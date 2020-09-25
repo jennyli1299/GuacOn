@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">GuacOn</string>
+    <string name="OK">Okay</string>
+    <string name="refine">Refine</string>
+    <string name="vegan">Vegan</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="dairyfree">Dairy-Free</string>
+    <string name="glutenfree">Gluten-Free</string>
+    <string name="naturalsweet">Naturally Sweetened</string>
 </resources>
