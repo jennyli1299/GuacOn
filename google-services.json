@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "462601428791",
+    "firebase_url": "https://guacon-65c8f.firebaseio.com",
+    "project_id": "guacon-65c8f",
+    "storage_bucket": "guacon-65c8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462601428791:android:554bceb1491cffa78004b2",
+        "android_client_info": {
+          "package_name": "com.example.guacon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462601428791-itpbo3eo20avsvp7ap5jkc0n649uumsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4R2y0rxYs6rBySknZU56vLkgLVMtg4mU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462601428791-itpbo3eo20avsvp7ap5jkc0n649uumsm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
