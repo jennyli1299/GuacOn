@@ -7,4 +7,7 @@
     <string name="dairyfree">Dairy-Free</string>
     <string name="glutenfree">Gluten-Free</string>
     <string name="naturalsweet">Naturally Sweetened</string>
+    <string name="profiletitle">Profile</string>
+    <string name="savedrecipes">Saved Recipes</string>
+    <string name="delete">Delete</string>
 </resources>
