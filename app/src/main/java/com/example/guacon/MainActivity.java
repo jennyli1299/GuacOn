@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button refine;
 
@@ -15,17 +17,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        refine = (Button) findViewById(R.id.btn_refine);
-
-        refine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent refineIntent = new Intent(getBaseContext(), Refine.class);
-                startActivity(refineIntent);
-            }
-        });
-
+        RadioGroup rg = (RadioGroup)findViewById(R.id.rg);
+        RadioButton rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
+        rb.setBackgroundResource(R.color.white);
+        rb.setChecked(false);
     }
 
+    public void onClick(View view){
+        startActivity(new Intent(MainActivity.this, Refine.class));
+        finish();
+    }
+
+    public void isChecked(View view){
+        ((RadioButton)findViewById(view.getId())).setBackgroundResource(R.color.gray);
+        startActivity(new Intent(MainActivity.this, Recipe.class));
+        finish();
+    }
 }
