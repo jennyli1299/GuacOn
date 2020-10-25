@@ -10,7 +10,34 @@
         android:id="@+id/text_searchResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="62dp"
+        android:layout_marginEnd="163dp"
+        android:layout_marginBottom="650dp"
+        android:text="@android:string/search_go"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="131dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="581dp"
+        android:text="@android:string/unknownName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+=======
         android:text="Search Result"
         tools:layout_editor_absoluteX="188dp"
         tools:layout_editor_absoluteY="348dp" />
+>>>>>>> 0c8d7e4018c81d141ce8c3dc0932b75f82ff09c1
 </androidx.constraintlayout.widget.ConstraintLayout>

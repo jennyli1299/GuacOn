@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 public class Recipe extends AppCompatActivity {
 
+    //fields
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
