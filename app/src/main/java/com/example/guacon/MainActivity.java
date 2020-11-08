@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void isChecked(View view){
         ((RadioButton)findViewById(view.getId())).setBackgroundResource(R.color.gray);
-        startActivity(new Intent(MainActivity.this, Category_List.class));
+//        startActivity(new Intent(MainActivity.this, Category_List.class));
 //        finish();
     }
 
