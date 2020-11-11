@@ -34,41 +34,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/img_place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:text="Image Placeholder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_text"
-        app:layout_constraintVertical_bias="0.035" />
-
-    <TextView
         android:id="@+id/prep_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="96dp"
         android:text="Prep Time:"
         app:layout_constraintEnd_toStartOf="@+id/cook_txt"
         app:layout_constraintHorizontal_bias="0.07"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_place" />
+        tools:layout_editor_absoluteY="213dp" />
 
     <TextView
         android:id="@+id/cook_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="84dp"
+        android:layout_marginBottom="104dp"
         android:text="Cook Time:"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/ingredients_txt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/prep_txt"
-        app:layout_constraintTop_toBottomOf="@+id/img_place"
-        app:layout_constraintVertical_bias="0.482" />
+        app:layout_constraintStart_toEndOf="@id/prep_txt" />
 
     <TextView
         android:id="@+id/ingredients_txt"
@@ -80,6 +66,19 @@
         app:layout_constraintHorizontal_bias="0.136"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prep_txt" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="208dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_text"
+        tools:srcCompat="@tools:sample/avatars" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
