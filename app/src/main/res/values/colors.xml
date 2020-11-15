@@ -5,4 +5,9 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="gray">#A39B9B</color>
     <color name="white">#fff</color>
+    
+    <color name="lavender">#E3DFFF</color>
+    <color name="mintSage">#D1F0B1</color>
+    <color name="pumpkin">#F58B29</color>
+    <color name="hunter">#47624F</color>
 </resources>
