@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:onClick="onOpen"
+    android:id="@+id/constraintLayout2">
+
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/zucchini_spaghetti"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tag1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name1"
+        android:text="Zucchini Spaghetti"
+        android:textSize="20dp"
+        android:textColor="#000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/prep_time1"
+        app:layout_constraintStart_toEndOf="@id/image1"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/prep_time1"
+        android:text="Prep Time: 30 min"
+        android:textSize="15dp"
+        android:textColor="#000"
+        app:layout_constraintTop_toBottomOf="@id/name1"
+        app:layout_constraintStart_toEndOf="@+id/image1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tag1"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tag1"
+        android:src="@drawable/ic_vegetarian"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tag2"
+        app:layout_constraintStart_toEndOf="@id/image1"
+        app:layout_constraintTop_toBottomOf="@id/prep_time1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tag2"
+        android:src="@drawable/ic_gluten_free"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tag3"
+        app:layout_constraintStart_toEndOf="@id/tag1"
+        app:layout_constraintTop_toBottomOf="@id/prep_time1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tag3"
+        android:src="@drawable/ic_dairy_free"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tag4"
+        app:layout_constraintStart_toEndOf="@id/tag2"
+        app:layout_constraintTop_toBottomOf="@id/prep_time1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tag4"
+        android:src="@drawable/ic_naturally_sweetened"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tag5"
+        app:layout_constraintStart_toEndOf="@id/tag3"
+        app:layout_constraintTop_toBottomOf="@id/prep_time1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tag5"
+        android:src="@drawable/ic_vegan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tag4"
+        app:layout_constraintTop_toBottomOf="@id/prep_time1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
