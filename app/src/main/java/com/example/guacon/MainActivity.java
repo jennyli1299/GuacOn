@@ -85,4 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         refinePreferences.put(p,b);
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
