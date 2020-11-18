@@ -1,43 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    tools:context=".SearchResult"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SearchResult">
+    android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/text_searchResult"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="163dp"
-        android:layout_marginBottom="650dp"
-        android:text="@android:string/search_go"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="RECIPES"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/scrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="131dp"
-        android:layout_marginEnd="288dp"
-        android:layout_marginBottom="581dp"
-        android:text="@android:string/unknownName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-=======
-        android:text="Search Result"
-        tools:layout_editor_absoluteX="188dp"
-        tools:layout_editor_absoluteY="348dp" />
->>>>>>> 0c8d7e4018c81d141ce8c3dc0932b75f82ff09c1
+        <include layout="@layout/recipe_view"/>
+
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

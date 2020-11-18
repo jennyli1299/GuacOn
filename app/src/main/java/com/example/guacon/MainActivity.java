@@ -32,42 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View view){
-        refine = (Button) findViewById(R.id.btn_refine);
-
-        refine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent refineIntent = new Intent(getBaseContext(), Refine.class);
-                String[] preferences = {"Vegetarian", "Vegan", "GF", "DF", "Naturally Sweetened"};
-                for (String s: preferences) {
-                        refineIntent.putExtra(s,refinePreferences.get(s));
-                    }
-                startActivity(refineIntent);
-            }
-        });
-
-        options[0]=(Button) findViewById(R.id.btn_breakfast);
-        options[1]=(Button) findViewById(R.id.btn_lunch);
-        options[2]=(Button) findViewById(R.id.btn_dinner);
-        options[3]=(Button) findViewById(R.id.btn_snacks);
-        options[4]=(Button) findViewById(R.id.btn_all);
-        //direct the buttons to search results
-        for(int i=0;i<5;i++){
-            options[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent searchIndent = new Intent(getBaseContext(), SearchResult.class);
-                    startActivity(searchIndent);
-                }
-            });
-        }
-
+        startActivity(new Intent(getApplicationContext(), Refine.class));
     }
 
     public void isChecked(View view){
         ((RadioButton)findViewById(view.getId())).setBackgroundResource(R.color.gray);
-//        startActivity(new Intent(MainActivity.this, Category_List.class));
-//        finish();
+        startActivity(new Intent(MainActivity.this, SearchResult.class));
     }
 
     public static HashMap<String, Boolean> getPreferences(Bundle b) {

@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Recipe extends AppCompatActivity {
+public class Recipe_Detail extends AppCompatActivity {
 
     //fields
     TextView Instructions;
