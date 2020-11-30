@@ -8,6 +8,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+
+import java.util.ArrayList;
+
 public class Recipe extends AppCompatActivity {
 
     //fields
@@ -23,6 +27,13 @@ public class Recipe extends AppCompatActivity {
     ImageView ic_vegan;
     ImageView ic_dairy_free;
     ImageView ic_naturally_sweetened;
+
+    String recipe_name = "Guacamole";
+    String prep_t = "10 min";
+    String cook_t = "5 min";
+    String ingredients = "avocado, salt, onion, tomato, lemon";
+    String instuctions = "MIX IT ALL TOGETHER!";
+
 
 
     @Override
@@ -42,6 +53,9 @@ public class Recipe extends AppCompatActivity {
         ic_dairy_free = (ImageView) findViewById(R.id.imageView4);
         ic_naturally_sweetened = (ImageView) findViewById(R.id.imageView5);
 
+//        FirebaseDatabase database = FirebaseApp.getInstance()
+
+
     }
 
     @Override
@@ -49,5 +63,7 @@ public class Recipe extends AppCompatActivity {
         super.onBackPressed();
 //        startActivity(new Intent(getApplicationContext(), Category_List.class));
     }
+
+
 
 }
