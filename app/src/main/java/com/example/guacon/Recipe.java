@@ -33,7 +33,7 @@ public class Recipe extends AppCompatActivity {
     String cook_t = "5 min";
     String ingredients = "avocado, salt, onion, tomato, lemon";
     String instuctions = "MIX IT ALL TOGETHER!";
-
+    String[] ingredients_array = {"avocado", "salt", "onion", "tomato", "lemon"};
 
 
     @Override
