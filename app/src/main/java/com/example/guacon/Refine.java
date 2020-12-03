@@ -1,6 +1,7 @@
 package com.example.guacon;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public class Refine extends AppCompatActivity {
 
         setAppropriateCheckBoxes();
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     public void onCheck(View view) {
@@ -88,7 +91,7 @@ public class Refine extends AppCompatActivity {
         finish();
     }
 
-    private void setAppropriateCheckBoxes() {
+    public void setAppropriateCheckBoxes() {
 //        for (String s: MainActivity.Preferences) {
 //            if (MainActivity.refinePreferences.containsKey(s)) {
 //                setCheckBox(s);
@@ -107,4 +110,9 @@ public class Refine extends AppCompatActivity {
 //                veg.setChecked(true);
 //        }
 //    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
