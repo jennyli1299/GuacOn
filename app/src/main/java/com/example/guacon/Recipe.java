@@ -1,53 +1,73 @@
 package com.example.guacon;
 
-import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+public class Recipe {
+    private String name, prep_time;
+    private List<String> ingredients = new ArrayList<>();
+    private boolean vegan, vegetarian, gluten_free, dairy_free, naturally_sweetened;
 
-public class Recipe extends AppCompatActivity {
+    public Recipe() {}
 
-    //fields
-    TextView Instructions;
-    TextView Recipe;
-    TextView Image_PlaceHolder;
-    TextView prep_time;
-    TextView cook_time;
-    TextView Ingredients;
-
-    ImageView ic_vegetarian;
-    ImageView ic_gluten_free;
-    ImageView ic_vegan;
-    ImageView ic_dairy_free;
-    ImageView ic_naturally_sweetened;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe);
-
-        Instructions = (TextView) findViewById(R.id.instructions_txt);
-        Recipe = (TextView) findViewById(R.id.recipe_text);
-        prep_time = (TextView) findViewById(R.id.prep_txt);
-        cook_time = (TextView) findViewById(R.id.cook_txt);
-        Ingredients = (TextView) findViewById(R.id.ingredients_txt);
-
-        ic_vegetarian = (ImageView) findViewById(R.id.imageView);
-        ic_gluten_free = (ImageView) findViewById(R.id.imageView2);
-        ic_vegan = (ImageView) findViewById(R.id.imageView3);
-        ic_dairy_free = (ImageView) findViewById(R.id.imageView4);
-        ic_naturally_sweetened = (ImageView) findViewById(R.id.imageView5);
-
+    public String getName(){ return name; }
+    public void setName(String name){
+        this.name = name;
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-//        startActivity(new Intent(getApplicationContext(), Category_List.class));
+    public String getPrep_time(){
+        return "Prep Time: " + prep_time + " min";
     }
-
+    public void setPrep_time(String prep_time){
+        this.prep_time = prep_time;
+    }
+    public List<String> getIngredients(){
+        return ingredients;
+    }
+    public void setIngredients(List<String> ingredients){
+        this.ingredients = ingredients;
+    }
+    public boolean isVegan(){
+        return vegan;
+    }
+    public void setVegan(boolean vegan){
+        this.vegan = vegan;
+    }
+    public boolean isVegetarian(){
+        return vegetarian;
+    }
+    public void setVegetarian(boolean vegetarian){
+        this.vegetarian = vegetarian;
+    }
+    public boolean isGluten_free(){
+        return gluten_free;
+    }
+    public void setGluten_free(boolean gluten_free){
+        this.gluten_free = gluten_free;
+    }
+    public boolean isDairy_free(){
+        return dairy_free;
+    }
+    public void setDairy_free(boolean dairy_free){
+        this.dairy_free = dairy_free;
+    }
+    public boolean isNaturally_sweetened(){
+        return naturally_sweetened;
+    }
+    public void setNaturally_sweetened(boolean naturally_sweetened){
+        this.naturally_sweetened = naturally_sweetened;
+    }
+    public String tags() {
+        String tag = "";
+        if(isVegan())
+            tag = tag + " Vegan ";
+        if(isVegetarian())
+            tag = tag + " Vegetarian ";
+        if(isGluten_free())
+            tag = tag + " Gluten-Free ";
+        if(isDairy_free())
+            tag = tag + " Dairy-Free ";
+        if(isNaturally_sweetened())
+            tag = tag + " Naturally Sweetened ";
+        return tag;
+    }
 }
