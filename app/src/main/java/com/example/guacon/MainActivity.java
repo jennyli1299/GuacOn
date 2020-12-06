@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 
 import java.util.HashMap;
 
+//TODO: In alignment with Refine.class
 public class MainActivity extends AppCompatActivity {
 
     private Button refine;

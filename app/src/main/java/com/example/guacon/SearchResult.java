@@ -59,6 +59,7 @@ public class SearchResult extends AppCompatActivity {
                 if(task.isSuccessful()){
                     @NonNull Recipe model = new Recipe();
                     DocumentSnapshot documentSnapshot = task.getResult();
+                    //TODO: send recipe name along with Intent
                     Intent intent = new Intent(getApplicationContext(), Recipe_Detail.class);
                     startActivity(intent);
                 }
@@ -91,12 +92,9 @@ public class SearchResult extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_refine) {
             startActivity(new Intent(getApplicationContext(), Refine.class));
             return true;

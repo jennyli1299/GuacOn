@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+//displays data of a particular recipe
+//TODO: recieve recipe selected from SearchResult.class
+//display link for checking the author of the recipe
 public class Recipe_Detail extends AppCompatActivity {
 
     //fields

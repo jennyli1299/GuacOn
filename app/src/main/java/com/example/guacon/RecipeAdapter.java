@@ -12,7 +12,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-
+//manages recyclerview for recipe data class and put data in recipe_card.xml
 public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapter.RecipesViewHolder> {
 
     private OnItemClickListener listener;
@@ -29,7 +29,7 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     }
 
     // Function to tell the class about the Card view (here
-    // "person.xml")in
+    // "recipe_card.xml")in
     // which the data will be shown
     @NonNull
     @Override
@@ -38,8 +38,8 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
         return new RecipeAdapter.RecipesViewHolder(view);
     }
 
-    // Sub Class to create references of the views in Crad
-    // view (here "person.xml")
+    // Sub Class to create references of the views in Card
+    // view (here "recipe_card.xml")
     class RecipesViewHolder extends RecyclerView.ViewHolder {
         TextView name, prep_time, supporting_text;
         public RecipesViewHolder(@NonNull View itemView) {
