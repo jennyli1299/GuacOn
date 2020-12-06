@@ -3,7 +3,10 @@ package com.example.guacon;
 import java.util.ArrayList;
 import java.util.List;
 
+//data class for collection "Recipes"
+//inflate data received from firestore in an object of type 'Recipe'
 public class Recipe {
+    //variable name must match the firestore key names
     private String name, prep_time;
     private List<String> ingredients = new ArrayList<>();
     private boolean vegan, vegetarian, gluten_free, dairy_free, naturally_sweetened;
