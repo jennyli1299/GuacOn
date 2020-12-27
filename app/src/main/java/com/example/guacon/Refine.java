@@ -57,31 +57,31 @@ public class Refine extends AppCompatActivity {
 //                else {
 //                    preferences.put("Vegan", false);
 //                }
-//                break;
+                break;
             case R.id.vegetarian:
 //                if (checked) {
                     preferences.put("Vegetarian", checked);
                 MainActivity.updatePreferences("Vegetarian", checked);
 //                }
-//                break;
+                break;
             case R.id.gluten_free:
 //                if (checked) {
                     preferences.put("GF", checked);
                 MainActivity.updatePreferences("GF", checked);
 //                }
-//                break;
+                break;
             case R.id.dairy_free:
 //                if (checked) {
                     preferences.put("DF", checked);
                 MainActivity.updatePreferences("DF", checked);
 //                }
-//                break;
+                break;
             case R.id.naturally_sweetened:
 //                if (checked) {
                     preferences.put("Naturally Sweetened", checked);
                 MainActivity.updatePreferences("Naturally Sweetened", checked);
 //                }
-//                break;
+                break;
         }
     }
 
