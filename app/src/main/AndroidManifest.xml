@@ -8,11 +8,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Category_List"></activity>
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".RecipeForm"></activity>
         <activity android:name=".SearchResult"></activity>
-        <activity android:name=".Profile"></activity>
-        <activity android:name=".Recipe" />
+        <activity android:name=".Profile" />
+        <activity android:name=".Recipe_Detail"></activity>
         <activity android:name=".Refine" />
         <activity android:name=".MainActivity">
             <intent-filter>
