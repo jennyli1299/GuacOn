@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         rb.setBackgroundResource(R.color.white);
         rb.setChecked(false);
         refinePreferences = new HashMap<String, Boolean>();
+        loadInitialPref();
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
     public static boolean updatePreferences(String p, Boolean b) {
         refinePreferences.put(p,b);
         return true;
+    }
+
+    public void loadInitialPref() {
+        refinePreferences.put("Vegan", false);
+        refinePreferences.put("Vegetarian", false);
+        refinePreferences.put("GF", false);
+        refinePreferences.put("DF", false);
+        refinePreferences.put("Naturally Sweetened", false);
     }
 
     @Override
