@@ -50,6 +50,7 @@ public class SearchResult extends AppCompatActivity {
                 showCustomDialog(path);
             }
         });
+
     }
 
     public void showCustomDialog(String path) {

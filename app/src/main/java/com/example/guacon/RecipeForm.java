@@ -8,23 +8,24 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 //enter the details for your recipe and add them to our database
-public class RecipeForm extends AppCompatActivity {
+public class RecipeForm extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private ViewFlipper simpleViewFlipper;
-    TextView t;
+    HashMap<String, String> userRecipe = new HashMap<String, String>();
+    ViewFlipper simpleViewFlipper;
     Spinner spinner, spinner2;
-    TextView set_time;
-    Button btn_set;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,84 +44,80 @@ public class RecipeForm extends AppCompatActivity {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
 
         // Spinner click listener
-        spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
-        spinner2.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        spinner.setOnItemSelectedListener(this);
+        spinner2.setOnItemSelectedListener(this);
 
         // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("g");
-        categories.add("mg");
-        categories.add("mcg");
-        categories.add("mL");
-        categories.add("%");
-        categories.add("IU");
-
-        List<String> freq = new ArrayList<String>();
-        freq.add("Everyday");
-        freq.add("6 days a week");
-        freq.add("5 days a week");
-        freq.add("4 days a week");
-        freq.add("3 days a week");
-        freq.add("2 days a week");
-        freq.add("Every 2 days");
-        freq.add("Once a week");
-        freq.add("Every 28 days");
-        freq.add("Only when needed");
+        List<String> time_unit = new ArrayList<>();
+        time_unit.add("min");
+        time_unit.add("hr");
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, freq);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time_unit);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
-        spinner2.setAdapter(dataAdapter2);
+        spinner2.setAdapter(dataAdapter);
 
-        set_time = (TextView)findViewById(R.id.set_time);
-        btn_set = (Button)findViewById(R.id.btn_set);
+        /*findViewById(R.id.buttonNext7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseFirestore.getInstance().collection("recipes").
+                        document().set(userRecipe);
+            }
+        });*/
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
-    }
-
-    public void onNothingSelected(AdapterView<?> arg0) {
-    }
-
-    public void checked(View v){
-        ((RadioButton)findViewById(v.getId())).setBackgroundResource(R.color.colorAccent);
-        a.add(((RadioButton)findViewById(v.getId())).getText().toString());
-        simpleViewFlipper.showNext();
-        ((TextView)findViewById(R.id.ques)).setText("What is the dosage taken once?");
-    }
-
-    ArrayList<String> a = new ArrayList<String>();
 
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.buttonNext1:  a.add(((EditText)findViewById(R.id.ans1)).getText().toString());
+            case R.id.buttonNext1:  userRecipe.put("Name", ((EditText)findViewById(R.id.ans1)).getText().toString());
                 simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("What is the form of medicine?");
+                ((TextView)findViewById(R.id.ques)).setText("How much time is required for preparation?");
                 break;
-            case R.id.buttonNext3:  a.add(((EditText)findViewById(R.id.ans3)).getText().toString());
-                a.add(String.valueOf(spinner.getSelectedItem()));
+            case R.id.buttonNext2:  userRecipe.put("Prep_Time", ((EditText)findViewById(R.id.ans1)).getText().toString());
+                //TODO: get unit from spinner
                 simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("At what time you wish to take medicine?");
+                ((TextView)findViewById(R.id.ques)).setText("How much time is required for cooking it?");
                 break;
-            case R.id.buttonNext4:  simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("When do you wish to repeat this schedule?");
-                break;
-            case R.id.buttonNext5:  a.add(String.valueOf(spinner2.getSelectedItem()));
+            case R.id.buttonNext3:  userRecipe.put("Cook_Time", ((EditText)findViewById(R.id.ans3)).getText().toString());
+                //TODO: get unit from spinner
                 simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("For how long you wish to take this medicine?");
+                ((TextView)findViewById(R.id.ques)).setText("List all the ingredients for your recipe?");
                 break;
-            case R.id.buttonNext6:  a.add(((EditText)findViewById(R.id.ans6)).getText().toString());
-                startActivity(new Intent(RecipeForm.this, MainActivity.class));
+            case R.id.buttonNext4:  String ing[];
+                simpleViewFlipper.showNext();
+                ((TextView)findViewById(R.id.ques)).setText("Provide the instructions for your recipe?");
+                break;
+            case R.id.buttonNext5:  simpleViewFlipper.showNext();
+                ((TextView)findViewById(R.id.ques)).setText("What tag(s) suits your recipe?");
+                break;
+            case R.id.buttonNext6:  simpleViewFlipper.showNext();
+                ((TextView)findViewById(R.id.ques)).setText("Show us how your creation looks like?");
+                break;
+            case R.id.buttonNext7:  startActivity(new Intent(getApplicationContext(), Profile.class));
                 break;
         }
+    }
+
+    public void isChecked(View v) {
+        if( ((CheckBox) findViewById(v.getId())).isChecked() )
+            findViewById(v.getId()).setBackgroundResource(R.color.gray);
+        if( !((CheckBox) findViewById(v.getId())).isChecked() )
+            findViewById(v.getId()).setBackgroundResource(R.color.white);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        // On selecting a spinner item
+        String item = adapterView.getItemAtPosition(i).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
