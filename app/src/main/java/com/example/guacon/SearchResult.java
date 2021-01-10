@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,22 +37,32 @@ public class SearchResult extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent intent = getIntent();
-        HashMap<String, Boolean> recipePreferences = (HashMap<String, Boolean>)intent.getSerializableExtra("recipePreferences");
-        base = FirebaseFirestore.getInstance().collection("recipes");
-        recyclerView = findViewById(R.id.rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
-        adapter = new RecipeAdapter(options);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                String path = documentSnapshot.getReference().getPath();
-                showCustomDialog(path);
-            }
-        });
+        SharedPreferences sharedPreferences = getSharedPreferences("pref", 0);
+        if(!sharedPreferences.getBoolean("vegan", true) && !sharedPreferences.getBoolean("vegetarian", true) &&
+                !sharedPreferences.getBoolean("dairy_free", true) && !sharedPreferences.getBoolean("gluten_free", true) &&
+                !sharedPreferences.getBoolean("naturally_sweetened", true)) {
+            base = FirebaseFirestore.getInstance().collection("recipes");
+        }
+        else
+            base = FirebaseFirestore.getInstance().collection("recipes")
+                    .whereEqualTo("vegan", sharedPreferences.getBoolean("vegan", true))
+                    .whereEqualTo("vegetarian", sharedPreferences.getBoolean("vegetarian", true))
+                    .whereEqualTo("gluten_free", sharedPreferences.getBoolean("gluten_free", true))
+                    .whereEqualTo("dairy_free", sharedPreferences.getBoolean("dairy_free", true))
+                    .whereEqualTo("naturally_sweetened", sharedPreferences.getBoolean("naturally_sweetened", true));
 
+            recyclerView = findViewById(R.id.rv);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
+            adapter = new RecipeAdapter(options);
+            recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                    String path = documentSnapshot.getReference().getPath();
+                    showCustomDialog(path);
+                }
+            });
     }
 
     public void showCustomDialog(String path) {
