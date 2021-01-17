@@ -9,12 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.HashMap;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 //enter the details for your recipe and add them to our database
 public class RecipeForm extends AppCompatActivity {
 
     Button cancel;
     Button addRecipe;
+    HashMap<String, String> userRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class RecipeForm extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Profile.class));
             }
         });
-        HashMap<String, String> userRecipe = new HashMap<String, String>();
+        userRecipe = new HashMap<String, String>();
         // TODO- add items to the hashmap
         //the keys are the names of the fields on Firebase and the values are the user's input
         EditText mEdit;
@@ -42,6 +45,7 @@ public class RecipeForm extends AppCompatActivity {
         userRecipe.put("name", mEdit.getText().toString());
         userRecipe.put("name", mEdit.getText().toString());
         userRecipe.put("name", mEdit.getText().toString());
+
         addRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
