@@ -8,8 +8,8 @@ public class Admin extends User {
 //        admin = true;
     }
 
-    public Admin(String fN, String lN) {
-        super(fN, lN);
+    public Admin(String fN, String lN, int age) {
+        super(fN, lN, age);
 //        admin = true;
     }
 
