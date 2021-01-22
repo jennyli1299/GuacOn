@@ -11,5 +11,11 @@
         android:title="Home"
         android:icon="@drawable/ic_home"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="200"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="always"/>
 
 </menu>

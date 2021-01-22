@@ -14,7 +14,6 @@ import android.widget.Toast;
 import java.sql.Ref;
 import java.util.HashMap;
 
-//TODO: add preferences in the form of Bundle to be used throughout the application lifecycle
 public class Refine extends AppCompatActivity {
 
     Button ok;

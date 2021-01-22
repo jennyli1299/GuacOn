@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -35,6 +37,7 @@ public class SearchResult extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref", 0);
+        //show all recipes
         if(!sharedPreferences.getBoolean("vegan", true) && !sharedPreferences.getBoolean("vegetarian", true) &&
                 !sharedPreferences.getBoolean("dairy_free", true) && !sharedPreferences.getBoolean("gluten_free", true) &&
                 !sharedPreferences.getBoolean("naturally_sweetened", true)) {
@@ -116,6 +119,12 @@ public class SearchResult extends AppCompatActivity {
 
         if (id == R.id.action_profile) {
             startActivity(new Intent(getApplicationContext(), Profile.class));
+            return true;
+        }
+
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }
 
