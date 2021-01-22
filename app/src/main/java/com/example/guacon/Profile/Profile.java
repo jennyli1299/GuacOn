@@ -1,29 +1,49 @@
-package com.example.guacon;
+package com.example.guacon.Profile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.guacon.Login.Launcher;
+import com.example.guacon.MainActivity;
+import com.example.guacon.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
+
+    TextView t;
+    String TAG ="main";
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-       Button delete = (Button) findViewById(R.id.btn_delete);
+        t = (TextView) findViewById(R.id.txt_profile_header);
+        Button delete = (Button) findViewById(R.id.btn_delete);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
+        t.setText(sharedPreferences.getString("user_name","") + ", " + sharedPreferences.getInt("user_age", 0));
+        //TODO: set saved_recipes and your_recipes from shared preferences to respective views
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +71,11 @@ public class Profile extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            return true;
+        }
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }
 
