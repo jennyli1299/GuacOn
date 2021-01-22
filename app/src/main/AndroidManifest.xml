@@ -9,12 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        <activity android:name=".RecipeForm" />
+        <activity android:name=".Profile.RecipeForm" />
         <activity android:name=".SearchResult" />
-        <activity android:name=".Profile" />
+        <activity android:name=".Profile.Profile" />
         <activity android:name=".Recipe_Detail" />
         <activity android:name=".Refine" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity" />
+        <activity android:name=".Login.LoginActivity"/>
+        <activity android:name=".Login.SignupActivity"/>
+        <activity android:name=".Login.Launcher" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

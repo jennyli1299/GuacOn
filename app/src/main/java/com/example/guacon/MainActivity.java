@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.guacon.Profile.Profile;
+
 import java.util.HashMap;
 
 //TODO: In alignment with Refine.class
