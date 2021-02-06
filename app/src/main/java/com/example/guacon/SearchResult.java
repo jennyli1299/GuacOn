@@ -54,7 +54,7 @@ public class SearchResult extends AppCompatActivity {
             recyclerView = findViewById(R.id.rv);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
-            adapter = new RecipeAdapter(options);
+            adapter = new RecipeAdapter(getApplicationContext(), options);
             recyclerView.setAdapter(adapter);
             adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
                 @Override
