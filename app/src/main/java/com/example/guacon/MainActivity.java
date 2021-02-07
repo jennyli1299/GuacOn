@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.guacon.Login.Launcher;
+import com.example.guacon.Profile.Profile;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.HashMap;
 
 //TODO: In alignment with Refine.class
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         rb.setBackgroundResource(R.color.white);
         rb.setChecked(false);
         refinePreferences = new HashMap<String, Boolean>();
+        loadInitialPref();
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void loadInitialPref() {
+        refinePreferences.put("Vegan", false);
+        refinePreferences.put("Vegetarian", false);
+        refinePreferences.put("GF", false);
+        refinePreferences.put("DF", false);
+        refinePreferences.put("Naturally Sweetened", false);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -83,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_profile) {
             startActivity(new Intent(getApplicationContext(), Profile.class));
+            return true;
+        }
+
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }
 

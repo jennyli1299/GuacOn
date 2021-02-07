@@ -10,4 +10,5 @@
     <string name="profiletitle">Profile</string>
     <string name="savedrecipes">Saved Recipes</string>
     <string name="delete">Delete</string>
+    <string name="hello_blank_fragment">hello blank fragment</string>
 </resources>
