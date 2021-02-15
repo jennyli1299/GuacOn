@@ -43,9 +43,12 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database:16.0.4'
     implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-storage'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
 
     implementation "org.apache.poi:poi:3.17"
 }
