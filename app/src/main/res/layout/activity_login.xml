@@ -83,15 +83,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/head_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please login to continue using MedTrack"
-        app:layout_constraintBottom_toTopOf="@+id/head_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/head" />
+        <TextView
+            android:id="@+id/head_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please login to continue using GuacOn"
+            app:layout_constraintBottom_toTopOf="@+id/head_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/head" />
 
     <TextView
         android:id="@+id/head_2"

@@ -47,6 +47,8 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
                 recipe.setGluten_free(model.isGluten_free());                   recipe.setDairy_free(model.isDairy_free());
                 recipe.setNaturally_sweetened(model.isNaturally_sweetened());   recipe.setFinal_photo(model.getFinal_photo());
                 recipe.setInstructions(model.getInstructions());                recipe.setIngredients(model.getIngredients());
+                recipe.setBreakfast(model.isBreakfast());                       recipe.setBreakfast(model.isLunch());
+                recipe.setBreakfast(model.isDinner());                       recipe.setBreakfast(model.isSnacks());
                 Intent intent = new Intent(context, Recipe_Detail.class);
                 intent.putExtra("Recipe", recipe);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

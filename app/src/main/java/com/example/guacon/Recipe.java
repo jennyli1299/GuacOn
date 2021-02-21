@@ -11,7 +11,7 @@ public class Recipe implements Serializable {
     private String name, prep_time, cook_time, final_photo;
     private List<String> ingredients = new ArrayList<>();
     private List<String> instructions = new ArrayList<>();
-    private boolean vegan, vegetarian, gluten_free, dairy_free, naturally_sweetened;
+    private boolean vegan, vegetarian, gluten_free, dairy_free, naturally_sweetened, dinner, lunch, breakfast, snacks;
 
     public Recipe() {}
 
@@ -53,6 +53,26 @@ public class Recipe implements Serializable {
         this.instructions = instructions;
     }
 
+    public boolean isBreakfast(){ return breakfast; }
+    public void setBreakfast(boolean breakfast){
+        this.breakfast = breakfast;
+    }
+
+    public boolean isLunch(){ return lunch; }
+    public void setLunch(boolean lunch){
+        this.lunch = lunch;
+    }
+
+    public boolean isDinner(){ return dinner; }
+    public void setDinner(boolean dinner){
+        this.dinner = dinner;
+    }
+
+    public boolean isSnacks(){ return snacks; }
+    public void setSnacks(boolean snacks){
+        this.snacks = snacks;
+    }
+
     public boolean isVegan(){
         return vegan;
     }
@@ -92,6 +112,14 @@ public class Recipe implements Serializable {
         String tag = "";
         if(isVegan())
             tag = tag + " Vegan ";
+        if(isBreakfast())
+            tag = tag + " Breakfast ";
+        if(isLunch())
+            tag = tag + " Lunch ";
+        if(isDinner())
+            tag = tag + " Dinner ";
+        if(isSnacks())
+            tag = tag + " Snacks ";
         if(isVegetarian())
             tag = tag + " Vegetarian ";
         if(isGluten_free())

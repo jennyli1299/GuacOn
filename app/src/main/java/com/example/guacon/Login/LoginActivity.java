@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth auth;
     private ProgressBar progressBar;
     String email, password, type;
-    private FirebaseFirestore medtrack;
+    private FirebaseFirestore guacon;
     HashMap<String, String> m = new HashMap<>();
     User user = new User();
 
