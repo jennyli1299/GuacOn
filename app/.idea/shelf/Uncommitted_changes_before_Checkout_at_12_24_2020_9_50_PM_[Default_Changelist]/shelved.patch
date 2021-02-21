@@ -1,0 +1,208 @@
+Index: app/src/main/res/layout/fragment_favorites.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".FavoritesFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <TextView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:text=\"@string/hello_blank_fragment\" />\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_favorites.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/res/layout/fragment_favorites.xml	(date 1608825541441)
+@@ -9,6 +9,6 @@
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+-        android:text="@string/hello_blank_fragment" />
++        android:text="Hello" />
+ 
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_groceries.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".GroceriesFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <TextView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:text=\"@string/hello_blank_fragment\" />\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_groceries.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/res/layout/fragment_groceries.xml	(date 1608825541580)
+@@ -9,6 +9,6 @@
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+-        android:text="@string/hello_blank_fragment" />
++        android:text="Hello" />
+ 
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">GuacOn</string>\r\n    <string name=\"OK\">Okay</string>\r\n    <string name=\"refine\">Refine</string>\r\n    <string name=\"vegan\">Vegan</string>\r\n    <string name=\"vegetarian\">Vegetarian</string>\r\n    <string name=\"dairyfree\">Dairy-Free</string>\r\n    <string name=\"glutenfree\">Gluten-Free</string>\r\n    <string name=\"naturalsweet\">Naturally Sweetened</string>\r\n    <string name=\"profiletitle\">Profile</string>\r\n    <string name=\"savedrecipes\">Saved Recipes</string>\r\n    <string name=\"delete\">Delete</string>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/res/values/strings.xml	(date 1607323759225)
+@@ -10,4 +10,15 @@
+     <string name="profiletitle">Profile</string>
+     <string name="savedrecipes">Saved Recipes</string>
+     <string name="delete">Delete</string>
++    <string name="title_activity_navigation">NavigationActivity</string>
++    <string name="navigation_drawer_open">Open navigation drawer</string>
++    <string name="navigation_drawer_close">Close navigation drawer</string>
++    <string name="nav_header_title">Android Studio</string>
++    <string name="nav_header_subtitle">android.studio@android.com</string>
++    <string name="nav_header_desc">Navigation header</string>
++    <string name="action_settings">Settings</string>
++
++    <string name="menu_home">Home</string>
++    <string name="menu_gallery">Gallery</string>
++    <string name="menu_slideshow">Slideshow</string>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".SettingsFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <TextView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:text=\"@string/hello_blank_fragment\" />\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_settings.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/res/layout/fragment_settings.xml	(date 1608825541171)
+@@ -9,6 +9,6 @@
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+-        android:text="@string/hello_blank_fragment" />
++        android:text="Hello" />
+ 
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_meal_plan.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".MealPlanFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <TextView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:text=\"@string/hello_blank_fragment\" />\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_meal_plan.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/res/layout/fragment_meal_plan.xml	(date 1608825541011)
+@@ -9,6 +9,6 @@
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+-        android:text="@string/hello_blank_fragment" />
++        android:text="Hello" />
+ 
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.guacon\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\">\r\n        <activity android:name=\".RecipeForm\"></activity>\r\n        <activity android:name=\".SearchResult\"></activity>\r\n        <activity android:name=\".Profile\" />\r\n        <activity android:name=\".Recipe_Detail\"></activity>\r\n        <activity android:name=\".Refine\" />\r\n        <activity android:name=\".MainActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/AndroidManifest.xml	(date 1607331923931)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="com.example.guacon">
++    package="com.example.guacon" >
+ 
+     <application
+         android:allowBackup="true"
+@@ -8,13 +8,13 @@
+         android:label="@string/app_name"
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+-        <activity android:name=".RecipeForm"></activity>
+-        <activity android:name=".SearchResult"></activity>
++        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
++        <activity android:name=".RecipeForm" />
++        <activity android:name=".SearchResult" />
+         <activity android:name=".Profile" />
+-        <activity android:name=".Recipe_Detail"></activity>
++        <activity android:name=".Recipe_Detail" />
+         <activity android:name=".Refine" />
+-        <activity android:name=".MainActivity">
++        <activity android:name=".MainActivity" >
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_7\" default=\"true\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ .idea/misc.xml	(date 1608824889959)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <!-- Base application theme. -->\r\n    <style name=\"AppTheme\" parent=\"Theme.AppCompat.Light.DarkActionBar\">\r\n        <!-- Customize your theme here. -->\r\n        <item name=\"colorPrimary\">@color/colorPrimary</item>\r\n        <item name=\"colorPrimaryDark\">@color/colorPrimaryDark</item>\r\n        <item name=\"colorAccent\">@color/colorAccent</item>\r\n    </style>\r\n\r\n    <style name=\"AppTheme.NoActionBar\">\r\n        <item name=\"windowActionBar\">false</item>\r\n        <item name=\"windowNoTitle\">true</item>\r\n    </style>\r\n\r\n    <style name=\"AppTheme.AppBarOverlay\" parent=\"ThemeOverlay.AppCompat.Dark.ActionBar\">\r\n        <item name=\"colorAccent\">#fff</item>\r\n    </style>\r\n\r\n    <style name=\"AppTheme.PopupOverlay\" parent=\"ThemeOverlay.AppCompat.Light\" />\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/styles.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/src/main/res/values/styles.xml	(date 1607331923529)
+@@ -17,5 +17,11 @@
+     </style>
+ 
+     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
++    <style name="NoActionBar">
++        <item name="windowActionBar">false</item>
++        <item name="windowNoTitle">true</item>
++    </style>
++    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
++    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+ 
+ </resources>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\napply plugin: 'com.google.gms.google-services'\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.2\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.guacon\"\r\n        minSdkVersion 22\r\n        targetSdkVersion 30\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation platform('com.google.firebase:firebase-bom:26.1.0')\r\n\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'com.google.android.material:material:1.2.0-alpha02'\r\n    implementation 'androidx.annotation:annotation:1.1.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'\r\n    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n\r\n    implementation 'androidx.cardview:cardview:1.0.0'\r\n\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test:runner:1.3.0'\r\n\r\n    implementation 'com.google.firebase:firebase-database:16.0.4'\r\n    implementation 'com.google.firebase:firebase-auth'\r\n    implementation 'com.google.firebase:firebase-analytics'\r\n    implementation 'com.google.firebase:firebase-firestore'\r\n    implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ app/build.gradle	(date 1607323762647)
+@@ -35,6 +35,8 @@
+     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+ 
+     implementation 'androidx.cardview:cardview:1.0.0'
++    implementation 'androidx.navigation:navigation-fragment:2.3.2'
++    implementation 'androidx.navigation:navigation-ui:2.3.2'
+ 
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test:runner:1.3.0'
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"PLATFORM\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"1.8\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision f12d8bd3f56d3df8c09fb54f1358829f060bad9c)
++++ .idea/gradle.xml	(date 1608824890612)
+@@ -15,6 +15,7 @@
+           </set>
+         </option>
+         <option name="resolveModulePerSourceSet" value="false" />
++        <option name="useQualifiedModuleNames" value="true" />
+       </GradleProjectSettings>
+     </option>
+   </component>

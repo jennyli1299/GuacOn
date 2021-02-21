@@ -5,11 +5,18 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.example.guacon.Profile.Profile;
+
+import java.io.Serializable;
 
 //displays data of a particular recipe
 //TODO: recieve recipe selected from SearchResult.class
@@ -17,39 +24,43 @@ import android.widget.TextView;
 public class Recipe_Detail extends AppCompatActivity {
 
     //fields
-    TextView Instructions;
+    ListView Instructions;
     TextView Recipe;
-    TextView Image_PlaceHolder;
     TextView prep_time;
     TextView cook_time;
-    TextView Ingredients;
-
-    ImageView ic_vegetarian;
-    ImageView ic_gluten_free;
-    ImageView ic_vegan;
-    ImageView ic_dairy_free;
-    ImageView ic_naturally_sweetened;
-
+    ListView Ingredients;
+    ImageView imageView;
+    Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        Instructions = (TextView) findViewById(R.id.instructions_txt);
+        Instructions = (ListView) findViewById(R.id.instructions_txt);
         Recipe = (TextView) findViewById(R.id.recipe_text);
         prep_time = (TextView) findViewById(R.id.prep_txt);
         cook_time = (TextView) findViewById(R.id.cook_txt);
-        Ingredients = (TextView) findViewById(R.id.ingredients_txt);
-
-        ic_vegetarian = (ImageView) findViewById(R.id.imageView);
-        ic_gluten_free = (ImageView) findViewById(R.id.imageView2);
-        ic_vegan = (ImageView) findViewById(R.id.imageView3);
-        ic_dairy_free = (ImageView) findViewById(R.id.imageView4);
-        ic_naturally_sweetened = (ImageView) findViewById(R.id.imageView5);
+        Ingredients = (ListView) findViewById(R.id.ingredients_txt);
+        imageView = (ImageView) findViewById(R.id.imageView7);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
+        Recipe.setText(recipe.getName());
+        prep_time.setText("Prep Time: " + recipe.getPrep_time() + " min");
+        cook_time.setText("Cook Time: " + recipe.getCook_time() + " min");
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_listview, recipe.getIngredients());
+        Ingredients.setAdapter(adapter);
+
+        adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_listview, recipe.getInstructions());
+        Instructions.setAdapter(adapter);
+
+        Glide.with(getApplicationContext()).load(recipe.getFinal_photo()).into(imageView);
     }
 
     @Override
