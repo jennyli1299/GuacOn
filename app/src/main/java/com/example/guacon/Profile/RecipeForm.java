@@ -87,8 +87,8 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
 
             //add recipe preparation time to Hashmap
             case R.id.buttonNext2:
-                newRecipe.setPrep_time(((EditText)findViewById(R.id.ans1)).getText().toString());
-                //userRecipe.put("prep_time", ((EditText)findViewById(R.id.ans1)).getText().toString());
+                newRecipe.setPrep_time(((EditText)findViewById(R.id.ans2)).getText().toString());
+                //userRecipe.put("prep_time", ((EditText)findViewById(R.id.ans2)).getText().toString());
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("How much time is required for cooking it?");
                 break;
