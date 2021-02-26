@@ -11,6 +11,7 @@ public class Recipe implements Serializable {
     private String name, prep_time, cook_time, final_photo;
     private List<String> ingredients = new ArrayList<>();
     private List<String> instructions = new ArrayList<>();
+    private List<String> meal_time = new ArrayList<>();
     private boolean vegan, vegetarian, gluten_free, dairy_free, naturally_sweetened;
 
     public Recipe() {}
@@ -18,6 +19,13 @@ public class Recipe implements Serializable {
     public String getName(){ return name; }
     public void setName(String name){
         this.name = name;
+    }
+
+    public List<String> getMeal_time() {
+        return meal_time;
+    }
+    public void setMeal_time(List<String> meal_time) {
+        this.meal_time = meal_time;
     }
 
     public String getFinal_photo(){ return final_photo; }

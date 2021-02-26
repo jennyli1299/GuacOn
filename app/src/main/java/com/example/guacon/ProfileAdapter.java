@@ -16,13 +16,13 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-//manages recyclerview for recipe data class and put data in recipe_card.xml
-public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapter.RecipesViewHolder> {
+//manages recyclerview for recipe data class and put data in profile_card.xml
+public class ProfileAdapter extends FirestoreRecyclerAdapter<Recipe, ProfileAdapter.RecipesViewHolder> {
 
     private OnItemClickListener listener;
     Context context;
 
-    public RecipeAdapter(Context context, @NonNull FirestoreRecyclerOptions<Recipe> options){
+    public ProfileAdapter(Context context, @NonNull FirestoreRecyclerOptions<Recipe> options){
         super(options);
         this.context = context;
     }
@@ -30,8 +30,6 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     @Override
     protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final Recipe model){
         holder.name.setText(model.getName());
-        holder.prep_time.setText("Prep Time: " + model.getPrep_time() + " min");
-        holder.supporting_text.setText(model.tags());
         //Loading image from Glide library.
         Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -54,26 +52,24 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     }
 
     // Function to tell the class about the Card view (here
-    // "recipe_card.xml")in
+    // "profile_card.xml")in
     // which the data will be shown
     @NonNull
     @Override
     public RecipesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_card, parent, false);
-        return new RecipeAdapter.RecipesViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_card, parent, false);
+        return new ProfileAdapter.RecipesViewHolder(view);
     }
 
     // Sub Class to create references of the views in Card
-    // view (here "recipe_card.xml")
+    // view (here "profile_card.xml")
     class RecipesViewHolder extends RecyclerView.ViewHolder {
-        TextView name, prep_time, supporting_text;
+        TextView name;
         ImageView media_image;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            prep_time = itemView.findViewById(R.id.prep_time);
-            supporting_text = itemView.findViewById(R.id.supporting_text);
-            media_image = itemView.findViewById(R.id.media_image);
+            name = itemView.findViewById(R.id.recipe_name);
+            media_image = itemView.findViewById(R.id.profile_media_image);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

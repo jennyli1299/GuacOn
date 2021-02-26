@@ -27,7 +27,83 @@
         <ViewFlipper
             android:id="@+id/simpleViewFlipper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inst_parent_layout"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inst_layout"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:id="@+id/number_1"
+                        android:text="1"
+                        android:textColor="@android:color/black"
+                        android:textSize="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/inst1"
+                        android:layout_width="wrap_content"
+                        android:ems="15"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:layout_marginBottom="10dp"/>
+
+                    <Button
+                        android:id="@+id/delete_inst"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:layout_marginLeft="10dp"
+                        android:background="@android:drawable/ic_menu_delete"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/more_buttons"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/buttonMore2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimaryDark"
+                        android:padding="15dp"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:text="ADD MORE INSTRUCTIONS"
+                        android:textColor="@color/white"/>
+
+                    <Button
+                        android:id="@+id/buttonNext5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimaryDark"
+                        android:padding="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:onClick="onClick"
+                        android:text="NEXT"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -302,166 +378,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="40dp">
 
-                <EditText
-                    android:id="@+id/inst1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number_1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/inst2"/>
 
-                <TextView
-                    android:id="@+id/number_1"
-                    android:text="1"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/inst1"
-                    app:layout_constraintBottom_toBottomOf="@+id/inst1"
-                    app:layout_constraintEnd_toStartOf="@+id/inst1"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
 
-                <EditText
-                    android:id="@+id/inst2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number_2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inst1"
-                    app:layout_constraintBottom_toTopOf="@+id/inst3"/>
-
-                <TextView
-                    android:id="@+id/number_2"
-                    android:text="2"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/inst2"
-                    app:layout_constraintBottom_toBottomOf="@+id/inst2"
-                    app:layout_constraintEnd_toStartOf="@+id/inst2"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <EditText
-                    android:id="@+id/inst3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number_3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inst2"
-                    app:layout_constraintBottom_toTopOf="@+id/inst4"/>
-
-                <TextView
-                    android:id="@+id/number_3"
-                    android:text="3"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/inst3"
-                    app:layout_constraintBottom_toBottomOf="@+id/inst3"
-                    app:layout_constraintEnd_toStartOf="@+id/inst3"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <EditText
-                    android:id="@+id/inst4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number_4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inst3"
-                    app:layout_constraintBottom_toTopOf="@+id/inst5"/>
-
-                <TextView
-                    android:id="@+id/number_4"
-                    android:text="4"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/inst4"
-                    app:layout_constraintBottom_toBottomOf="@+id/inst4"
-                    app:layout_constraintEnd_toStartOf="@+id/inst4"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <EditText
-                    android:id="@+id/inst5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    app:layout_constraintStart_toEndOf="@+id/number_5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inst4"
-                    app:layout_constraintBottom_toTopOf="@+id/buttonNext5"/>
-
-                <TextView
-                    android:id="@+id/number_5"
-                    android:text="5"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/inst5"
-                    app:layout_constraintBottom_toBottomOf="@+id/inst5"
-                    app:layout_constraintEnd_toStartOf="@+id/inst5"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <Button
-                    android:id="@+id/buttonNext5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"
-                    android:padding="15dp"
-                    android:layout_marginTop="50dp"
-                    android:onClick="onClick"
-                    android:text="NEXT"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toEndOf="@+id/buttonMore2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inst5"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <Button
-                    android:id="@+id/buttonMore2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"
-                    android:padding="15dp"
-                    android:layout_marginTop="50dp"
-                    android:onClick="onClick"
-                    android:text="ADD MORE INSTRUCTIONS"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/buttonNext5"
-                    app:layout_constraintTop_toBottomOf="@+id/inst5"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -552,6 +471,89 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tag5"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/breakfast"
+                    android:textSize="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="#fff"
+                    android:textAlignment="center"
+                    android:button="@null"
+                    android:onClick="isChecked"
+                    android:text="@string/breakfast"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/lunch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/lunch"
+                    android:textSize="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="#fff"
+                    android:button="@null"
+                    android:onClick="isChecked"
+                    android:text="@string/lunch"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@+id/breakfast"
+                    app:layout_constraintBottom_toTopOf="@+id/snack"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/snack"
+                    android:textSize="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="#fff"
+                    android:button="@null"
+                    android:onClick="isChecked"
+                    android:text="@string/snack"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@+id/lunch"
+                    app:layout_constraintBottom_toTopOf="@+id/dinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/dinner"
+                    android:textSize="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="#fff"
+                    android:button="@null"
+                    android:textAlignment="center"
+                    android:onClick="isChecked"
+                    android:text="@string/all"
+                    app:layout_constraintTop_toBottomOf="@+id/snack"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonNext8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <Button
+                    android:id="@+id/buttonNext8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    android:padding="15dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:onClick="onClick"
+                    android:text="NEXT"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dinner"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
