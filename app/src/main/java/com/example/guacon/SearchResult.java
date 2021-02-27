@@ -11,6 +11,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
@@ -41,7 +44,8 @@ public class SearchResult extends AppCompatActivity {
         if(!sharedPreferences.getBoolean("vegan", true) && !sharedPreferences.getBoolean("vegetarian", true) &&
                 !sharedPreferences.getBoolean("dairy_free", true) && !sharedPreferences.getBoolean("gluten_free", true) &&
                 !sharedPreferences.getBoolean("naturally_sweetened", true)) {
-            base = FirebaseFirestore.getInstance().collection("recipes");
+            Toast.makeText(this, getIntent().getStringExtra("meal_time"), Toast.LENGTH_SHORT).show();
+            base = FirebaseFirestore.getInstance().collection("recipes").whereArrayContains("meal_time", getIntent().getStringExtra("meal_time"));
         }
         else
             base = FirebaseFirestore.getInstance().collection("recipes")
@@ -52,6 +56,7 @@ public class SearchResult extends AppCompatActivity {
                     .whereEqualTo("naturally_sweetened", sharedPreferences.getBoolean("naturally_sweetened", true));
 
             recyclerView = findViewById(R.id.rv);
+            ((TextView) findViewById(R.id.default_text)).setVisibility(View.INVISIBLE);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
             adapter = new RecipeAdapter(getApplicationContext(), options);

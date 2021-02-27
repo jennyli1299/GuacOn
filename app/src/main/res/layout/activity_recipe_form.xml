@@ -29,82 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/inst_parent_layout"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/inst_layout"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:id="@+id/number_1"
-                        android:text="1"
-                        android:textColor="@android:color/black"
-                        android:textSize="20dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/inst1"
-                        android:layout_width="wrap_content"
-                        android:ems="15"
-                        android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
-                        android:layout_marginBottom="10dp"/>
-
-                    <Button
-                        android:id="@+id/delete_inst"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:clickable="true"
-                        android:onClick="onClick"
-                        android:layout_marginLeft="10dp"
-                        android:background="@android:drawable/ic_menu_delete"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/more_buttons"
-                    android:layout_marginTop="30dp"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/buttonMore2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimaryDark"
-                        android:padding="15dp"
-                        android:onClick="onClick"
-                        android:layout_marginRight="10dp"
-                        android:text="ADD MORE INSTRUCTIONS"
-                        android:textColor="@color/white"/>
-
-                    <Button
-                        android:id="@+id/buttonNext5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimaryDark"
-                        android:padding="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:onClick="onClick"
-                        android:text="NEXT"
-                        android:textColor="@color/white"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -217,170 +141,105 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="40dp">
+                android:id="@+id/ing_parent_layout"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp">
 
-                <EditText
-                    android:id="@+id/ing1"
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/ing2"/>
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
-                <TextView
-                    android:id="@+id/number1"
-                    android:text="1"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/ing1"
-                    app:layout_constraintBottom_toBottomOf="@+id/ing1"
-                    app:layout_constraintEnd_toStartOf="@+id/ing1"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    <Button
+                        android:id="@+id/add2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:onClick="onClick"
+                        android:text="Add" />
 
-                <EditText
-                    android:id="@+id/ing2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ing1"
-                    app:layout_constraintBottom_toTopOf="@+id/ing3"/>
+                    <EditText
+                        android:id="@+id/ing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@id/add2" />
 
-                <TextView
-                    android:id="@+id/number2"
-                    android:text="2"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/ing2"
-                    app:layout_constraintBottom_toBottomOf="@+id/ing2"
-                    app:layout_constraintEnd_toStartOf="@+id/ing2"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/ing3"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/container2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ing2"
-                    app:layout_constraintBottom_toTopOf="@+id/ing4"/>
-
-                <TextView
-                    android:id="@+id/number3"
-                    android:text="3"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/ing3"
-                    app:layout_constraintBottom_toBottomOf="@+id/ing3"
-                    app:layout_constraintEnd_toStartOf="@+id/ing3"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <EditText
-                    android:id="@+id/ing4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/number4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ing3"
-                    app:layout_constraintBottom_toTopOf="@+id/ing5"/>
-
-                <TextView
-                    android:id="@+id/number4"
-                    android:text="4"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/ing4"
-                    app:layout_constraintBottom_toBottomOf="@+id/ing4"
-                    app:layout_constraintEnd_toStartOf="@+id/ing4"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <EditText
-                    android:id="@+id/ing5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    app:layout_constraintStart_toEndOf="@+id/number5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ing4"
-                    app:layout_constraintBottom_toTopOf="@+id/buttonNext4"/>
-
-                <TextView
-                    android:id="@+id/number5"
-                    android:text="5"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/ing5"
-                    app:layout_constraintBottom_toBottomOf="@+id/ing5"
-                    app:layout_constraintEnd_toStartOf="@+id/ing5"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    android:orientation="vertical"></LinearLayout>
 
                 <Button
                     android:id="@+id/buttonNext4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_margin="50dp"
                     android:onClick="onClick"
                     android:text="NEXT"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toEndOf="@+id/buttonMore"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ing5"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inst_parent_layout"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <Button
+                        android:id="@+id/add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:onClick="onClick"
+                        android:text="Add" />
+
+                    <EditText
+                        android:id="@+id/inst"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@id/add" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"></LinearLayout>
 
                 <Button
-                    android:id="@+id/buttonMore"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/buttonNext5"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_margin="50dp"
                     android:onClick="onClick"
-                    android:text="ADD MORE INGREDIENTS"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/buttonNext4"
-                    app:layout_constraintTop_toBottomOf="@+id/ing5"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:text="NEXT"
+                    android:textColor="@color/white" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -389,11 +248,12 @@
                 <CheckBox
                     android:id="@+id/tag"
                     android:textSize="20dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
+                    android:textAlignment="center"
                     android:onClick="isChecked"
                     android:text="@string/vegan"
                     app:layout_constraintTop_toTopOf="parent"
@@ -405,10 +265,11 @@
                     android:id="@+id/tag2"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
                     android:onClick="isChecked"
+                    android:textAlignment="center"
                     android:text="@string/vegetarian"
                     app:layout_constraintTop_toBottomOf="@+id/tag"
                     app:layout_constraintBottom_toTopOf="@+id/tag3"
@@ -419,9 +280,10 @@
                     android:id="@+id/tag3"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
+                    android:textAlignment="center"
                     android:onClick="isChecked"
                     android:text="@string/glutenfree"
                     app:layout_constraintTop_toBottomOf="@+id/tag2"
@@ -433,7 +295,8 @@
                     android:id="@+id/tag4"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
+                    android:textAlignment="center"
                     android:background="#fff"
                     android:button="@null"
                     android:onClick="isChecked"
@@ -447,9 +310,10 @@
                     android:id="@+id/tag5"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
+                    android:textAlignment="center"
                     android:onClick="isChecked"
                     android:text="@string/naturalsweet"
                     app:layout_constraintTop_toBottomOf="@+id/tag4"
@@ -459,12 +323,11 @@
 
                 <Button
                     android:id="@+id/buttonNext6"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
+                    android:layout_margin="50dp"
                     android:onClick="onClick"
                     android:text="NEXT"
                     android:textColor="@color/white"
@@ -484,7 +347,7 @@
                     android:textSize="20dp"
                     android:layout_marginTop="30dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:textAlignment="center"
                     android:button="@null"
@@ -499,7 +362,7 @@
                     android:id="@+id/lunch"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
                     android:onClick="isChecked"
@@ -514,7 +377,7 @@
                     android:id="@+id/snack"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
                     android:onClick="isChecked"
@@ -529,12 +392,12 @@
                     android:id="@+id/dinner"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:background="#fff"
                     android:button="@null"
                     android:textAlignment="center"
                     android:onClick="isChecked"
-                    android:text="@string/all"
+                    android:text="@string/dinner"
                     app:layout_constraintTop_toBottomOf="@+id/snack"
                     app:layout_constraintBottom_toTopOf="@+id/buttonNext8"
                     app:layout_constraintStart_toStartOf="parent"
@@ -542,12 +405,11 @@
 
                 <Button
                     android:id="@+id/buttonNext8"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
+                    android:layout_margin="50dp"
                     android:onClick="onClick"
                     android:text="NEXT"
                     android:textColor="@color/white"
@@ -597,11 +459,11 @@
 
                 <Button
                     android:id="@+id/buttonNext7"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_margin="50dp"
                     android:onClick="onClick"
                     android:text="SAVE RECIPE"
                     android:textColor="@color/white"

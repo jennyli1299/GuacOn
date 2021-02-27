@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20dp"
+            android:id="@+id/default_text"
             android:layout_marginTop="20dp"
             android:text="No results for your preferences"
             app:layout_constraintTop_toBottomOf="@id/appbar"/>
