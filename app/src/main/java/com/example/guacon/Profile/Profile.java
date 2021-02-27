@@ -21,28 +21,36 @@ import com.example.guacon.ProfileAdapter;
 import com.example.guacon.R;
 import com.example.guacon.Recipe;
 import com.example.guacon.RecipeAdapter;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+
 
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
 
     TextView t;
     String TAG ="main";
+
     RecyclerView saved_recipes, your_recipes;
     ProfileAdapter savedRecipeAdapter, yourRecipeAdapter;
     Query base;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        RecipeAdapter ad;
+
 
         t = (TextView) findViewById(R.id.name);
         Button delete = (Button) findViewById(R.id.btn_delete);
@@ -94,7 +102,23 @@ public class Profile extends AppCompatActivity {
         super.onStop();
         savedRecipeAdapter.stopListening();
         yourRecipeAdapter.stopListening();
+
     }
+
+            public void showCustomDialog(String path) {
+                FirebaseFirestore.getInstance().document(path).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            @NonNull Recipe model = new Recipe();
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            //TODO: send recipe name along with Intent
+                            Intent intent = new Intent(getApplicationContext(), Recipe_Detail.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
