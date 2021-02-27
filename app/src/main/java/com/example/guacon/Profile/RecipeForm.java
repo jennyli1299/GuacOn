@@ -2,19 +2,24 @@ package com.example.guacon.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +53,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
     FirebaseStorage storage;
     StorageReference storageReference;
     Recipe newRecipe = new Recipe();
+    private LinearLayout parentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
+        parentLayout = findViewById(R.id.inst_parent_layout);
     }
 
 
@@ -111,7 +118,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 break;
 
             //add recipe instructions to Hashmap
-            case R.id.buttonNext5:  no = Integer.parseInt(((TextView)findViewById(R.id.number_5)).getText().toString());
+            case R.id.buttonNext5:  no = Integer.parseInt(((TextView)findViewById(R.id.number_1)).getText().toString());
                 ArrayList<String> inst = new ArrayList<>();
                 for(int i=0; i<no; i++) {
                     String editTextID = "inst" + (i+1);
@@ -133,13 +140,23 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 newRecipe.setGluten_free(((CheckBox) findViewById(R.id.tag3)).isChecked());
                 newRecipe.setDairy_free(((CheckBox) findViewById(R.id.tag4)).isChecked());
                 newRecipe.setNaturally_sweetened(((CheckBox) findViewById(R.id.tag5)).isChecked());
-                //userRecipe.put("vegan", ((CheckBox) findViewById(R.id.tag)).isChecked());
-                //userRecipe.put("vegetarian", ((CheckBox) findViewById(R.id.tag2)).isChecked());
-                //userRecipe.put("gluten_free", ((CheckBox) findViewById(R.id.tag3)).isChecked());
-                //userRecipe.put("dairy_free", ((CheckBox) findViewById(R.id.tag4)).isChecked());
-                //userRecipe.put("naturally_sweetened", ((CheckBox) findViewById(R.id.tag5)).isChecked());
                 simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("Show us how your creation looks like?");
+                ((TextView)findViewById(R.id.ques)).setText("What time does your recipe tastes best?");
+                break;
+
+            case R.id.buttonNext8:
+                ArrayList<String> meal_time = new ArrayList<>();
+                if(((CheckBox) findViewById(R.id.breakfast)).isChecked())
+                    meal_time.add("Breakfast");
+                if(((CheckBox) findViewById(R.id.dinner)).isChecked())
+                    meal_time.add("Dinner");
+                if(((CheckBox) findViewById(R.id.lunch)).isChecked())
+                    meal_time.add("Lunch");
+                if(((CheckBox) findViewById(R.id.snack)).isChecked())
+                    meal_time.add("Snack");
+                newRecipe.setMeal_time(meal_time);
+                simpleViewFlipper.showNext();
+                ((TextView)findViewById(R.id.ques)).setText("Show us how your creation looks?");
                 break;
 
             //Upload Image to Firebase storage and userRecipe hashmap to Firestore
@@ -166,6 +183,13 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             //add more instructions button
             case R.id.buttonMore2:
                 //TODO: add dynamic views
+                LinearLayout rowView = findViewById(R.id.row);
+                // Add the new row before the add field button.
+                parentLayout.addView(rowView);
+                break;
+
+            case R.id.delete_inst:
+                parentLayout.removeView((View) v.getParent());
                 break;
         }
     }

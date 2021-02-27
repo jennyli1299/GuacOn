@@ -17,11 +17,11 @@ import android.widget.TextView;
 
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.MainActivity;
+import com.example.guacon.ProfileAdapter;
 import com.example.guacon.R;
 import com.example.guacon.Recipe;
 import com.example.guacon.RecipeAdapter;
-import com.example.guacon.Recipe_Detail;
-import com.example.guacon.User;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,17 +32,18 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+
 
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
 
     TextView t;
     String TAG ="main";
-    private RecyclerView recipe;
-    User userInfo;
-    
+
+    RecyclerView saved_recipes, your_recipes;
+    ProfileAdapter savedRecipeAdapter, yourRecipeAdapter;
+    Query base;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +52,15 @@ public class Profile extends AppCompatActivity {
         RecipeAdapter ad;
 
 
-        t = (TextView) findViewById(R.id.txt_profile_header);
+        t = (TextView) findViewById(R.id.name);
         Button delete = (Button) findViewById(R.id.btn_delete);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
-        t.setText(sharedPreferences.getString("user_name","") + ", " + sharedPreferences.getInt("user_age", 0));
-        //TODO: set saved_recipes and your_recipes from shared preferences to respective views
+        t.setText(sharedPreferences.getString("user_name",""));
+        ((TextView) findViewById(R.id.age)).setText(String.valueOf(sharedPreferences.getInt("user_age",0)));
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,30 +70,39 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        base = FirebaseFirestore.getInstance().collection("recipes");
 
-        // Creates the user object
-        userInfo = new User();
-        recipe = (RecyclerView) findViewById(R.id.savedRecipe);
-        recipe.setLayoutManager(new LinearLayoutManager(this));
+        saved_recipes = findViewById(R.id.saved_recipes);
+        saved_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        your_recipes = findViewById(R.id.your_recipes);
+        your_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Figure out how saved recipes are going to be stored in firestore
-        FirestoreRecyclerOptions<Recipe> options;
-        Query base;
+        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
 
-        ArrayList<String> savedRecipes = new ArrayList<String>( sharedPreferences.getStringSet("user_saved_recipes", new HashSet<String>()));
-        for (int i = 0; i < savedRecipes.size(); i++) {
-            base = FirebaseFirestore.getInstance().collection("recipes").whereEqualTo("name", savedRecipes.get(i));
-            options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
-            ad = new RecipeAdapter(options);
-            recipe.setAdapter(ad);
-            ad.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                    String path = documentSnapshot.getReference().getPath();
-                    showCustomDialog(path);
-                }
-            });
-        }
+        savedRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);
+        yourRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);
+
+        saved_recipes.setAdapter(savedRecipeAdapter);
+        your_recipes.setAdapter(yourRecipeAdapter);
+    }
+
+    // Function to tell the app to start getting
+    // data from database on starting of the activity
+    @Override protected void onStart()
+    {
+        super.onStart();
+        savedRecipeAdapter.startListening();
+        yourRecipeAdapter.startListening();
+    }
+
+    // Function to tell the app to stop getting
+    // data from database on stoping of the activity
+    @Override protected void onStop()
+    {
+        super.onStop();
+        savedRecipeAdapter.stopListening();
+        yourRecipeAdapter.stopListening();
+
     }
 
             public void showCustomDialog(String path) {

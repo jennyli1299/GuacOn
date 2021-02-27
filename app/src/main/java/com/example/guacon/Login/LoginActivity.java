@@ -37,8 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private RadioButton r;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
-    String email, password, type;
-    private FirebaseFirestore medtrack;
+    String email, password;
     HashMap<String, String> m = new HashMap<>();
     User user = new User();
 
