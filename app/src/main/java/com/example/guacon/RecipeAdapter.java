@@ -2,10 +2,12 @@ package com.example.guacon;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,8 +32,16 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     @Override
     protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final Recipe model){
         holder.name.setText(model.getName());
-        holder.prep_time.setText("Prep Time: " + model.getPrep_time() + " min");
-        holder.supporting_text.setText(model.tags());
+        if(model.getTags().contains("Vegan"))
+            holder.v.setVisibility(View.VISIBLE);
+        if(model.getTags().contains("Vegetarian"))
+            holder.veg.setVisibility(View.VISIBLE);
+        if(model.getTags().contains("Gluten Free"))
+            holder.gf.setVisibility(View.VISIBLE);
+        if(model.getTags().contains("Dairy Free"))
+            holder.df.setVisibility(View.VISIBLE);
+        if(model.getTags().contains("Naturally Sweetened"))
+            holder.ns.setVisibility(View.VISIBLE);
         //Loading image from Glide library.
         Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -41,10 +51,11 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
                 recipe.setName(model.getName());
                 recipe.setPrep_time(model.getPrep_time());
                 recipe.setCook_time(model.getCook_time());
-                recipe.setVegan(model.isVegan());                               recipe.setVegetarian(model.isVegetarian());
-                recipe.setGluten_free(model.isGluten_free());                   recipe.setDairy_free(model.isDairy_free());
-                recipe.setNaturally_sweetened(model.isNaturally_sweetened());   recipe.setFinal_photo(model.getFinal_photo());
-                recipe.setInstructions(model.getInstructions());                recipe.setIngredients(model.getIngredients());
+                recipe.setTags(model.getTags());
+                recipe.setFinal_photo(model.getFinal_photo());
+                recipe.setInstructions(model.getInstructions());
+                recipe.setIngredients(model.getIngredients());
+
                 Intent intent = new Intent(context, Recipe_Detail.class);
                 intent.putExtra("Recipe", recipe);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -66,14 +77,18 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     // Sub Class to create references of the views in Card
     // view (here "recipe_card.xml")
     class RecipesViewHolder extends RecyclerView.ViewHolder {
-        TextView name, prep_time, supporting_text;
+        TextView name;
         ImageView media_image;
+        ImageView v, veg, gf, ns, df;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
-            prep_time = itemView.findViewById(R.id.prep_time);
-            supporting_text = itemView.findViewById(R.id.supporting_text);
             media_image = itemView.findViewById(R.id.media_image);
+            v = itemView.findViewById(R.id.v);
+            veg = itemView.findViewById(R.id.veg);
+            gf = itemView.findViewById(R.id.gf);
+            df = itemView.findViewById(R.id.df);
+            ns = itemView.findViewById(R.id.ns);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

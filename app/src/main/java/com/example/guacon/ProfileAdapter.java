@@ -39,10 +39,10 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Recipe, ProfileAdap
                 recipe.setName(model.getName());
                 recipe.setPrep_time(model.getPrep_time());
                 recipe.setCook_time(model.getCook_time());
-                recipe.setVegan(model.isVegan());                               recipe.setVegetarian(model.isVegetarian());
-                recipe.setGluten_free(model.isGluten_free());                   recipe.setDairy_free(model.isDairy_free());
-                recipe.setNaturally_sweetened(model.isNaturally_sweetened());   recipe.setFinal_photo(model.getFinal_photo());
-                recipe.setInstructions(model.getInstructions());                recipe.setIngredients(model.getIngredients());
+                recipe.setTags(model.getTags());
+                recipe.setFinal_photo(model.getFinal_photo());
+                recipe.setInstructions(model.getInstructions());
+                recipe.setIngredients(model.getIngredients());
                 Intent intent = new Intent(context, Recipe_Detail.class);
                 intent.putExtra("Recipe", recipe);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

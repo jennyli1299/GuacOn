@@ -3,6 +3,8 @@ package com.example.guacon;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class SearchResult extends AppCompatActivity {
 
@@ -39,35 +47,43 @@ public class SearchResult extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("pref", 0);
-        //show all recipes
-        if(!sharedPreferences.getBoolean("vegan", true) && !sharedPreferences.getBoolean("vegetarian", true) &&
-                !sharedPreferences.getBoolean("dairy_free", true) && !sharedPreferences.getBoolean("gluten_free", true) &&
-                !sharedPreferences.getBoolean("naturally_sweetened", true)) {
-            Toast.makeText(this, getIntent().getStringExtra("meal_time"), Toast.LENGTH_SHORT).show();
-            base = FirebaseFirestore.getInstance().collection("recipes").whereArrayContains("meal_time", getIntent().getStringExtra("meal_time"));
-        }
-        else
-            base = FirebaseFirestore.getInstance().collection("recipes")
-                    .whereEqualTo("vegan", sharedPreferences.getBoolean("vegan", true))
-                    .whereEqualTo("vegetarian", sharedPreferences.getBoolean("vegetarian", true))
-                    .whereEqualTo("gluten_free", sharedPreferences.getBoolean("gluten_free", true))
-                    .whereEqualTo("dairy_free", sharedPreferences.getBoolean("dairy_free", true))
-                    .whereEqualTo("naturally_sweetened", sharedPreferences.getBoolean("naturally_sweetened", true));
+        SharedPreferences sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
+        ArrayList<String> pref = new ArrayList<String>(sharedPreferences.getStringSet("preferences", new HashSet<String>()));
 
-            recyclerView = findViewById(R.id.rv);
-            ((TextView) findViewById(R.id.default_text)).setVisibility(View.INVISIBLE);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
-            adapter = new RecipeAdapter(getApplicationContext(), options);
-            recyclerView.setAdapter(adapter);
-            adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                    String path = documentSnapshot.getReference().getPath();
-                    showCustomDialog(path);
-                }
-            });
+        if (pref.isEmpty()){
+            //show all recipes
+            if(getIntent().getStringExtra("meal_time").equals("Search All"))
+                base = FirebaseFirestore.getInstance().collection("recipes");
+            //show all recipes with a particular meal time
+            else
+                base = FirebaseFirestore.getInstance().collection("recipes")
+                    .whereArrayContains("meal_time", getIntent().getStringExtra("meal_time"));
+        }
+        else {
+            //TODO: add preferences condition
+            //show all recipes with preferences
+            if(getIntent().getStringExtra("meal_time").equals("Search All"))
+                base = FirebaseFirestore.getInstance().collection("recipes");
+            //show all recipes with prefernces and preferred meal time
+            else
+                base = FirebaseFirestore.getInstance().collection("recipes")
+                        .whereArrayContains("meal_time", getIntent().getStringExtra("meal_time"));
+            //base = base.whereArrayContainsAny("tags", pref);
+        }
+
+        recyclerView = findViewById(R.id.rv);
+        GridLayoutManager grid = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
+        adapter = new RecipeAdapter(getApplicationContext(), options);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String path = documentSnapshot.getReference().getPath();
+                showCustomDialog(path);
+            }
+        });
     }
 
     public void showCustomDialog(String path) {

@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public void isChecked(View view){
         ((RadioButton)findViewById(view.getId())).setBackgroundResource(R.color.gray);
         Intent intent = new Intent(MainActivity.this, SearchResult.class);
-        if(((RadioButton)findViewById(view.getId())).getText() != "Search All")
-            intent.putExtra("meal_time", ((RadioButton)findViewById(view.getId())).getText());
+        intent.putExtra("meal_time", ((RadioButton)findViewById(view.getId())).getText());
         startActivity(intent);
     }
 

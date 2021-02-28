@@ -170,11 +170,18 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
 
             //add recipe tags to HashMap
             case R.id.buttonNext6:
-                newRecipe.setVegan(((CheckBox) findViewById(R.id.tag)).isChecked());
-                newRecipe.setVegetarian(((CheckBox) findViewById(R.id.tag2)).isChecked());
-                newRecipe.setGluten_free(((CheckBox) findViewById(R.id.tag3)).isChecked());
-                newRecipe.setDairy_free(((CheckBox) findViewById(R.id.tag4)).isChecked());
-                newRecipe.setNaturally_sweetened(((CheckBox) findViewById(R.id.tag5)).isChecked());
+                ArrayList<String> tags = new ArrayList<>();
+                if(((CheckBox) findViewById(R.id.vegan)).isChecked())
+                    tags.add("Vegan");
+                if(((CheckBox) findViewById(R.id.vegetarian)).isChecked())
+                    tags.add("Vegetarian");
+                if(((CheckBox) findViewById(R.id.gluten_free)).isChecked())
+                    tags.add("Gluten Free");
+                if(((CheckBox) findViewById(R.id.dairy_free)).isChecked())
+                    tags.add("Dairy Free");
+                if(((CheckBox) findViewById(R.id.naturally_sweetened)).isChecked())
+                    tags.add("Naturally Sweetened");
+                newRecipe.setTags(tags);
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("What time does your recipe tastes best?");
                 break;
