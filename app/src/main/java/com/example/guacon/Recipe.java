@@ -9,10 +9,7 @@ import java.util.List;
 public class Recipe implements Serializable {
     //variable name must match the firestore key names
     private String name, prep_time, cook_time, final_photo;
-    private List<String> ingredients = new ArrayList<>();
-    private List<String> instructions = new ArrayList<>();
-    private List<String> meal_time = new ArrayList<>();
-    private boolean vegan, vegetarian, gluten_free, dairy_free, naturally_sweetened;
+    private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), meal_time = new ArrayList<>(), tags = new ArrayList<>();
 
     public Recipe() {}
 
@@ -61,53 +58,10 @@ public class Recipe implements Serializable {
         this.instructions = instructions;
     }
 
-    public boolean isVegan(){
-        return vegan;
+    public List<String> getTags() {
+        return tags;
     }
-    public void setVegan(boolean vegan){
-        this.vegan = vegan;
-    }
-
-    public boolean isVegetarian(){
-        return vegetarian;
-    }
-    public void setVegetarian(boolean vegetarian){
-        this.vegetarian = vegetarian;
-    }
-
-    public boolean isGluten_free(){
-        return gluten_free;
-    }
-    public void setGluten_free(boolean gluten_free){
-        this.gluten_free = gluten_free;
-    }
-
-    public boolean isDairy_free(){
-        return dairy_free;
-    }
-    public void setDairy_free(boolean dairy_free){
-        this.dairy_free = dairy_free;
-    }
-
-    public boolean isNaturally_sweetened(){
-        return naturally_sweetened;
-    }
-    public void setNaturally_sweetened(boolean naturally_sweetened){
-        this.naturally_sweetened = naturally_sweetened;
-    }
-
-    public String tags() {
-        String tag = "";
-        if(isVegan())
-            tag = tag + " Vegan ";
-        if(isVegetarian())
-            tag = tag + " Vegetarian ";
-        if(isGluten_free())
-            tag = tag + " Gluten-Free ";
-        if(isDairy_free())
-            tag = tag + " Dairy-Free ";
-        if(isNaturally_sweetened())
-            tag = tag + " Naturally Sweetened ";
-        return tag;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

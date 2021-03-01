@@ -29,93 +29,160 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RadioGroup
-        android:id="@+id/rg"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
-        app:layout_constraintVertical_bias="0">
+        app:layout_constraintTop_toBottomOf="@id/appbar">
 
-        <RadioButton
-            android:id="@+id/btn_breakfast"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="#fff"
-            android:button="@null"
-            android:checked="true"
-            android:onClick="isChecked"
-            android:paddingLeft="40dp"
-            android:text="Breakfast"
-            android:textSize="25sp"
-            tools:layout_conversion_absoluteHeight="80dp"
-            tools:layout_conversion_absoluteWidth="411dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
+            android:layout_height="wrap_content">
 
-        <RadioButton
-            android:id="@+id/btn_lunch"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="#fff"
-            android:button="@null"
-            android:onClick="isChecked"
-            android:paddingLeft="40dp"
-            android:text="Lunch"
-            android:textSize="25sp"
-            tools:layout_conversion_absoluteHeight="80dp"
-            tools:layout_conversion_absoluteWidth="411dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="80dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_breakfast"
+                android:scaleType="centerCrop"
+                android:id="@+id/btn_breakfast_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btn_lunch_bg"/>
 
-        <RadioButton
-            android:id="@+id/btn_dinner"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="#fff"
-            android:button="@null"
-            android:onClick="isChecked"
-            android:paddingLeft="40dp"
-            android:text="Dinner"
-            android:textSize="25sp"
-            tools:layout_conversion_absoluteHeight="80dp"
-            tools:layout_conversion_absoluteWidth="411dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="160dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/btn_breakfast"
+                android:text="Breakfast"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:onClick="onSelect"
+                android:textSize="40dp"
+                android:padding="10dp"
+                android:background="@color/red"
+                android:textColor="#fff"
+                android:textFontWeight="900"
+                android:fontFamily="@font/lato"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_breakfast_bg"
+                app:layout_constraintTop_toTopOf="@+id/btn_breakfast_bg"
+                app:layout_constraintStart_toStartOf="@+id/btn_breakfast_bg"
+                app:layout_constraintEnd_toEndOf="@+id/btn_breakfast_bg"/>
 
-        <RadioButton
-            android:id="@+id/btn_snacks"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="#fff"
-            android:button="@null"
-            android:onClick="isChecked"
-            android:paddingLeft="40dp"
-            android:text="Snacks"
-            android:textSize="25sp"
-            tools:layout_conversion_absoluteHeight="80dp"
-            tools:layout_conversion_absoluteWidth="411dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="240dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_lunch"
+                android:scaleType="centerCrop"
+                android:id="@+id/btn_lunch_bg"
+                app:layout_constraintTop_toBottomOf="@+id/btn_breakfast_bg"
+                app:layout_constraintBottom_toTopOf="@+id/btn_snacks_bg"/>
 
-        <RadioButton
-            android:id="@+id/btn_all"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="#fff"
-            android:button="@null"
-            android:onClick="isChecked"
-            android:paddingLeft="40dp"
-            android:text="Search All"
-            android:textSize="25sp"
-            tools:layout_conversion_absoluteHeight="80dp"
-            tools:layout_conversion_absoluteWidth="411dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="320dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/btn_lunch"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:text="Lunch"
+                android:padding="10dp"
+                android:textSize="40dp"
+                android:textColor="#fff"
+                android:onClick="onSelect"
+                android:textFontWeight="900"
+                android:background="@color/black"
+                android:fontFamily="@font/lato"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_lunch_bg"
+                app:layout_constraintTop_toTopOf="@+id/btn_lunch_bg"
+                app:layout_constraintStart_toStartOf="@+id/btn_lunch_bg"
+                app:layout_constraintEnd_toEndOf="@+id/btn_lunch_bg"/>
 
-    </RadioGroup>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_snacks"
+                android:scaleType="centerCrop"
+                android:id="@+id/btn_snacks_bg"
+                app:layout_constraintTop_toBottomOf="@+id/btn_lunch_bg"
+                app:layout_constraintBottom_toTopOf="@+id/btn_dinner_bg"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/btn_snacks"
+                android:text="Snacks"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:onClick="onSelect"
+                android:textSize="40dp"
+                android:padding="10dp"
+                android:textColor="#fff"
+                android:textFontWeight="900"
+                android:background="@color/brown"
+                android:fontFamily="@font/lato"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_snacks_bg"
+                app:layout_constraintTop_toTopOf="@+id/btn_snacks_bg"
+                app:layout_constraintStart_toStartOf="@+id/btn_snacks_bg"
+                app:layout_constraintEnd_toEndOf="@+id/btn_snacks_bg"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_dinner"
+                android:scaleType="centerCrop"
+                android:id="@+id/btn_dinner_bg"
+                app:layout_constraintTop_toBottomOf="@+id/btn_snacks_bg"
+                app:layout_constraintBottom_toTopOf="@+id/btn_all_bg"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/btn_dinner"
+                android:text="Dinner"
+                android:textSize="40dp"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:onClick="onSelect"
+                android:padding="10dp"
+                android:textFontWeight="900"
+                android:fontFamily="@font/lato"
+                android:background="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_dinner_bg"
+                app:layout_constraintTop_toTopOf="@+id/btn_dinner_bg"
+                app:layout_constraintStart_toStartOf="@+id/btn_dinner_bg"
+                app:layout_constraintEnd_toEndOf="@+id/btn_dinner_bg"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_all"
+                android:scaleType="centerCrop"
+                android:id="@+id/btn_all_bg"
+                app:layout_constraintTop_toBottomOf="@+id/btn_dinner_bg"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/btn_all"
+                android:text="Search All"
+                android:textSize="40dp"
+                android:textColor="#fff"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:onClick="onSelect"
+                android:textFontWeight="900"
+                android:padding="10dp"
+                android:background="@color/maroon"
+                android:fontFamily="@font/lato"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_all_bg"
+                app:layout_constraintTop_toTopOf="@+id/btn_all_bg"
+                app:layout_constraintStart_toStartOf="@+id/btn_all_bg"
+                app:layout_constraintEnd_toEndOf="@+id/btn_all_bg"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

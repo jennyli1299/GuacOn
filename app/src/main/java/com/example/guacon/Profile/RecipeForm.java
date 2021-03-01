@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,17 +44,16 @@ import java.util.List;
 import java.util.UUID;
 
 //enter the details for your recipe and add them to our database
-public class RecipeForm extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class RecipeForm extends AppCompatActivity implements View.OnClickListener{
 
-    HashMap<String, Object> userRecipe = new HashMap<String, Object>();
     ViewFlipper simpleViewFlipper;
-    Spinner spinner, spinner2;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
     FirebaseStorage storage;
     StorageReference storageReference;
     Recipe newRecipe = new Recipe();
-    private LinearLayout parentLayout;
+    Button add_inst, add_ing;
+    ArrayList<String> inst = new ArrayList<>(), ing = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,67 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        parentLayout = findViewById(R.id.inst_parent_layout);
-    }
+        add_inst = findViewById(R.id.add);
+        add_ing = findViewById(R.id.add2);
 
+        add_inst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View addView = layoutInflater.inflate(R.layout.activity_listview2, (LinearLayout) findViewById(R.id.container), false);
+
+                final TextView text = (TextView) addView.findViewById(R.id.inst1);
+                text.setText(((EditText) findViewById(R.id.inst)).getText().toString());
+
+                Button delete_inst = (Button) addView.findViewById(R.id.delete_inst);
+                final View.OnClickListener thisListener = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        inst.remove(text.getText().toString());
+                        ((LinearLayout)addView.getParent()).removeView(addView);
+                    }
+                };
+
+                delete_inst.setOnClickListener(thisListener);
+
+                if(inst.contains(text.getText().toString()))
+                    Toast.makeText(RecipeForm.this, "Instruction already added", Toast.LENGTH_SHORT).show();
+                else {
+                    inst.add(text.getText().toString());
+                    ((LinearLayout) findViewById(R.id.container)).addView(addView);
+                }
+            }
+        });
+
+        add_ing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View addView = layoutInflater.inflate(R.layout.activity_listview2, (LinearLayout) findViewById(R.id.container2), false);
+
+                final TextView text = (TextView) addView.findViewById(R.id.inst1);
+                text.setText(((EditText) findViewById(R.id.ing)).getText().toString());
+
+                Button delete_inst = (Button) addView.findViewById(R.id.delete_inst);
+                final View.OnClickListener thisListener = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        ing.remove(text.getText().toString());
+                        ((LinearLayout)addView.getParent()).removeView(addView);
+                    }
+                };
+
+                delete_inst.setOnClickListener(thisListener);
+
+                if(ing.contains(text.getText().toString()))
+                    Toast.makeText(RecipeForm.this, "Ingredient already added", Toast.LENGTH_SHORT).show();
+                else {
+                    ing.add(text.getText().toString());
+                    ((LinearLayout) findViewById(R.id.container2)).addView(addView);
+                }
+            }
+        });
+    }
 
     public void onClick(View v) {
         switch (v.getId()){
@@ -80,7 +138,6 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             //add recipe name to Hashmap
             case R.id.buttonNext1:
                 newRecipe.setName(((EditText)findViewById(R.id.ans1)).getText().toString());
-                //userRecipe.put("name", ((EditText)findViewById(R.id.ans1)).getText().toString());
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("How much time is required for preparation?");
                 break;
@@ -88,7 +145,6 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             //add recipe preparation time to Hashmap
             case R.id.buttonNext2:
                 newRecipe.setPrep_time(((EditText)findViewById(R.id.ans2)).getText().toString());
-                //userRecipe.put("prep_time", ((EditText)findViewById(R.id.ans2)).getText().toString());
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("How much time is required for cooking it?");
                 break;
@@ -96,50 +152,36 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             //add recipe cooking time to Hashmap
             case R.id.buttonNext3:
                 newRecipe.setCook_time(((EditText)findViewById(R.id.ans3)).getText().toString());
-                //userRecipe.put("cook_time", ((EditText)findViewById(R.id.ans3)).getText().toString());
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("List all the ingredients for your recipe?");
                 break;
 
             //add recipe ingredients to HashMap
-            case R.id.buttonNext4: int no = Integer.parseInt(((TextView)findViewById(R.id.number5)).getText().toString());
-                ArrayList<String> ing = new ArrayList<>();
-                for(int i=0; i<no; i++) {
-                    String editTextID = "ing" + (i+1);
-                    int resID = getResources().getIdentifier(editTextID, "id", getPackageName());
-                    if(((EditText) findViewById(resID)).getText().toString() == " ")
-                        break;
-                    ing.add(((EditText) findViewById(resID)).getText().toString());
-                }
-                newRecipe.setIngredients(ing);
-                //userRecipe.put("ingredients", ing);
+            case R.id.buttonNext4: newRecipe.setIngredients(ing);
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("Provide the instructions for your recipe?");
                 break;
 
             //add recipe instructions to Hashmap
-            case R.id.buttonNext5:  no = Integer.parseInt(((TextView)findViewById(R.id.number_1)).getText().toString());
-                ArrayList<String> inst = new ArrayList<>();
-                for(int i=0; i<no; i++) {
-                    String editTextID = "inst" + (i+1);
-                    int resID = getResources().getIdentifier(editTextID, "id", getPackageName());
-                    if(((EditText) findViewById(resID)).getText().toString() == " ")
-                        break;
-                    inst.add(((EditText) findViewById(resID)).getText().toString());
-                }
-                newRecipe.setInstructions(inst);
-                //userRecipe.put("instructions", inst);
+            case R.id.buttonNext5:  newRecipe.setInstructions(inst);
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("What tag(s) suits your recipe?");
                 break;
 
             //add recipe tags to HashMap
             case R.id.buttonNext6:
-                newRecipe.setVegan(((CheckBox) findViewById(R.id.tag)).isChecked());
-                newRecipe.setVegetarian(((CheckBox) findViewById(R.id.tag2)).isChecked());
-                newRecipe.setGluten_free(((CheckBox) findViewById(R.id.tag3)).isChecked());
-                newRecipe.setDairy_free(((CheckBox) findViewById(R.id.tag4)).isChecked());
-                newRecipe.setNaturally_sweetened(((CheckBox) findViewById(R.id.tag5)).isChecked());
+                ArrayList<String> tags = new ArrayList<>();
+                if(((CheckBox) findViewById(R.id.tag)).isChecked())
+                    tags.add("Vegan");
+                if(((CheckBox) findViewById(R.id.tag2)).isChecked())
+                    tags.add("Vegetarian");
+                if(((CheckBox) findViewById(R.id.tag3)).isChecked())
+                    tags.add("Gluten Free");
+                if(((CheckBox) findViewById(R.id.tag4)).isChecked())
+                    tags.add("Dairy Free");
+                if(((CheckBox) findViewById(R.id.tag5)).isChecked())
+                    tags.add("Naturally Sweetened");
+                newRecipe.setTags(tags);
                 simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("What time does your recipe tastes best?");
                 break;
@@ -162,10 +204,13 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             //Upload Image to Firebase storage and userRecipe hashmap to Firestore
             case R.id.buttonNext7:
                 uploadImage();
-                newRecipe.setFinal_photo("https://firebasestorage.googleapis.com/v0/b/guacon-65c8f.appspot.com/o/images%2F" + ((TextView) findViewById(R.id.image_name)).getText().toString() + "?alt=media");
-                //userRecipe.put("final_image", ((TextView) findViewById(R.id.image_name)).getText().toString());
-                FirebaseFirestore.getInstance().collection("recipes").document().set(newRecipe);
-                startActivity(new Intent(getApplicationContext(), Profile.class));
+                if(((TextView) findViewById(R.id.image_name)).getText().toString().equals(""))
+                    Toast.makeText(this, "Please upload an Image", Toast.LENGTH_SHORT).show();
+                else {
+                    newRecipe.setFinal_photo("https://firebasestorage.googleapis.com/v0/b/guacon-65c8f.appspot.com/o/images%2F" + ((TextView) findViewById(R.id.image_name)).getText().toString() + "?alt=media");
+                    FirebaseFirestore.getInstance().collection("recipes").document().set(newRecipe);
+                    startActivity(new Intent(getApplicationContext(), Profile.class));
+                }
                 break;
 
             //select Image button
@@ -174,23 +219,6 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-
-            //add more ingredients button
-            case R.id.buttonMore:
-                //TODO: add dynamic views
-                break;
-
-            //add more instructions button
-            case R.id.buttonMore2:
-                //TODO: add dynamic views
-                LinearLayout rowView = findViewById(R.id.row);
-                // Add the new row before the add field button.
-                parentLayout.addView(rowView);
-                break;
-
-            case R.id.delete_inst:
-                parentLayout.removeView((View) v.getParent());
-                break;
         }
     }
 
@@ -257,14 +285,4 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             findViewById(v.getId()).setBackgroundResource(R.color.white);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        // On selecting a spinner item
-        String item = adapterView.getItemAtPosition(i).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 }

@@ -5,4 +5,10 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="gray">#EFEDED</color>
     <color name="white">#fff</color>
+    <color name="orange">#80F57C00</color>
+    <color name="brown">#80702E04</color>
+    <color name="maroon">#80A5084C</color>
+    <color name="red">#80D32F2F</color>
+    <color name="black">#80000000</color>
+    <color name="green">#80388E3C</color>
 </resources>

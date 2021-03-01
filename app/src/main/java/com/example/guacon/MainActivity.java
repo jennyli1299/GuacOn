@@ -11,67 +11,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-//TODO: In alignment with Refine.class
 public class MainActivity extends AppCompatActivity {
-
-    private Button refine;
-    private Button[] options= new Button[5];
-
-    public static HashMap<String, Boolean> refinePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RadioGroup rg = (RadioGroup)findViewById(R.id.rg);
-        RadioButton rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
-
-        rb.setBackgroundResource(R.color.white);
-        rb.setChecked(false);
-        refinePreferences = new HashMap<String, Boolean>();
-        loadInitialPref();
-
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
-    public void isChecked(View view){
-        ((RadioButton)findViewById(view.getId())).setBackgroundResource(R.color.gray);
+    public void onSelect(View view){
         Intent intent = new Intent(MainActivity.this, SearchResult.class);
-        intent.putExtra("refinePreferences", refinePreferences);
+        intent.putExtra("meal_time", ((TextView)findViewById(view.getId())).getText());
         startActivity(intent);
-    }
-
-    public static HashMap<String, Boolean> getPreferences(Bundle b) {
-        String[] preferences = {"Vegetarian", "Vegan", "GF", "DF", "Naturally Sweetened"};
-        HashMap<String, Boolean> pref = new HashMap<String, Boolean>();
-        if (b != null) {
-            for (String s: preferences) {
-                pref.put(s,b.getBoolean(s));
-            }
-        }
-        return pref;
-    }
-
-    public static boolean updatePreferences(String p, Boolean b) {
-        refinePreferences.put(p,b);
-        return true;
-    }
-
-    public void loadInitialPref() {
-        refinePreferences.put("Vegan", false);
-        refinePreferences.put("Vegetarian", false);
-        refinePreferences.put("GF", false);
-        refinePreferences.put("DF", false);
-        refinePreferences.put("Naturally Sweetened", false);
     }
 
     @Override
