@@ -171,15 +171,15 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             //add recipe tags to HashMap
             case R.id.buttonNext6:
                 ArrayList<String> tags = new ArrayList<>();
-                if(((CheckBox) findViewById(R.id.vegan)).isChecked())
+                if(((CheckBox) findViewById(R.id.tag)).isChecked())
                     tags.add("Vegan");
-                if(((CheckBox) findViewById(R.id.vegetarian)).isChecked())
+                if(((CheckBox) findViewById(R.id.tag2)).isChecked())
                     tags.add("Vegetarian");
-                if(((CheckBox) findViewById(R.id.gluten_free)).isChecked())
+                if(((CheckBox) findViewById(R.id.tag3)).isChecked())
                     tags.add("Gluten Free");
-                if(((CheckBox) findViewById(R.id.dairy_free)).isChecked())
+                if(((CheckBox) findViewById(R.id.tag4)).isChecked())
                     tags.add("Dairy Free");
-                if(((CheckBox) findViewById(R.id.naturally_sweetened)).isChecked())
+                if(((CheckBox) findViewById(R.id.tag5)).isChecked())
                     tags.add("Naturally Sweetened");
                 newRecipe.setTags(tags);
                 simpleViewFlipper.showNext();

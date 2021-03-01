@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
@@ -19,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//TODO: In alignment with Refine.class
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -27,20 +27,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RadioGroup rg = (RadioGroup)findViewById(R.id.rg);
-        RadioButton rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
-
-        rb.setBackgroundResource(R.color.white);
-        rb.setChecked(false);
-
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
-    public void isChecked(View view){
-        ((RadioButton)findViewById(view.getId())).setBackgroundResource(R.color.gray);
+    public void onSelect(View view){
         Intent intent = new Intent(MainActivity.this, SearchResult.class);
-        intent.putExtra("meal_time", ((RadioButton)findViewById(view.getId())).getText());
+        intent.putExtra("meal_time", ((TextView)findViewById(view.getId())).getText());
         startActivity(intent);
     }
 
