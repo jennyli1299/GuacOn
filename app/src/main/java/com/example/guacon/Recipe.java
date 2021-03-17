@@ -1,5 +1,12 @@
 package com.example.guacon;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +15,7 @@ import java.util.List;
 //inflate data received from firestore in an object of type 'Recipe'
 public class Recipe implements Serializable {
     //variable name must match the firestore key names
-    private String name, prep_time, cook_time, final_photo;
+    private String name, prep_time, cook_time, final_photo, owner;
     private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), meal_time = new ArrayList<>(), tags = new ArrayList<>();
 
     public Recipe() {}
@@ -63,5 +70,13 @@ public class Recipe implements Serializable {
     }
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

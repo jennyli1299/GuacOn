@@ -1,0 +1,1066 @@
+Index: app/src/main/java/com/example/guacon/Profile/Profile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon.Profile;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.appcompat.widget.Toolbar;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.view.Menu;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.TextView;\r\n\r\nimport com.example.guacon.Login.Launcher;\r\nimport com.example.guacon.MainActivity;\r\nimport com.example.guacon.ProfileAdapter;\r\nimport com.example.guacon.R;\r\nimport com.example.guacon.Recipe;\r\nimport com.example.guacon.RecipeAdapter;\r\nimport com.firebase.ui.firestore.FirestoreRecyclerOptions;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.Query;\r\n\r\n//user profile displaying user data along with saved recipes and recipes added by user\r\npublic class Profile extends AppCompatActivity {\r\n\r\n    TextView t;\r\n    String TAG =\"main\";\r\n    RecyclerView saved_recipes, your_recipes;\r\n    ProfileAdapter savedRecipeAdapter, yourRecipeAdapter;\r\n    Query base;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_profile);\r\n\r\n        t = (TextView) findViewById(R.id.name);\r\n        Button delete = (Button) findViewById(R.id.btn_delete);\r\n\r\n        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);\r\n        setSupportActionBar(toolbar);\r\n\r\n        SharedPreferences sharedPreferences = getSharedPreferences(\"user\", 0);\r\n        t.setText(sharedPreferences.getString(\"user_name\",\"\"));\r\n        ((TextView) findViewById(R.id.age)).setText(String.valueOf(sharedPreferences.getInt(\"user_age\",0)));\r\n\r\n        FloatingActionButton fab = findViewById(R.id.fab);\r\n        fab.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                startActivity(new Intent(getApplicationContext(), RecipeForm.class));\r\n            }\r\n        });\r\n\r\n        base = FirebaseFirestore.getInstance().collection(\"recipes\");\r\n\r\n        saved_recipes = findViewById(R.id.saved_recipes);\r\n        saved_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));\r\n        your_recipes = findViewById(R.id.your_recipes);\r\n        your_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));\r\n\r\n        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();\r\n\r\n        savedRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);\r\n        yourRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);\r\n\r\n        saved_recipes.setAdapter(savedRecipeAdapter);\r\n        your_recipes.setAdapter(yourRecipeAdapter);\r\n    }\r\n\r\n    // Function to tell the app to start getting\r\n    // data from database on starting of the activity\r\n    @Override protected void onStart()\r\n    {\r\n        super.onStart();\r\n        savedRecipeAdapter.startListening();\r\n        yourRecipeAdapter.startListening();\r\n    }\r\n\r\n    // Function to tell the app to stop getting\r\n    // data from database on stoping of the activity\r\n    @Override protected void onStop()\r\n    {\r\n        super.onStop();\r\n        savedRecipeAdapter.stopListening();\r\n        yourRecipeAdapter.stopListening();\r\n    }\r\n\r\n    @Override\r\n    public boolean onCreateOptionsMenu(Menu menu) {\r\n        // Inflate the menu; this adds items to the action bar if it is present.\r\n        getMenuInflater().inflate(R.menu.menu_profile, menu);\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean onOptionsItemSelected(MenuItem item) {\r\n        // Handle action bar item clicks here. The action bar will\r\n        // automatically handle clicks on the Home/Up button, so long\r\n        // as you specify a parent activity in AndroidManifest.xml.\r\n        int id = item.getItemId();\r\n\r\n        //noinspection SimplifiableIfStatement\r\n        if (id == R.id.action_home) {\r\n            startActivity(new Intent(getApplicationContext(), MainActivity.class));\r\n            return true;\r\n        }\r\n        if (id == R.id.action_logout) {\r\n            FirebaseAuth.getInstance().signOut();\r\n            startActivity(new Intent(getApplicationContext(), Launcher.class));\r\n            return true;\r\n        }\r\n\r\n        return super.onOptionsItemSelected(item);\r\n    }\r\n\r\n    @Override\r\n    public void onBackPressed() {\r\n        super.onBackPressed();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/guacon/Profile/Profile.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/Profile/Profile.java	(date 1615571602564)
+@@ -1,9 +1,8 @@
+ package com.example.guacon.Profile;
+ 
+-import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.widget.Toolbar;
+-import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.GridLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import android.content.Intent;
+@@ -12,47 +11,54 @@
+ import android.view.Menu;
+ import android.view.MenuItem;
+ import android.view.View;
+-import android.widget.Button;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import com.example.guacon.Login.Launcher;
+ import com.example.guacon.MainActivity;
+-import com.example.guacon.ProfileAdapter;
+ import com.example.guacon.R;
+ import com.example.guacon.Recipe;
+-import com.example.guacon.RecipeAdapter;
++import com.example.guacon.User;
++import com.example.guacon.UserCard;
++import com.example.guacon.UserCardAdapter;
+ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+-import com.google.android.gms.tasks.OnCompleteListener;
+-import com.google.android.gms.tasks.Task;
+ import com.google.android.material.floatingactionbutton.FloatingActionButton;
+ import com.google.firebase.auth.FirebaseAuth;
+-import com.google.firebase.firestore.DocumentSnapshot;
+ import com.google.firebase.firestore.FirebaseFirestore;
+ import com.google.firebase.firestore.Query;
++import com.google.gson.Gson;
+ 
+ //user profile displaying user data along with saved recipes and recipes added by user
+ public class Profile extends AppCompatActivity {
+ 
+-    TextView t;
++    TextView name_age, followers, following;
+     String TAG ="main";
+-    RecyclerView saved_recipes, your_recipes;
+-    ProfileAdapter savedRecipeAdapter, yourRecipeAdapter;
++    RecyclerView cards;
+     Query base;
++    UserCardAdapter userCardAdapter;
++    SharedPreferences sharedPreferences;
++    User[] user;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_profile);
+ 
+-        t = (TextView) findViewById(R.id.name);
+-        Button delete = (Button) findViewById(R.id.btn_delete);
++        name_age = findViewById(R.id.name);
++        followers = findViewById(R.id.followers);
++        following = findViewById(R.id.following);
+ 
+-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
++        Toolbar toolbar = findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
+ 
+-        SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
+-        t.setText(sharedPreferences.getString("user_name",""));
+-        ((TextView) findViewById(R.id.age)).setText(String.valueOf(sharedPreferences.getInt("user_age",0)));
++        sharedPreferences = getSharedPreferences("user",0);
++        String json = sharedPreferences.getString("user_info", null);
++        Gson gson = new Gson();
++        user = gson.fromJson(json, User[].class);
++
++        followers.setText(user[0].getFollowers_count() + " followers");
++        following.setText(user[0].getFollowing_count() + " following");
++        name_age.setText(user[0].getName() + ", " + user[0].getAge());
+ 
+         FloatingActionButton fab = findViewById(R.id.fab);
+         fab.setOnClickListener(new View.OnClickListener() {
+@@ -62,20 +68,14 @@
+             }
+         });
+ 
+-        base = FirebaseFirestore.getInstance().collection("recipes");
+-
+-        saved_recipes = findViewById(R.id.saved_recipes);
+-        saved_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+-        your_recipes = findViewById(R.id.your_recipes);
+-        your_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
++        base = FirebaseFirestore.getInstance().collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
+ 
+-        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
++        cards = findViewById(R.id.cards);
++        cards.setLayoutManager(new GridLayoutManager(this, 2));
+ 
+-        savedRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);
+-        yourRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);
+-
+-        saved_recipes.setAdapter(savedRecipeAdapter);
+-        your_recipes.setAdapter(yourRecipeAdapter);
++        FirestoreRecyclerOptions<UserCard> options = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base, UserCard.class).build();
++        userCardAdapter = new UserCardAdapter(getApplicationContext(), options);
++        cards.setAdapter(userCardAdapter);
+     }
+ 
+     // Function to tell the app to start getting
+@@ -83,8 +83,6 @@
+     @Override protected void onStart()
+     {
+         super.onStart();
+-        savedRecipeAdapter.startListening();
+-        yourRecipeAdapter.startListening();
+     }
+ 
+     // Function to tell the app to stop getting
+@@ -92,8 +90,6 @@
+     @Override protected void onStop()
+     {
+         super.onStop();
+-        savedRecipeAdapter.stopListening();
+-        yourRecipeAdapter.stopListening();
+     }
+ 
+     @Override
+Index: app/src/main/java/com/example/guacon/ProfileAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.firebase.ui.firestore.FirestoreRecyclerAdapter;\r\nimport com.firebase.ui.firestore.FirestoreRecyclerOptions;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\n\r\n//manages recyclerview for recipe data class and put data in profile_card.xml\r\npublic class ProfileAdapter extends FirestoreRecyclerAdapter<Recipe, ProfileAdapter.RecipesViewHolder> {\r\n\r\n    private OnItemClickListener listener;\r\n    Context context;\r\n\r\n    public ProfileAdapter(Context context, @NonNull FirestoreRecyclerOptions<Recipe> options){\r\n        super(options);\r\n        this.context = context;\r\n    }\r\n\r\n    @Override\r\n    protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final Recipe model){\r\n        holder.name.setText(model.getName());\r\n        //Loading image from Glide library.\r\n        Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);\r\n        holder.itemView.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Recipe recipe = new Recipe();\r\n                recipe.setName(model.getName());\r\n                recipe.setPrep_time(model.getPrep_time());\r\n                recipe.setCook_time(model.getCook_time());\r\n                recipe.setTags(model.getTags());\r\n                recipe.setFinal_photo(model.getFinal_photo());\r\n                recipe.setInstructions(model.getInstructions());\r\n                recipe.setIngredients(model.getIngredients());\r\n                Intent intent = new Intent(context, Recipe_Detail.class);\r\n                intent.putExtra(\"Recipe\", recipe);\r\n                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);\r\n                context.startActivity(intent);\r\n            }\r\n        });\r\n    }\r\n\r\n    // Function to tell the class about the Card view (here\r\n    // \"profile_card.xml\")in\r\n    // which the data will be shown\r\n    @NonNull\r\n    @Override\r\n    public RecipesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_card, parent, false);\r\n        return new ProfileAdapter.RecipesViewHolder(view);\r\n    }\r\n\r\n    // Sub Class to create references of the views in Card\r\n    // view (here \"profile_card.xml\")\r\n    class RecipesViewHolder extends RecyclerView.ViewHolder {\r\n        TextView name;\r\n        ImageView media_image;\r\n        public RecipesViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            name = itemView.findViewById(R.id.recipe_name);\r\n            media_image = itemView.findViewById(R.id.profile_media_image);\r\n            itemView.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    int position = getAdapterPosition();\r\n                    if (position != RecyclerView.NO_POSITION && listener != null) {\r\n                        listener.onItemClick(getSnapshots().getSnapshot(position), position);\r\n                    }\r\n\r\n                }\r\n            });\r\n        }\r\n    }\r\n    public interface OnItemClickListener {\r\n        void onItemClick(DocumentSnapshot documentSnapshot, int position);\r\n    }\r\n    public void setOnItemClickListener(OnItemClickListener listener) {\r\n        this.listener = listener;\r\n    }\r\n}
+===================================================================
+--- app/src/main/java/com/example/guacon/ProfileAdapter.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/UserCardAdapter.java	(date 1615572882629)
+@@ -7,6 +7,7 @@
+ import android.view.ViewGroup;
+ import android.widget.ImageView;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+@@ -15,40 +16,52 @@
+ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+ import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.FirebaseFirestore;
++
++import java.util.ArrayList;
+ 
+ //manages recyclerview for recipe data class and put data in profile_card.xml
+-public class ProfileAdapter extends FirestoreRecyclerAdapter<Recipe, ProfileAdapter.RecipesViewHolder> {
++public class UserCardAdapter extends FirestoreRecyclerAdapter<UserCard, UserCardAdapter.RecipesViewHolder> {
+ 
+     private OnItemClickListener listener;
+     Context context;
+ 
+-    public ProfileAdapter(Context context, @NonNull FirestoreRecyclerOptions<Recipe> options){
++    public UserCardAdapter(Context context, @NonNull FirestoreRecyclerOptions<UserCard> options){
+         super(options);
+         this.context = context;
+     }
+ 
+     @Override
+-    protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final Recipe model){
+-        holder.name.setText(model.getName());
+-        //Loading image from Glide library.
+-        Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);
+-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View view) {
+-                Recipe recipe = new Recipe();
+-                recipe.setName(model.getName());
+-                recipe.setPrep_time(model.getPrep_time());
+-                recipe.setCook_time(model.getCook_time());
+-                recipe.setTags(model.getTags());
+-                recipe.setFinal_photo(model.getFinal_photo());
+-                recipe.setInstructions(model.getInstructions());
+-                recipe.setIngredients(model.getIngredients());
+-                Intent intent = new Intent(context, Recipe_Detail.class);
+-                intent.putExtra("Recipe", recipe);
+-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+-                context.startActivity(intent);
+-            }
+-        });
++    protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final UserCard model){
++        ArrayList<String> recipeArrayList = model.getRecipe();
++        //for(int i=0; i<model.getCount();i++){
++          //  FirebaseFirestore.getInstance().collection("recipes/" + recipeArrayList.get(i))
++        for(int i=0; i<model.getCount(); i++) {
++            if (model.getCount() == 1) {
++                holder.media_image.setMinimumWidth(200);
++                holder.media_image2.setVisibility(View.GONE);
++                holder.media_image3.setVisibility(View.GONE);
++            //    Glide.with(context).load(recipeArrayList.get(i).getFinal_photo()).into(holder.media_image);
++            }
++            if (model.getCount() == 2) {
++                holder.media_image3.setVisibility(View.GONE);
++            //    Glide.with(context).load(recipeArrayList.get(i).getFinal_photo()).into(holder.media_image);
++            //    Glide.with(context).load(recipeArrayList.get(i+1).getFinal_photo()).into(holder.media_image2);
++            }
++            if (model.getCount()>=3){
++            //    Glide.with(context).load(recipeArrayList.get(i).getFinal_photo()).into(holder.media_image);
++            //    Glide.with(context).load(recipeArrayList.get(i+1).getFinal_photo()).into(holder.media_image2);
++            //    Glide.with(context).load(recipeArrayList.get(i+2).getFinal_photo()).into(holder.media_image3);
++            }
++            holder.name.setText(model.getName());
++            //Loading image from Glide library.
++            holder.itemView.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View view) {
++
++                }
++            });
++        }
+     }
+ 
+     // Function to tell the class about the Card view (here
+@@ -58,18 +71,20 @@
+     @Override
+     public RecipesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_card, parent, false);
+-        return new ProfileAdapter.RecipesViewHolder(view);
++        return new UserCardAdapter.RecipesViewHolder(view);
+     }
+ 
+     // Sub Class to create references of the views in Card
+     // view (here "profile_card.xml")
+     class RecipesViewHolder extends RecyclerView.ViewHolder {
+         TextView name;
+-        ImageView media_image;
++        ImageView media_image, media_image2, media_image3;
+         public RecipesViewHolder(@NonNull View itemView) {
+             super(itemView);
+-            name = itemView.findViewById(R.id.recipe_name);
++            name = itemView.findViewById(R.id.card_name);
+             media_image = itemView.findViewById(R.id.profile_media_image);
++            media_image2 = itemView.findViewById(R.id.profile_media_image2);
++            media_image3 = itemView.findViewById(R.id.profile_media_image3);
+             itemView.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+Index: app/src/main/res/layout/activity_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Profile.Profile\">\r\n\r\n    <com.google.android.material.appbar.AppBarLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:theme=\"@style/AppTheme.AppBarOverlay\"\r\n        android:id=\"@+id/appbar\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.0\">\r\n\r\n        <androidx.appcompat.widget.Toolbar\r\n            android:id=\"@+id/toolbar\"\r\n            app:title=\"Profile\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"?attr/actionBarSize\"\r\n            android:background=\"@color/colorPrimaryDark\"\r\n            app:popupTheme=\"@style/AppTheme.PopupOverlay\" />\r\n\r\n    </com.google.android.material.appbar.AppBarLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:paddingLeft=\"10dp\"\r\n        android:paddingRight=\"10dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/appbar\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\">\r\n\r\n    <ImageView\r\n        android:layout_width=\"100dp\"\r\n        android:layout_height=\"100dp\"\r\n        android:id=\"@+id/dp\"\r\n        android:src=\"@drawable/guacon\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/name\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintBottom_toTopOf=\"@id/saved_title\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/name\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Your name\"\r\n        android:textAlignment=\"center\"\r\n        android:textSize=\"26sp\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/dp\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/age\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/dp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/age\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Your age\"\r\n        android:textAlignment=\"center\"\r\n        android:textSize=\"20sp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/name\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/dp\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/dp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"/>\r\n\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Saved Recipes\"\r\n        android:textColor=\"#000\"\r\n        android:id=\"@+id/saved_title\"\r\n        android:layout_marginTop=\"20dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/dp\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/saved_recipes\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0\"/>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id = \"@+id/saved_recipes\"\r\n        android:layout_width = \"match_parent\"\r\n        android:layout_height = \"wrap_content\"\r\n        android:scrollbars=\"horizontal\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/saved_title\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/your_title\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"/>\r\n\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Your Recipes\"\r\n        android:textColor=\"#000\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:id=\"@+id/your_title\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/saved_recipes\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/your_recipes\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0\"/>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id = \"@+id/your_recipes\"\r\n        android:layout_width = \"match_parent\"\r\n        android:layout_height = \"wrap_content\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/your_title\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"/>\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <com.google.android.material.floatingactionbutton.FloatingActionButton\r\n        android:id=\"@+id/fab\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:src=\"@drawable/ic_recipe_add\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.919\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.953\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_profile.xml	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/res/layout/activity_profile.xml	(date 1614858933656)
+@@ -28,7 +28,7 @@
+ 
+     </com.google.android.material.appbar.AppBarLayout>
+ 
+-    <androidx.constraintlayout.widget.ConstraintLayout
++    <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:paddingLeft="10dp"
+@@ -38,87 +38,90 @@
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent">
+ 
+-    <ImageView
+-        android:layout_width="100dp"
+-        android:layout_height="100dp"
+-        android:id="@+id/dp"
+-        android:src="@drawable/guacon"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintEnd_toStartOf="@+id/name"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintBottom_toTopOf="@id/saved_title"/>
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <androidx.cardview.widget.CardView
++            android:layout_width="80dp"
++            android:layout_height="80dp"
++            android:id="@+id/dp"
++            app:cardCornerRadius="50dp"
++            android:layout_marginTop="20dp"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintTop_toTopOf="parent"
++            app:layout_constraintBottom_toTopOf="@id/name">
++
++            <ImageView
++                android:layout_width="80dp"
++                android:layout_height="80dp"
++                android:id="@+id/dp1"
++                android:src="@drawable/guacon"
++                android:scaleType="centerCrop" />
++
++        </androidx.cardview.widget.CardView>
+ 
+-    <TextView
+-        android:id="@+id/name"
+-        android:layout_width="0dp"
+-        android:layout_height="wrap_content"
+-        android:text="Your name"
+-        android:textAlignment="center"
+-        android:textSize="26sp"
+-        app:layout_constraintTop_toTopOf="@+id/dp"
+-        app:layout_constraintBottom_toTopOf="@+id/age"
+-        app:layout_constraintStart_toEndOf="@+id/dp"
+-        app:layout_constraintEnd_toEndOf="parent"/>
++        <TextView
++            android:id="@+id/name"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:hint="Your Name, Your Age"
++            android:textColor="#000"
++            android:textAlignment="center"
++            android:textSize="25sp"
++            app:layout_constraintTop_toBottomOf="@+id/dp"
++            app:layout_constraintBottom_toTopOf="@+id/followers"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintEnd_toEndOf="parent"/>
+ 
+-    <TextView
+-        android:id="@+id/age"
+-        android:layout_width="0dp"
+-        android:layout_height="wrap_content"
+-        android:text="Your age"
+-        android:textAlignment="center"
+-        android:textSize="20sp"
+-        app:layout_constraintTop_toBottomOf="@+id/name"
+-        app:layout_constraintBottom_toBottomOf="@+id/dp"
+-        app:layout_constraintStart_toEndOf="@+id/dp"
+-        app:layout_constraintEnd_toEndOf="parent"/>
++        <TextView
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:text="0 followers"
++            android:textColor="#000"
++            android:textAlignment="viewEnd"
++            android:id="@+id/followers"
++            app:layout_constraintTop_toBottomOf="@+id/name"
++            app:layout_constraintBottom_toTopOf="@+id/cards"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintEnd_toStartOf="@+id/seperator"/>
+ 
+-    <TextView
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="Saved Recipes"
+-        android:textColor="#000"
+-        android:id="@+id/saved_title"
+-        android:layout_marginTop="20dp"
+-        app:layout_constraintTop_toBottomOf="@+id/dp"
+-        app:layout_constraintBottom_toTopOf="@+id/saved_recipes"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0"/>
+-
+-    <androidx.recyclerview.widget.RecyclerView
+-        android:id = "@+id/saved_recipes"
+-        android:layout_width = "match_parent"
+-        android:layout_height = "wrap_content"
+-        android:scrollbars="horizontal"
+-        app:layout_constraintTop_toBottomOf="@+id/saved_title"
+-        app:layout_constraintBottom_toTopOf="@+id/your_title"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"/>
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text=" - "
++            android:id="@+id/seperator"
++            app:layout_constraintTop_toBottomOf="@+id/name"
++            app:layout_constraintBottom_toTopOf="@+id/cards"
++            app:layout_constraintEnd_toStartOf="@+id/following"
++            app:layout_constraintStart_toEndOf="@+id/followers"/>
+ 
+-    <TextView
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="Your Recipes"
+-        android:textColor="#000"
+-        android:layout_marginTop="20dp"
+-        android:id="@+id/your_title"
+-        app:layout_constraintTop_toBottomOf="@+id/saved_recipes"
+-        app:layout_constraintBottom_toTopOf="@+id/your_recipes"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0"/>
++        <TextView
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:text="0 following"
++            android:textColor="#000"
++            android:id="@+id/following"
++            app:layout_constraintTop_toBottomOf="@+id/name"
++            app:layout_constraintBottom_toTopOf="@+id/cards"
++            app:layout_constraintStart_toEndOf="@+id/seperator"
++            app:layout_constraintEnd_toEndOf="parent"/>
+ 
+-    <androidx.recyclerview.widget.RecyclerView
+-        android:id = "@+id/your_recipes"
+-        android:layout_width = "match_parent"
+-        android:layout_height = "wrap_content"
+-        app:layout_constraintTop_toBottomOf="@+id/your_title"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"/>
++        <androidx.recyclerview.widget.RecyclerView
++            android:id = "@+id/cards"
++            android:layout_width = "match_parent"
++            android:layout_height = "wrap_content"
++            android:visibility="gone"
++            app:layout_constraintTop_toBottomOf="@+id/seperator"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintEnd_toEndOf="parent"/>
+ 
+-    </androidx.constraintlayout.widget.ConstraintLayout>
++        </androidx.constraintlayout.widget.ConstraintLayout>
+ 
++    </ScrollView>
++
+     <com.google.android.material.floatingactionbutton.FloatingActionButton
+         android:id="@+id/fab"
+         android:layout_width="wrap_content"
+Index: app/src/main/java/com/example/guacon/Login/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon.Login;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.RadioButton;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.guacon.MainActivity;\r\nimport com.example.guacon.R;\r\nimport com.example.guacon.User;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\npublic class LoginActivity extends AppCompatActivity implements View.OnClickListener {\r\n    private Button b1;\r\n    private TextView t;\r\n    private EditText e1,e2;\r\n    private RadioButton r;\r\n    private FirebaseAuth auth;\r\n    private ProgressBar progressBar;\r\n    String email, password;\r\n    HashMap<String, String> m = new HashMap<>();\r\n    User user = new User();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login);\r\n        e1 = (EditText) findViewById(R.id.email_text);\r\n        e2 = (EditText) findViewById(R.id.password_text);\r\n        t = (TextView) findViewById(R.id.signup_link);\r\n        b1 = (Button) findViewById(R.id.login_button);\r\n        progressBar = findViewById(R.id.progressBar);\r\n        auth = FirebaseAuth.getInstance();\r\n    }\r\n\r\n    private void loginUserAccount(){\r\n        progressBar.setVisibility(View.VISIBLE);\r\n        email = e1.getText().toString();\r\n        password = e2.getText().toString();\r\n\r\n        if(TextUtils.isEmpty(email)){\r\n            e1.setError(\"required\");\r\n            return;\r\n        }\r\n\r\n        if(TextUtils.isEmpty(password)){\r\n            e2.setError(\"required\");\r\n            return;\r\n        }\r\n\r\n        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<AuthResult> task) {\r\n                if(task.isSuccessful()){\r\n                    Toast.makeText(getApplicationContext(), \"Login Successful!\", Toast.LENGTH_LONG).show();\r\n                    progressBar.setVisibility(View.GONE);\r\n\r\n                    saveData(email);\r\n\r\n                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);\r\n                    startActivity(intent);\r\n                }\r\n                else{\r\n                    Toast.makeText(getApplicationContext(), \"Login Failed!\", Toast.LENGTH_LONG).show();\r\n                    progressBar.setVisibility(View.GONE);\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    public void saveData(String email) {\r\n        final SharedPreferences sharedPreferences = getSharedPreferences(\"user\", 0);\r\n        final SharedPreferences.Editor editor = sharedPreferences.edit();\r\n        editor.putString(\"user_email\", email);\r\n        FirebaseFirestore.getInstance().collection(\"Users\").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if(task.isSuccessful()) {\r\n                    DocumentSnapshot documentSnapshot = task.getResult();\r\n                    user.setName(documentSnapshot.getString(\"First_Name\"), documentSnapshot.getString(\"Last_Name\"));\r\n                    user.setAge(Integer.parseInt(String.valueOf(documentSnapshot.getLong(\"Age\"))));\r\n                    user.setSaved_recipes((ArrayList<String>)documentSnapshot.get(\"saved_recipes\"));\r\n                    user.setYour_recipes((ArrayList<String>)documentSnapshot.get(\"your_recipes\"));\r\n\r\n                    editor.putString(\"user_name\", user.getName());\r\n                    editor.putInt(\"user_age\", user.getAge());\r\n                    editor.putStringSet(\"user_saved_recipes\", new HashSet<String>(user.getSaved_recipes()));\r\n                    editor.putStringSet(\"user_recipes\", new HashSet<String>(user.getYour_recipes()));\r\n                    editor.apply();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    public void onClick(View v){\r\n        if(v.getId()==R.id.signup_link){\r\n            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);\r\n            startActivity(intent);\r\n        }\r\n        else\r\n            loginUserAccount();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/guacon/Login/LoginActivity.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/Login/LoginActivity.java	(date 1615569290664)
+@@ -3,6 +3,7 @@
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
++import android.os.Parcelable;
+ import android.text.TextUtils;
+ import android.view.View;
+ import android.widget.Button;
+@@ -24,10 +25,13 @@
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.firestore.DocumentSnapshot;
+ import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.gson.Gson;
+ 
++import java.io.Serializable;
+ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.HashSet;
++import java.util.List;
+ import java.util.Set;
+ 
+ public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+@@ -45,10 +49,10 @@
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_login);
+-        e1 = (EditText) findViewById(R.id.email_text);
+-        e2 = (EditText) findViewById(R.id.password_text);
+-        t = (TextView) findViewById(R.id.signup_link);
+-        b1 = (Button) findViewById(R.id.login_button);
++        e1 = findViewById(R.id.email_text);
++        e2 = findViewById(R.id.password_text);
++        t = findViewById(R.id.signup_link);
++        b1 = findViewById(R.id.login_button);
+         progressBar = findViewById(R.id.progressBar);
+         auth = FirebaseAuth.getInstance();
+     }
+@@ -72,13 +76,9 @@
+             @Override
+             public void onComplete(@NonNull Task<AuthResult> task) {
+                 if(task.isSuccessful()){
+-                    Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_LONG).show();
++                    Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
+                     progressBar.setVisibility(View.GONE);
+-
+                     saveData(email);
+-
+-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+-                    startActivity(intent);
+                 }
+                 else{
+                     Toast.makeText(getApplicationContext(), "Login Failed!", Toast.LENGTH_LONG).show();
+@@ -98,15 +98,19 @@
+                 if(task.isSuccessful()) {
+                     DocumentSnapshot documentSnapshot = task.getResult();
+                     user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
+-                    user.setAge(Integer.parseInt(String.valueOf(documentSnapshot.getLong("Age"))));
+-                    user.setSaved_recipes((ArrayList<String>)documentSnapshot.get("saved_recipes"));
+-                    user.setYour_recipes((ArrayList<String>)documentSnapshot.get("your_recipes"));
+-
+-                    editor.putString("user_name", user.getName());
+-                    editor.putInt("user_age", user.getAge());
+-                    editor.putStringSet("user_saved_recipes", new HashSet<String>(user.getSaved_recipes()));
+-                    editor.putStringSet("user_recipes", new HashSet<String>(user.getYour_recipes()));
+-                    editor.apply();
++                    user.setAge(documentSnapshot.getLong("Age"));
++                    user.setFollowers((ArrayList<String>)documentSnapshot.get("Followers"));
++                    user.setFollowing((ArrayList<String>)documentSnapshot.get("Following"));
++                    user.setFollowers_count(documentSnapshot.getLong("Followers_count"));
++                    user.setFollowing_count(documentSnapshot.getLong("Following_count"));
++                    List<User> temp = new ArrayList<>();
++                    temp.add(user);
++                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
++                    Gson gson = new Gson();
++                    String json = gson.toJson(temp);
++                    editor.putString("user_info", json);
++                    editor.commit();
++                    startActivity(intent);
+                 }
+             }
+         });
+Index: app/src/main/java/com/example/guacon/Admin.java
+===================================================================
+--- app/src/main/java/com/example/guacon/Admin.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/Admin.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
+@@ -1,16 +0,0 @@
+-package com.example.guacon;
+-
+-public class Admin extends User {
+-    private boolean admin = true;
+-
+-    public Admin(){
+-        super();
+-//        admin = true;
+-    }
+-
+-    public Admin(String fN, String lN, int age) {
+-        super(fN, lN, age);
+-//        admin = true;
+-    }
+-
+-}
+Index: app/src/main/java/com/example/guacon/Login/Launcher.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon.Login;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.TextView;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.guacon.MainActivity;\r\nimport com.example.guacon.R;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\n\r\npublic class Launcher extends AppCompatActivity implements View.OnClickListener{\r\n\r\n    Button b1;\r\n    TextView t;\r\n    private FirebaseAuth auth;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_launcher);\r\n        t = (TextView) findViewById(R.id.login_link);\r\n        b1 = (Button) findViewById(R.id.signup_button);\r\n        auth = FirebaseAuth.getInstance();\r\n        FirebaseUser currentUser = auth.getCurrentUser();\r\n        if(currentUser!=null) {\r\n            Intent intent = new Intent(getApplicationContext(), MainActivity.class);\r\n            startActivity(intent);\r\n        }\r\n    }\r\n\r\n    public void onClick(View v){\r\n        if(v.getId()==R.id.signup_button){\r\n            Intent intent = new Intent(Launcher.this, SignupActivity.class);\r\n            startActivity(intent);\r\n        }\r\n        if(v.getId()==R.id.login_link){\r\n            Intent intent = new Intent(Launcher.this, LoginActivity.class);\r\n            startActivity(intent);\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/guacon/Login/Launcher.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/Login/Launcher.java	(date 1614937477437)
+@@ -5,18 +5,28 @@
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.TextView;
++
++import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import com.example.guacon.MainActivity;
+ import com.example.guacon.R;
++import com.example.guacon.User;
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.FirebaseFirestore;
++
++import java.util.ArrayList;
+ 
+ public class Launcher extends AppCompatActivity implements View.OnClickListener{
+ 
+     Button b1;
+     TextView t;
+     private FirebaseAuth auth;
++    User user = new User();
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -27,7 +37,24 @@
+         auth = FirebaseAuth.getInstance();
+         FirebaseUser currentUser = auth.getCurrentUser();
+         if(currentUser!=null) {
++            FirebaseFirestore.getInstance().collection("Users")
++                    .document(getSharedPreferences("user", 0).getString("user_email","")).get()
++                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++                @Override
++                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                    if (task.isSuccessful()) {
++                        DocumentSnapshot documentSnapshot = task.getResult();
++                        user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
++                        user.setAge(documentSnapshot.getLong("Age"));
++                        user.setFollowers((ArrayList<String>) documentSnapshot.get("Followers"));
++                        user.setFollowing((ArrayList<String>) documentSnapshot.get("Following"));
++                        user.setFollowers_count(documentSnapshot.getLong("Followers_count"));
++                        user.setFollowing_count(documentSnapshot.getLong("Following_count"));
++                    }
++                }
++            });
+             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
++            intent.putExtra("user_info", user);
+             startActivity(intent);
+         }
+     }
+Index: app/src/main/java/com/example/guacon/SearchResult.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.appcompat.widget.Toolbar;\r\nimport androidx.constraintlayout.widget.ConstraintLayout;\r\nimport androidx.recyclerview.widget.GridLayoutManager;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.view.Menu;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.GridLayout;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.guacon.Login.Launcher;\r\nimport com.example.guacon.Profile.Profile;\r\nimport com.firebase.ui.firestore.FirestoreRecyclerOptions;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.Query;\r\n\r\nimport org.w3c.dom.Text;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashSet;\r\n\r\npublic class SearchResult extends AppCompatActivity {\r\n\r\n    private RecyclerView recyclerView;\r\n    RecipeAdapter adapter;\r\n    Query base;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_search_result3);\r\n\r\n        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);\r\n        setSupportActionBar(toolbar);\r\n\r\n        SharedPreferences sharedPreferences = getSharedPreferences(\"pref\", MODE_PRIVATE);\r\n        ArrayList<String> pref = new ArrayList<String>(sharedPreferences.getStringSet(\"preferences\", new HashSet<String>()));\r\n\r\n        if (pref.isEmpty()){\r\n            //show all recipes\r\n            if(getIntent().getStringExtra(\"meal_time\").equals(\"Search All\"))\r\n                base = FirebaseFirestore.getInstance().collection(\"recipes\");\r\n            //show all recipes with a particular meal time\r\n            else\r\n                base = FirebaseFirestore.getInstance().collection(\"recipes\")\r\n                    .whereArrayContains(\"meal_time\", getIntent().getStringExtra(\"meal_time\"));\r\n        }\r\n        else {\r\n            //TODO: add preferences condition\r\n            //show all recipes with preferences\r\n            if(getIntent().getStringExtra(\"meal_time\").equals(\"Search All\"))\r\n                base = FirebaseFirestore.getInstance().collection(\"recipes\");\r\n            //show all recipes with prefernces and preferred meal time\r\n            else\r\n                base = FirebaseFirestore.getInstance().collection(\"recipes\")\r\n                        .whereArrayContains(\"meal_time\", getIntent().getStringExtra(\"meal_time\"));\r\n            //base = base.whereArrayContainsAny(\"tags\", pref);\r\n        }\r\n\r\n        recyclerView = findViewById(R.id.rv);\r\n        GridLayoutManager grid = new GridLayoutManager(this, 2);\r\n        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));\r\n        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();\r\n        adapter = new RecipeAdapter(getApplicationContext(), options);\r\n        recyclerView.setAdapter(adapter);\r\n        adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {\r\n                String path = documentSnapshot.getReference().getPath();\r\n                showCustomDialog(path);\r\n            }\r\n        });\r\n    }\r\n\r\n    public void showCustomDialog(String path) {\r\n        FirebaseFirestore.getInstance().document(path).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if(task.isSuccessful()){\r\n                    @NonNull Recipe model = new Recipe();\r\n                    DocumentSnapshot documentSnapshot = task.getResult();\r\n                    //TODO: send recipe name along with Intent\r\n                    Intent intent = new Intent(getApplicationContext(), Recipe_Detail.class);\r\n                    startActivity(intent);\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    // Function to tell the app to start getting\r\n    // data from database on starting of the activity\r\n    @Override protected void onStart()\r\n    {\r\n        super.onStart();\r\n        adapter.startListening();\r\n    }\r\n\r\n    // Function to tell the app to stop getting\r\n    // data from database on stoping of the activity\r\n    @Override protected void onStop()\r\n    {\r\n        super.onStop();\r\n        adapter.stopListening();\r\n    }\r\n\r\n    @Override\r\n    public boolean onCreateOptionsMenu(Menu menu) {\r\n        // Inflate the menu; this adds items to the action bar if it is present.\r\n        getMenuInflater().inflate(R.menu.menu_all, menu);\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean onOptionsItemSelected(MenuItem item) {\r\n\r\n        int id = item.getItemId();\r\n\r\n        if (id == R.id.action_refine) {\r\n            startActivity(new Intent(getApplicationContext(), Refine.class));\r\n            return true;\r\n        }\r\n\r\n        if (id == R.id.action_home) {\r\n            startActivity(new Intent(getApplicationContext(), MainActivity.class));\r\n        }\r\n\r\n        if (id == R.id.action_profile) {\r\n            startActivity(new Intent(getApplicationContext(), Profile.class));\r\n            return true;\r\n        }\r\n\r\n        if (id == R.id.action_logout) {\r\n            FirebaseAuth.getInstance().signOut();\r\n            startActivity(new Intent(getApplicationContext(), Launcher.class));\r\n            return true;\r\n        }\r\n\r\n        return super.onOptionsItemSelected(item);\r\n    }\r\n\r\n    @Override\r\n    public void onBackPressed() {\r\n        super.onBackPressed();\r\n        startActivity(new Intent(getApplicationContext(), MainActivity.class));\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/guacon/SearchResult.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/SearchResult.java	(date 1614939723690)
+@@ -4,9 +4,11 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.widget.Toolbar;
+ import androidx.constraintlayout.widget.ConstraintLayout;
++import androidx.recyclerview.widget.DefaultItemAnimator;
+ import androidx.recyclerview.widget.GridLayoutManager;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
++import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+ 
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+@@ -72,8 +74,8 @@
+         }
+ 
+         recyclerView = findViewById(R.id.rv);
+-        GridLayoutManager grid = new GridLayoutManager(this, 2);
+-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
++        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
++        recyclerView.setItemAnimator(new DefaultItemAnimator());
+         FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
+         adapter = new RecipeAdapter(getApplicationContext(), options);
+         recyclerView.setAdapter(adapter);
+Index: app/src/main/res/layout/recipe_card.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    style=\"@style/CardView.Light\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:layout_marginRight=\"4dp\"\r\n    android:layout_marginLeft=\"4dp\"\r\n    android:layout_marginBottom=\"8dp\"\r\n    android:background=\"@color/gray\"\r\n    android:layout_marginTop=\"8dp\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/name\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"5dp\"\r\n            android:layout_marginBottom=\"5dp\"\r\n            android:textSize=\"18dp\"\r\n            android:text=\"recipe name here\"\r\n            android:textAlignment=\"center\"\r\n            android:textAppearance=\"@style/TextAppearance.AppCompat.Body2\"\r\n            android:textColor=\"#DE000000\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/tags\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"@id/media_image\"\r\n            app:layout_constraintEnd_toEndOf=\"@id/media_image\" />\r\n\r\n        <ImageView\r\n            android:id=\"@+id/media_image\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"0dp\"\r\n            android:scaleType=\"centerCrop\"\r\n            android:src=\"@drawable/zs\"\r\n            app:layout_constraintDimensionRatio=\"5:6\"\r\n            app:layout_constraintTop_toTopOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintBottom_toTopOf=\"@+id/tags\"/>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/tags\"\r\n            android:layout_marginTop=\"5dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/media_image\"\r\n            app:layout_constraintBottom_toTopOf=\"@+id/name\"\r\n            app:layout_constraintStart_toStartOf=\"@id/media_image\"\r\n            app:layout_constraintEnd_toEndOf=\"@id/media_image\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <ImageView\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:id=\"@+id/v\"\r\n                android:visibility=\"gone\"\r\n                android:layout_marginRight=\"4dp\"\r\n                android:src=\"@drawable/ic_vegan\"/>\r\n\r\n            <ImageView\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:id=\"@+id/veg\"\r\n                android:visibility=\"gone\"\r\n                android:layout_marginRight=\"4dp\"\r\n                android:src=\"@drawable/ic_vegetarian\"/>\r\n\r\n            <ImageView\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:id=\"@+id/gf\"\r\n                android:visibility=\"gone\"\r\n                android:layout_marginRight=\"4dp\"\r\n                android:src=\"@drawable/ic_gluten_free\"/>\r\n\r\n            <ImageView\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:id=\"@+id/df\"\r\n                android:visibility=\"gone\"\r\n                android:layout_marginRight=\"4dp\"\r\n                android:src=\"@drawable/ic_dairy_free\"/>\r\n\r\n            <ImageView\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:id=\"@+id/ns\"\r\n                android:visibility=\"gone\"\r\n                android:src=\"@drawable/ic_naturally_sweetened\"/>\r\n\r\n        </LinearLayout>\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n</androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/recipe_card.xml	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/res/layout/recipe_card.xml	(date 1614686254449)
+@@ -43,6 +43,17 @@
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintBottom_toTopOf="@+id/tags"/>
+ 
++        <ImageButton
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:src="@android:drawable/btn_star"
++            app:layout_constraintBottom_toBottomOf="@+id/media_image"
++            app:layout_constraintTop_toTopOf="@+id/media_image"
++            app:layout_constraintStart_toStartOf="@+id/media_image"
++            app:layout_constraintEnd_toEndOf="@+id/media_image"
++            app:layout_constraintVertical_bias="1"
++            app:layout_constraintHorizontal_bias="1"/>
++
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\napply plugin: 'com.google.gms.google-services'\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.2\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.guacon\"\r\n        minSdkVersion 22\r\n        targetSdkVersion 30\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation platform('com.google.firebase:firebase-bom:26.1.0')\r\n\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'com.google.android.material:material:1.2.0-alpha02'\r\n    implementation 'androidx.annotation:annotation:1.1.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'\r\n    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n\r\n    implementation 'androidx.cardview:cardview:1.0.0'\r\n    implementation 'androidx.navigation:navigation-fragment:2.3.2'\r\n    implementation 'androidx.navigation:navigation-ui:2.3.2'\r\n\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test:runner:1.3.0'\r\n\r\n    implementation 'com.google.firebase:firebase-database:16.0.4'\r\n    implementation 'com.google.firebase:firebase-auth'\r\n    implementation 'com.google.firebase:firebase-storage'\r\n    implementation 'com.google.firebase:firebase-analytics'\r\n    implementation 'com.google.firebase:firebase-firestore'\r\n    implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'\r\n\r\n    implementation 'com.github.bumptech.glide:glide:4.7.1'\r\n\r\n    implementation \"org.apache.poi:poi:3.17\"\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/build.gradle	(date 1614940698397)
+@@ -50,5 +50,7 @@
+ 
+     implementation 'com.github.bumptech.glide:glide:4.7.1'
+ 
++    implementation 'com.google.code.gson:gson:2.6.2'
++
+     implementation "org.apache.poi:poi:3.17"
+ }
+Index: app/src/main/java/com/example/guacon/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class User {\r\n    public String First_Name, Last_Name;\r\n    public int Age;\r\n    public ArrayList<String> saved_recipes, your_recipes;\r\n\r\n    public User(){}\r\n\r\n    public User(String firstName, String lastName, int age) {\r\n        First_Name = firstName;\r\n        Last_Name = lastName;\r\n        Age = age;\r\n    }\r\n\r\n    public void setYour_recipes(ArrayList<String> your_recipes) {\r\n        this.your_recipes = your_recipes;\r\n    }\r\n\r\n    public ArrayList<String> getYour_recipes() {\r\n        return your_recipes;\r\n    }\r\n\r\n    public ArrayList<String> getSaved_recipes() {\r\n        return saved_recipes;\r\n    }\r\n\r\n    public void setSaved_recipes(ArrayList<String> saved_recipes) {\r\n        this.saved_recipes = saved_recipes;\r\n    }\r\n\r\n    public int getAge() {\r\n        return Age;\r\n    }\r\n\r\n    public String getName() {\r\n        return First_Name+\" \"+Last_Name;\r\n    }\r\n\r\n    public void setAge(int age) {\r\n        Age = age;\r\n    }\r\n\r\n    public void setName(String first_Name, String last_Name) {\r\n        First_Name = first_Name;\r\n        Last_Name = last_Name;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/guacon/User.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/User.java	(date 1614930654105)
+@@ -1,45 +1,72 @@
+ package com.example.guacon;
+ 
++import android.os.Build;
++
++import java.io.Serializable;
++import java.time.Year;
+ import java.util.ArrayList;
++import java.util.Calendar;
+ 
+-public class User {
++public class User implements Serializable {
+     public String First_Name, Last_Name;
+-    public int Age;
+-    public ArrayList<String> saved_recipes, your_recipes;
++    public long Age, Followers_count, Following_count;
++    public ArrayList<String> Followers, Following;
+ 
+     public User(){}
+ 
+-    public User(String firstName, String lastName, int age) {
+-        First_Name = firstName;
+-        Last_Name = lastName;
+-        Age = age;
++    public User(User user) {
++        First_Name = user.First_Name;
++        Last_Name = user.Last_Name;
++        Age = user.Age;
++        Followers.addAll(user.Followers);
++        Following.addAll(user.Following);
++        Followers_count = user.Followers_count;
++        Following_count = user.Following_count;
++    }
++
++    public ArrayList<String> getFollowers() {
++        return Followers;
++    }
++
++    public void setFollowers(ArrayList<String> followers) {
++        Followers = followers;
++    }
++
++    public ArrayList<String> getFollowing() {
++        return Following;
++    }
++
++    public void setFollowers_count(long followers_count) {
++        Followers_count = followers_count;
+     }
+ 
+-    public void setYour_recipes(ArrayList<String> your_recipes) {
+-        this.your_recipes = your_recipes;
++    public long getFollowers_count() {
++        return Followers_count;
+     }
+ 
+-    public ArrayList<String> getYour_recipes() {
+-        return your_recipes;
++    public long getFollowing_count() {
++        return Following_count;
+     }
+ 
+-    public ArrayList<String> getSaved_recipes() {
+-        return saved_recipes;
++    public void setFollowing_count(long following_count) {
++        Following_count = following_count;
+     }
+ 
+-    public void setSaved_recipes(ArrayList<String> saved_recipes) {
+-        this.saved_recipes = saved_recipes;
++    public void setFollowing(ArrayList<String> following) {
++        Following = following;
+     }
+ 
+     public int getAge() {
+-        return Age;
++        Calendar c = Calendar.getInstance();
++        c.setTimeInMillis(Age);
++        return (Calendar.getInstance().get(Calendar.YEAR)-c.get(Calendar.YEAR));
+     }
+ 
+     public String getName() {
+-        return First_Name+" "+Last_Name;
++        return First_Name + " " + Last_Name.charAt(0);
+     }
+ 
+-    public void setAge(int age) {
++    public void setAge(long age) {
+         Age = age;
+     }
+ 
+Index: app/src/main/java/com/example/guacon/Login/SignupActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.guacon.Login;\r\n\r\nimport android.app.ProgressDialog;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.RadioButton;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.guacon.MainActivity;\r\nimport com.example.guacon.R;\r\nimport com.example.guacon.User;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.HashSet;\r\nimport java.util.Map;\r\nimport java.util.Set;\r\n\r\npublic class SignupActivity extends AppCompatActivity implements View.OnClickListener {\r\n    Button b1;\r\n    RadioButton r;\r\n    EditText e1,e2;\r\n    TextView t1,t2;\r\n    private FirebaseAuth auth;\r\n    private FirebaseFirestore guacon;\r\n    String email, password;\r\n    private ProgressDialog progressDialog;\r\n    User user = new User();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_signup);\r\n        e1 = (EditText) findViewById(R.id.email_text);\r\n        e2 = (EditText) findViewById(R.id.password_text);\r\n        t1 = (TextView) findViewById(R.id.login_link);\r\n        b1 = (Button) findViewById(R.id.signup_button);\r\n        r = (RadioButton) findViewById(R.id.privacy_policy);\r\n        progressDialog = new ProgressDialog(this);\r\n        auth = FirebaseAuth.getInstance();\r\n        guacon = FirebaseFirestore.getInstance();\r\n    }\r\n\r\n    private void registerUser(){\r\n        //getting email and password from edit texts\r\n        email = e1.getText().toString().trim();\r\n        password  = e2.getText().toString().trim();\r\n\r\n        //checking if email and passwords are empty\r\n        if(TextUtils.isEmpty(email)){\r\n            e1.setError(\"required\");\r\n            return;\r\n        }\r\n\r\n        if(TextUtils.isEmpty(password)){\r\n            e2.setError(\"required\");\r\n            return;\r\n        }\r\n\r\n        if(!r.isChecked()){\r\n            Toast.makeText(this,\"Please agree to Privacy Policy.\",Toast.LENGTH_LONG).show();\r\n            return;\r\n        }\r\n\r\n        //if the email and password are not empty\r\n        //displaying a progress dialog\r\n\r\n        progressDialog.setMessage(\"Registering\" + \"\\n\" + \"Please Wait...\");\r\n        progressDialog.show();\r\n\r\n        final Map<String, Object> newUser = new HashMap<>();\r\n        newUser.put(\"First_Name\", \"\");\r\n        newUser.put(\"Last_Name\", \"\");\r\n        newUser.put(\"Age\", 18);\r\n        newUser.put(\"saved_recipes\", new ArrayList<String>());\r\n        newUser.put(\"your_recipes\", new ArrayList<String>());\r\n\r\n        //creating a new user\r\n        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<AuthResult> task) {\r\n                //checking if success\r\n                if(task.isSuccessful()){\r\n                    //enter in Starting Gradle Daemon...database\r\n                    guacon.collection(\"Users\").document(email).set(newUser);\r\n\r\n                    saveData(email);\r\n\r\n                    startActivity(new Intent(getApplicationContext(), MainActivity.class));\r\n                }\r\n                else{\r\n                    //display some message here\r\n                    Toast.makeText(SignupActivity.this,\"Registration Error\"+task.getException(),Toast.LENGTH_LONG).show();\r\n                }\r\n                progressDialog.dismiss();\r\n            }\r\n        });\r\n    }\r\n\r\n    public void saveData(String email) {\r\n        final SharedPreferences sharedPreferences = getSharedPreferences(\"user\", 0);\r\n        final SharedPreferences.Editor editor = sharedPreferences.edit();\r\n        editor.putString(\"user_email\", email);\r\n        FirebaseFirestore.getInstance().collection(\"Users\").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if(task.isSuccessful()) {\r\n                    DocumentSnapshot documentSnapshot = task.getResult();\r\n                    user.setName(documentSnapshot.getString(\"First_Name\"), documentSnapshot.getString(\"Last_Name\"));\r\n                    user.setAge(Integer.parseInt(String.valueOf(documentSnapshot.getLong(\"Age\"))));\r\n                    user.setSaved_recipes((ArrayList<String>)documentSnapshot.get(\"saved_recipes\"));\r\n                    user.setYour_recipes((ArrayList<String>)documentSnapshot.get(\"your_recipes\"));\r\n\r\n                    editor.putString(\"user_name\", user.getName());\r\n                    editor.putInt(\"user_age\", user.getAge());\r\n                    editor.putStringSet(\"user_saved_recipes\", new HashSet<String>(user.getSaved_recipes()));\r\n                    editor.putStringSet(\"user_recipes\", new HashSet<String>(user.getYour_recipes()));\r\n                    editor.apply();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    public void onClick(View view) {\r\n        if(view.getId()==R.id.signup_button)\r\n            //calling register method on click\r\n            registerUser();\r\n        else{\r\n            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);\r\n            startActivity(intent);\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/guacon/Login/SignupActivity.java	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/java/com/example/guacon/Login/SignupActivity.java	(date 1614939331774)
+@@ -1,13 +1,19 @@
+ package com.example.guacon.Login;
+ 
++import android.app.DatePickerDialog;
++import android.app.Dialog;
+ import android.app.ProgressDialog;
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
+ import android.text.TextUtils;
+ import android.view.View;
++import android.view.Window;
++import android.view.WindowManager;
+ import android.widget.Button;
++import android.widget.DatePicker;
+ import android.widget.EditText;
++import android.widget.ImageButton;
+ import android.widget.RadioButton;
+ import android.widget.TextView;
+ import android.widget.Toast;
+@@ -19,13 +25,16 @@
+ import com.example.guacon.R;
+ import com.example.guacon.User;
+ import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.OnSuccessListener;
+ import com.google.android.gms.tasks.Task;
+ import com.google.firebase.auth.AuthResult;
+ import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.DocumentReference;
+ import com.google.firebase.firestore.DocumentSnapshot;
+ import com.google.firebase.firestore.FirebaseFirestore;
+ 
+ import java.util.ArrayList;
++import java.util.Calendar;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.Map;
+@@ -83,13 +92,6 @@
+         progressDialog.setMessage("Registering" + "\n" + "Please Wait...");
+         progressDialog.show();
+ 
+-        final Map<String, Object> newUser = new HashMap<>();
+-        newUser.put("First_Name", "");
+-        newUser.put("Last_Name", "");
+-        newUser.put("Age", 18);
+-        newUser.put("saved_recipes", new ArrayList<String>());
+-        newUser.put("your_recipes", new ArrayList<String>());
+-
+         //creating a new user
+         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+             @Override
+@@ -97,11 +99,7 @@
+                 //checking if success
+                 if(task.isSuccessful()){
+                     //enter in Starting Gradle Daemon...database
+-                    guacon.collection("Users").document(email).set(newUser);
+-
+-                    saveData(email);
+-
+-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
++                    getDataFromUser();
+                 }
+                 else{
+                     //display some message here
+@@ -112,28 +110,95 @@
+         });
+     }
+ 
+-    public void saveData(String email) {
++    private int mYear, mMonth, mDay;
++
++    public void getDataFromUser() {
++        final Map<String, Object> newUser = new HashMap<>();
++        final Dialog dialog = new Dialog(this);
++
++        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
++        dialog.setContentView(R.layout.dialog_profile);
++
++        final Calendar cal = Calendar.getInstance();
++        ((ImageButton) dialog.findViewById(R.id.date_icon)).setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++
++                final Calendar c = cal.getInstance();
++                mYear = c.get(Calendar.YEAR);
++                mMonth = c.get(Calendar.MONTH);
++                mDay = c.get(Calendar.DAY_OF_MONTH);
++
++                DatePickerDialog datePickerDialog = new DatePickerDialog(SignupActivity.this, new DatePickerDialog.OnDateSetListener() {
++                    @Override
++                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
++                        String mm = String.format("%02d", monthOfYear+1);
++                        String dd = String.format("%02d", dayOfMonth);
++                        ((TextView) dialog.findViewById(R.id.age)).setText(year + "-" + mm + "-" + dd);
++                        mYear = year;
++                        mMonth = Integer.parseInt(mm) - 1;
++                        mDay = Integer.parseInt(dd);
++                    }
++                }, mYear, mMonth, mDay);
++                datePickerDialog.show();
++            }
++        });
++        ((Button) dialog.findViewById(R.id.buttonOk)).setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                cal.set(mYear, mMonth, mDay);
++                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.first_name)).getText().toString())){
++                    ((EditText)dialog.findViewById(R.id.first_name)).setError("Required");
++                }
++                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.last_name)).getText().toString())){
++                    ((EditText)dialog.findViewById(R.id.last_name)).setError("Required");
++                }
++                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.age)).getText().toString())){
++                    ((EditText)dialog.findViewById(R.id.age)).setError("Required");
++                }
++                else {
++                    newUser.put("First_Name", ((EditText) dialog.findViewById(R.id.first_name)).getText().toString());
++                    newUser.put("Last_Name", ((EditText) dialog.findViewById(R.id.last_name)).getText().toString());
++                    newUser.put("Age", cal.getTimeInMillis());
++                    newUser.put("Followers", new ArrayList<String>());
++                    newUser.put("Following", new ArrayList<String>());
++                    newUser.put("Followers_count", 0);
++                    newUser.put("Following_count", 0);
++                    //add data to collection 'Users'
++                    guacon.collection("Users").document(email).set(newUser);
++                    dialog.cancel();
++                    saveDataToLocal(email);
++                }
++            }
++        });
++
++        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
++        lp.copyFrom(dialog.getWindow().getAttributes());
++        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
++        dialog.show();
++        dialog.getWindow().setAttributes(lp);
++    }
++
++    public void saveDataToLocal(String email) {
+         final SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
+         final SharedPreferences.Editor editor = sharedPreferences.edit();
+         editor.putString("user_email", email);
++        editor.commit();
+         FirebaseFirestore.getInstance().collection("Users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+             @Override
+             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                 if(task.isSuccessful()) {
+                     DocumentSnapshot documentSnapshot = task.getResult();
+                     user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
+-                    user.setAge(Integer.parseInt(String.valueOf(documentSnapshot.getLong("Age"))));
+-                    user.setSaved_recipes((ArrayList<String>)documentSnapshot.get("saved_recipes"));
+-                    user.setYour_recipes((ArrayList<String>)documentSnapshot.get("your_recipes"));
+-
+-                    editor.putString("user_name", user.getName());
+-                    editor.putInt("user_age", user.getAge());
+-                    editor.putStringSet("user_saved_recipes", new HashSet<String>(user.getSaved_recipes()));
+-                    editor.putStringSet("user_recipes", new HashSet<String>(user.getYour_recipes()));
+-                    editor.apply();
++                    user.setAge(documentSnapshot.getLong("Age"));
++                    user.setFollowers((ArrayList<String>)documentSnapshot.get("Followers"));
++                    user.setFollowing((ArrayList<String>)documentSnapshot.get("Following"));
++                    user.setFollowers_count(documentSnapshot.getLong("Followers_count"));
++                    user.setFollowing_count(documentSnapshot.getLong("Following_count"));
+                 }
+             }
+         });
++        startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra("user_info", user));
+     }
+ 
+     public void onClick(View view) {
+Index: app/src/main/res/layout/profile_card.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version = \"1.0\" encoding = \"utf-8\"?>\r\n<androidx.cardview.widget.CardView\r\n    xmlns:android = \"http://schemas.android.com/apk/res/android\"\r\n    xmlns:card_view = \"http://schemas.android.com/apk/res-auto\"\r\n    android:layout_width = \"120dp\"\r\n    card_view:cardCornerRadius = \"4dp\"\r\n    android:id = \"@+id/card_view\"\r\n    android:layout_margin = \"2dp\"\r\n    android:maxHeight=\"180dp\"\r\n    android:layout_height = \"wrap_content\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n        android:layout_height=\"match_parent\"\r\n        android:padding=\"2dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"120dp\"\r\n            android:layout_height=\"120dp\"\r\n            android:scaleType=\"centerCrop\"\r\n            android:id=\"@+id/profile_media_image\"\r\n            app:layout_constraintVertical_bias=\"0\"\r\n            android:src=\"@drawable/guacon\"\r\n            app:layout_constraintDimensionRatio=\"1:1\"\r\n            app:layout_constraintTop_toTopOf=\"parent\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"/>\r\n\r\n        <TextView\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/recipe_name\"\r\n            android:textAlignment=\"center\"\r\n            android:text=\"Full recipe name here\"\r\n            app:layout_constraintVertical_bias=\"0\"\r\n            android:layout_marginTop=\"10dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/profile_media_image\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"/>\r\n\r\n        <ImageButton\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:src=\"@android:drawable/btn_star_big_on\"\r\n            android:background=\"@android:color/transparent\"\r\n            app:layout_constraintBottom_toBottomOf=\"@+id/profile_media_image\"\r\n            app:layout_constraintTop_toTopOf=\"@+id/profile_media_image\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/profile_media_image\"\r\n            app:layout_constraintEnd_toEndOf=\"@+id/profile_media_image\"\r\n            app:layout_constraintVertical_bias=\"1\"\r\n            app:layout_constraintHorizontal_bias=\"1\"/>\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n</androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/profile_card.xml	(revision e28104ffc49dbde8cea5aa021ac1320b8d658add)
++++ app/src/main/res/layout/profile_card.xml	(date 1614928199138)
+@@ -2,57 +2,65 @@
+ <androidx.cardview.widget.CardView
+     xmlns:android = "http://schemas.android.com/apk/res/android"
+     xmlns:card_view = "http://schemas.android.com/apk/res-auto"
+-    android:layout_width = "120dp"
+-    card_view:cardCornerRadius = "4dp"
++    android:layout_width = "match_parent"
+     android:id = "@+id/card_view"
+-    android:layout_margin = "2dp"
+-    android:maxHeight="180dp"
++    card_view:cardCornerRadius="10dp"
++    card_view:cardElevation="10dp"
+     android:layout_height = "wrap_content">
+ 
+     <androidx.constraintlayout.widget.ConstraintLayout
+-        android:layout_width="match_parent"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+-        android:layout_height="match_parent"
+-        android:padding="2dp">
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
+ 
+         <ImageView
+-            android:layout_width="120dp"
+-            android:layout_height="120dp"
++            android:layout_width="100dp"
++            android:layout_height="100dp"
++            android:id="@+id/profile_media_image"
++            android:src="@drawable/ic_dinner"
+             android:scaleType="centerCrop"
+-            android:id="@+id/profile_media_image"
++            app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintVertical_bias="0"
+-            android:src="@drawable/guacon"
+-            app:layout_constraintDimensionRatio="1:1"
+-            app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintEnd_toStartOf="@+id/profile_media_image2" />
++
++        <ImageView
++            android:layout_width="100dp"
++            android:layout_height="0dp"
++            android:id="@+id/profile_media_image2"
++            android:src="@drawable/ic_breakfast"
++            android:scaleType="centerCrop"
++            app:layout_constraintTop_toTopOf="@id/profile_media_image"
++            app:layout_constraintBottom_toTopOf="@+id/profile_media_image3"
++            app:layout_constraintStart_toEndOf="@+id/profile_media_image"
++            app:layout_constraintEnd_toEndOf="parent"/>
++
++        <ImageView
++            android:layout_width="100dp"
++            android:layout_height="50dp"
++            android:id="@+id/profile_media_image3"
++            android:src="@drawable/ic_all"
++            android:scaleType="centerCrop"
++            app:layout_constraintTop_toBottomOf="@+id/profile_media_image2"
++            app:layout_constraintBottom_toBottomOf="@id/profile_media_image"
++            app:layout_constraintStart_toEndOf="@+id/profile_media_image"
+             app:layout_constraintEnd_toEndOf="parent"/>
+ 
+         <TextView
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+-            android:id="@+id/recipe_name"
++            android:id="@+id/card_name"
+             android:textAlignment="center"
+-            android:text="Full recipe name here"
++            android:text="Card name here"
+             app:layout_constraintVertical_bias="0"
+-            android:layout_marginTop="10dp"
++            android:layout_marginTop="5dp"
++            android:layout_marginBottom="5dp"
+             app:layout_constraintTop_toBottomOf="@+id/profile_media_image"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"/>
+ 
+-        <ImageButton
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:src="@android:drawable/btn_star_big_on"
+-            android:background="@android:color/transparent"
+-            app:layout_constraintBottom_toBottomOf="@+id/profile_media_image"
+-            app:layout_constraintTop_toTopOf="@+id/profile_media_image"
+-            app:layout_constraintStart_toStartOf="@+id/profile_media_image"
+-            app:layout_constraintEnd_toEndOf="@+id/profile_media_image"
+-            app:layout_constraintVertical_bias="1"
+-            app:layout_constraintHorizontal_bias="1"/>
+-
+     </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+ </androidx.cardview.widget.CardView>
+\ No newline at end of file

@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,8 +74,8 @@ public class SearchResult extends AppCompatActivity {
         }
 
         recyclerView = findViewById(R.id.rv);
-        GridLayoutManager grid = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);

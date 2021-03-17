@@ -3,6 +3,7 @@ package com.example.guacon.Login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +25,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,10 +49,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        e1 = (EditText) findViewById(R.id.email_text);
-        e2 = (EditText) findViewById(R.id.password_text);
-        t = (TextView) findViewById(R.id.signup_link);
-        b1 = (Button) findViewById(R.id.login_button);
+        e1 = findViewById(R.id.email_text);
+        e2 = findViewById(R.id.password_text);
+        t = findViewById(R.id.signup_link);
+        b1 = findViewById(R.id.login_button);
         progressBar = findViewById(R.id.progressBar);
         auth = FirebaseAuth.getInstance();
     }
@@ -72,13 +76,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
-
                     saveData(email);
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Login Failed!", Toast.LENGTH_LONG).show();
@@ -98,15 +98,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
-                    user.setAge(Integer.parseInt(String.valueOf(documentSnapshot.getLong("Age"))));
-                    user.setSaved_recipes((ArrayList<String>)documentSnapshot.get("saved_recipes"));
-                    user.setYour_recipes((ArrayList<String>)documentSnapshot.get("your_recipes"));
-
-                    editor.putString("user_name", user.getName());
-                    editor.putInt("user_age", user.getAge());
-                    editor.putStringSet("user_saved_recipes", new HashSet<String>(user.getSaved_recipes()));
-                    editor.putStringSet("user_recipes", new HashSet<String>(user.getYour_recipes()));
-                    editor.apply();
+                    user.setAge(documentSnapshot.getLong("Age"));
+                    user.setFollowers((ArrayList<String>)documentSnapshot.get("Followers"));
+                    user.setFollowing((ArrayList<String>)documentSnapshot.get("Following"));
+                    user.setFollowers_count(documentSnapshot.getLong("Followers_count"));
+                    user.setFollowing_count(documentSnapshot.getLong("Following_count"));
+                    List<User> temp = new ArrayList<>();
+                    temp.add(user);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(temp);
+                    editor.putString("user_info", json);
+                    editor.commit();
+                    startActivity(intent);
                 }
             }
         });
