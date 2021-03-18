@@ -16,20 +16,13 @@ import java.util.List;
 public class Recipe implements Serializable {
     //variable name must match the firestore key names
     private String name, prep_time, cook_time, final_photo, owner;
-    private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), meal_time = new ArrayList<>(), tags = new ArrayList<>();
+    private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), tags = new ArrayList<>();
 
     public Recipe() {}
 
     public String getName(){ return name; }
     public void setName(String name){
         this.name = name;
-    }
-
-    public List<String> getMeal_time() {
-        return meal_time;
-    }
-    public void setMeal_time(List<String> meal_time) {
-        this.meal_time = meal_time;
     }
 
     public String getFinal_photo(){ return final_photo; }

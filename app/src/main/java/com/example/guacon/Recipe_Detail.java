@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -54,6 +57,7 @@ public class Recipe_Detail extends AppCompatActivity {
         ns = findViewById(R.id.naturally_sweetened);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("Recipe");
         setSupportActionBar(toolbar);
 
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
@@ -75,9 +79,9 @@ public class Recipe_Detail extends AppCompatActivity {
         }
 
         for(int i=0;i<recipe.getInstructions().size();i++){
-            Instructions.append("Step " + i+1 + "\n");
+            Instructions.append(Html.fromHtml("<font><b>Step " + (i+1) + "</b></font>"));
             Instructions.setTypeface(null, Typeface.NORMAL);
-            Instructions.append(recipe.getInstructions().get(i) + "\n\n");
+            Instructions.append("\n" + recipe.getInstructions().get(i) + "\n\n");
         }
 
         if(recipe.getTags().contains("Vegan"))
@@ -98,6 +102,7 @@ public class Recipe_Detail extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_all, menu);
+        menu.findItem(R.id.action_refine).setVisible(false);
         return true;
     }
 
@@ -108,18 +113,16 @@ public class Recipe_Detail extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refine) {
-            startActivity(new Intent(getApplicationContext(), Refine.class));
-            return true;
-        }
-
         if (id == R.id.action_home) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), SearchResult.class));
         }
-
         if (id == R.id.action_profile) {
             startActivity(new Intent(getApplicationContext(), Profile.class));
+            return true;
+        }
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }
 

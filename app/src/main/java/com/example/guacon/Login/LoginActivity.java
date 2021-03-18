@@ -3,7 +3,6 @@ package com.example.guacon.Login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.guacon.MainActivity;
 import com.example.guacon.R;
+import com.example.guacon.SearchResult;
 import com.example.guacon.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,12 +26,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Button b1;
@@ -59,25 +55,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void loginUserAccount(){
         progressBar.setVisibility(View.VISIBLE);
+
+        //get data from edittext fields
         email = e1.getText().toString();
         password = e2.getText().toString();
 
+        //check for empty fields
         if(TextUtils.isEmpty(email)){
             e1.setError("required");
             return;
         }
-
         if(TextUtils.isEmpty(password)){
             e2.setError("required");
             return;
         }
 
+        //log user in
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
+
+                    //save user info in sharedpreferences for local usage
                     saveData(email);
                 }
                 else{
@@ -89,27 +90,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void saveData(String email) {
+        //save data in sharedpreferences 'user' --> 'user_email' and 'User' type object
         final SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editor.putString("user_email", email);
         FirebaseFirestore.getInstance().collection("Users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
+
+                    //save data to User class object
                     user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
                     user.setAge(documentSnapshot.getLong("Age"));
                     user.setFollowers((ArrayList<String>)documentSnapshot.get("Followers"));
                     user.setFollowing((ArrayList<String>)documentSnapshot.get("Following"));
                     user.setFollowers_count(documentSnapshot.getLong("Followers_count"));
                     user.setFollowing_count(documentSnapshot.getLong("Following_count"));
+
+                    //convert to User class object to Json type for storing in sharedpreferences
                     List<User> temp = new ArrayList<>();
                     temp.add(user);
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SearchResult.class);
                     Gson gson = new Gson();
                     String json = gson.toJson(temp);
+
                     editor.putString("user_info", json);
                     editor.commit();
+
                     startActivity(intent);
                 }
             }

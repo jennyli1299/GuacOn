@@ -1,6 +1,5 @@
 package com.example.guacon.Profile;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,27 +12,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.guacon.Login.Launcher;
-import com.example.guacon.MainActivity;
 import com.example.guacon.R;
-import com.example.guacon.Recipe;
+import com.example.guacon.SearchResult;
 import com.example.guacon.User;
 import com.example.guacon.UserCard;
 import com.example.guacon.UserCardAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
 
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
@@ -56,8 +47,10 @@ public class Profile extends AppCompatActivity {
         following = findViewById(R.id.following);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
 
+        //get user basic info from sharedpreferences
         sharedPreferences = getSharedPreferences("user",0);
         String json = sharedPreferences.getString("user_info", null);
         Gson gson = new Gson();
@@ -67,6 +60,7 @@ public class Profile extends AppCompatActivity {
         following.setText(user[0].getFollowing_count() + " following");
         name_age.setText(user[0].getName() + ", " + user[0].getAge());
 
+        //add a new recipe
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,17 +69,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        /*FirebaseFirestore.getInstance().document("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                ArrayList<String> recipelist = (ArrayList<String>) documentSnapshot.get("Recipe");
-                for(int i=0; i< documentSnapshot.getLong("Count"); i++) {
-                    base = FirebaseFirestore.getInstance().collection("recipes");
-                }
-            }
-        });*/
-
+        //display user cards
         base = FirebaseFirestore.getInstance().collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
 
         cards = findViewById(R.id.cards);
@@ -115,7 +99,9 @@ public class Profile extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_all, menu);
+        menu.findItem(R.id.action_refine).setVisible(false);
+        menu.findItem(R.id.action_profile).setVisible(false);
         return true;
     }
 
@@ -128,7 +114,7 @@ public class Profile extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), SearchResult.class));
             return true;
         }
         if (id == R.id.action_logout) {

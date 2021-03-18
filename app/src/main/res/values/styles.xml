@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@font/lato</item>
+        <item name="buttonStyle">@font/lato</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

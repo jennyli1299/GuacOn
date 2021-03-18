@@ -20,43 +20,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:id="@+id/appbar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/rv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_bias="0.0">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                app:title="Search Results"
+            <include
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimaryDark"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:layout_height="wrap_content"
+                layout="@layout/fragment_appbar"
+                android:id="@+id/appbar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.0"/>
 
-        </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                android:id="@+id/default_text"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
+                android:text="No results for your preferences"
+                app:layout_constraintTop_toBottomOf="@id/appbar"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            android:id="@+id/default_text"
-            android:layout_marginTop="20dp"
-            android:visibility="invisible"
-            android:text="No results for your preferences"
-            app:layout_constraintTop_toBottomOf="@id/appbar"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rv"
-            app:layout_constraintTop_toBottomOf="@id/appbar"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rv"
+                app:layout_constraintTop_toBottomOf="@id/appbar"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

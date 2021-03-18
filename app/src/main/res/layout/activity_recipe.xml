@@ -20,27 +20,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
+            <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                layout="@layout/fragment_appbar"
+                android:id="@+id/appbar"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    app:titleTextColor="#000"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimaryDark"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:title="Recipe" />
-
-            </com.google.android.material.appbar.AppBarLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.0"/>
 
             <TextView
                 android:id="@+id/instructions_head"
@@ -216,8 +205,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appbar"
-                app:layout_constraintVertical_bias="0.0"
-                tools:srcCompat="@drawable/ic_breakfast" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
                 android:id="@+id/favorite_button4"

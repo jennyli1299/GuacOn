@@ -21,24 +21,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.guacon.MainActivity;
 import com.example.guacon.R;
+import com.example.guacon.SearchResult;
 import com.example.guacon.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     Button b1;
@@ -75,12 +71,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             e1.setError("required");
             return;
         }
-
         if(TextUtils.isEmpty(password)){
             e2.setError("required");
             return;
         }
-
         if(!r.isChecked()){
             Toast.makeText(this,"Please agree to Privacy Policy.",Toast.LENGTH_LONG).show();
             return;
@@ -88,7 +82,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         //if the email and password are not empty
         //displaying a progress dialog
-
         progressDialog.setMessage("Registering" + "\n" + "Please Wait...");
         progressDialog.show();
 
@@ -99,6 +92,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 //checking if success
                 if(task.isSuccessful()){
                     //enter in Starting Gradle Daemon...database
+                    FirebaseFirestore.getInstance().document("Users/" + email).set(user);
+
+                    //get basic info for user for creating document in collection 'User'
                     getDataFromUser();
                 }
                 else{
@@ -116,14 +112,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         final Map<String, Object> newUser = new HashMap<>();
         final Dialog dialog = new Dialog(this);
 
+        //form in a dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_profile);
 
         final Calendar cal = Calendar.getInstance();
+        //get DOB for age
         ((ImageButton) dialog.findViewById(R.id.date_icon)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 final Calendar c = cal.getInstance();
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
@@ -143,10 +140,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 datePickerDialog.show();
             }
         });
+
+        //save data in db
         ((Button) dialog.findViewById(R.id.buttonOk)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cal.set(mYear, mMonth, mDay);
+
+                //check for empty fields
                 if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.first_name)).getText().toString())){
                     ((EditText)dialog.findViewById(R.id.first_name)).setError("Required");
                 }
@@ -164,10 +165,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     newUser.put("Following", new ArrayList<String>());
                     newUser.put("Followers_count", 0);
                     newUser.put("Following_count", 0);
+
                     //add data to collection 'Users'
                     guacon.collection("Users").document(email).set(newUser);
                     dialog.cancel();
-                    saveDataToLocal(email);
+
+                    //save data for local usage
+                    new LoginActivity().saveData(email);
                 }
             }
         });
@@ -179,34 +183,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         dialog.getWindow().setAttributes(lp);
     }
 
-    public void saveDataToLocal(String email) {
-        final SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("user_email", email);
-        editor.commit();
-        FirebaseFirestore.getInstance().collection("Users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
-                    user.setAge(documentSnapshot.getLong("Age"));
-                    user.setFollowers((ArrayList<String>)documentSnapshot.get("Followers"));
-                    user.setFollowing((ArrayList<String>)documentSnapshot.get("Following"));
-                    user.setFollowers_count(documentSnapshot.getLong("Followers_count"));
-                    user.setFollowing_count(documentSnapshot.getLong("Following_count"));
-                }
-            }
-        });
-        startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra("user_info", user));
-    }
-
     public void onClick(View view) {
         if(view.getId()==R.id.signup_button)
             //calling register method on click
             registerUser();
         else{
-            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
     }

@@ -15,8 +15,6 @@
         <activity android:name=".SearchResult" />
         <activity android:name=".Profile.Profile" />
         <activity android:name=".Recipe_Detail" />
-        <activity android:name=".Refine" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".Login.LoginActivity"/>
         <activity android:name=".Login.SignupActivity"/>
         <activity android:name=".Login.Launcher" >
