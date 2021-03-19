@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 
+
+
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
 
@@ -37,10 +39,13 @@ public class Profile extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     User[] user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        RecipeAdapter ad;
+
 
         name_age = findViewById(R.id.name);
         followers = findViewById(R.id.followers);
@@ -95,6 +100,21 @@ public class Profile extends AppCompatActivity {
         super.onStop();
         userCardAdapter.stopListening();
     }
+
+            public void showCustomDialog(String path) {
+                FirebaseFirestore.getInstance().document(path).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            @NonNull Recipe model = new Recipe();
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            //TODO: send recipe name along with Intent
+                            Intent intent = new Intent(getApplicationContext(), Recipe_Detail.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
