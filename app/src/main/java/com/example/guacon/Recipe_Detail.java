@@ -1,20 +1,30 @@
 package com.example.guacon;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 
@@ -24,12 +34,8 @@ import java.io.Serializable;
 public class Recipe_Detail extends AppCompatActivity {
 
     //fields
-    ListView Instructions;
-    TextView Recipe;
-    TextView prep_time;
-    TextView cook_time;
-    ListView Ingredients;
-    ImageView imageView;
+    TextView Instructions, Recipe, prep_time, cook_time, Ingredients, owner;
+    ImageView imageView, v, veg, gf, df, ns;
     Recipe recipe;
 
     @Override
@@ -37,28 +43,57 @@ public class Recipe_Detail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        Instructions = (ListView) findViewById(R.id.instructions_txt);
-        Recipe = (TextView) findViewById(R.id.recipe_text);
-        prep_time = (TextView) findViewById(R.id.prep_txt);
-        cook_time = (TextView) findViewById(R.id.cook_txt);
-        Ingredients = (ListView) findViewById(R.id.ingredients_txt);
-        imageView = (ImageView) findViewById(R.id.imageView7);
+        Instructions = findViewById(R.id.instructions_txt);
+        Recipe = findViewById(R.id.recipe_text);
+        prep_time = findViewById(R.id.prep_time);
+        cook_time = findViewById(R.id.cook_time);
+        Ingredients = findViewById(R.id.ingredients_txt);
+        imageView = findViewById(R.id.imageView7);
+        owner = findViewById(R.id.owner_name);
+        v = findViewById(R.id.vegan);
+        veg = findViewById(R.id.vegetarian);
+        gf = findViewById(R.id.gluten_free);
+        df = findViewById(R.id.dairy_free);
+        ns = findViewById(R.id.naturally_sweetened);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("Recipe");
         setSupportActionBar(toolbar);
 
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
+
+        FirebaseFirestore.getInstance().document("Users/" + recipe.getOwner()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                owner.setText("Recipe by " + task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name"));
+            }
+        });
+
         Recipe.setText(recipe.getName());
         prep_time.setText("Prep Time: " + recipe.getPrep_time() + " min");
         cook_time.setText("Cook Time: " + recipe.getCook_time() + " min");
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_listview, recipe.getIngredients());
-        Ingredients.setAdapter(adapter);
+        Ingredients.setText(recipe.getIngredients().get(0) + "\n");
+        for(int i=1;i<recipe.getIngredients().size();i++){
+            Ingredients.append(recipe.getIngredients().get(i) + "\n");
+        }
 
-        adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_listview, recipe.getInstructions());
-        Instructions.setAdapter(adapter);
+        for(int i=0;i<recipe.getInstructions().size();i++){
+            Instructions.append(Html.fromHtml("<font><b>Step " + (i+1) + "</b></font>"));
+            Instructions.setTypeface(null, Typeface.NORMAL);
+            Instructions.append("\n" + recipe.getInstructions().get(i) + "\n\n");
+        }
+
+        if(recipe.getTags().contains("Vegan"))
+            v.setVisibility(View.VISIBLE);
+        if(recipe.getTags().contains("Vegetarian"))
+            veg.setVisibility(View.VISIBLE);
+        if(recipe.getTags().contains("Gluten Free"))
+            gf.setVisibility(View.VISIBLE);
+        if(recipe.getTags().contains("Dairy Free"))
+            df.setVisibility(View.VISIBLE);
+        if(recipe.getTags().contains("Naturally Sweetened"))
+            ns.setVisibility(View.VISIBLE);
 
         Glide.with(getApplicationContext()).load(recipe.getFinal_photo()).into(imageView);
     }
@@ -67,6 +102,7 @@ public class Recipe_Detail extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_all, menu);
+        menu.findItem(R.id.action_refine).setVisible(false);
         return true;
     }
 
@@ -77,18 +113,16 @@ public class Recipe_Detail extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refine) {
-            startActivity(new Intent(getApplicationContext(), Refine.class));
-            return true;
-        }
-
         if (id == R.id.action_home) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), SearchResult.class));
         }
-
         if (id == R.id.action_profile) {
             startActivity(new Intent(getApplicationContext(), Profile.class));
+            return true;
+        }
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }
 
@@ -98,7 +132,6 @@ public class Recipe_Detail extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        startActivity(new Intent(getApplicationContext(), Category_List.class));
     }
 
 }

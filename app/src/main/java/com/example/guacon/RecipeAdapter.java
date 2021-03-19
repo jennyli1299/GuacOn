@@ -32,19 +32,15 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     @Override
     protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final Recipe model){
         holder.name.setText(model.getName());
-        if(model.getTags().contains("Vegan"))
-            holder.v.setVisibility(View.VISIBLE);
-        if(model.getTags().contains("Vegetarian"))
-            holder.veg.setVisibility(View.VISIBLE);
-        if(model.getTags().contains("Gluten Free"))
-            holder.gf.setVisibility(View.VISIBLE);
-        if(model.getTags().contains("Dairy Free"))
-            holder.df.setVisibility(View.VISIBLE);
-        if(model.getTags().contains("Naturally Sweetened"))
-            holder.ns.setVisibility(View.VISIBLE);
         //Loading image from Glide library.
         Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        holder.link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Recipe recipe = new Recipe();
@@ -55,7 +51,7 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
                 recipe.setFinal_photo(model.getFinal_photo());
                 recipe.setInstructions(model.getInstructions());
                 recipe.setIngredients(model.getIngredients());
-
+                recipe.setOwner(model.getOwner());
                 Intent intent = new Intent(context, Recipe_Detail.class);
                 intent.putExtra("Recipe", recipe);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -77,18 +73,13 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     // Sub Class to create references of the views in Card
     // view (here "recipe_card.xml")
     class RecipesViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
+        TextView name, link;
         ImageView media_image;
-        ImageView v, veg, gf, ns, df;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             media_image = itemView.findViewById(R.id.media_image);
-            v = itemView.findViewById(R.id.v);
-            veg = itemView.findViewById(R.id.veg);
-            gf = itemView.findViewById(R.id.gf);
-            df = itemView.findViewById(R.id.df);
-            ns = itemView.findViewById(R.id.ns);
+            link = itemView.findViewById(R.id.seerecipe);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

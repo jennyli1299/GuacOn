@@ -1,9 +1,8 @@
 package com.example.guacon.Profile;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -12,37 +11,33 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.guacon.Login.Launcher;
-import com.example.guacon.MainActivity;
-import com.example.guacon.ProfileAdapter;
 import com.example.guacon.R;
-import com.example.guacon.Recipe;
-import com.example.guacon.RecipeAdapter;
-
+import com.example.guacon.SearchResult;
+import com.example.guacon.User;
+import com.example.guacon.UserCard;
+import com.example.guacon.UserCardAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.gson.Gson;
 
 
 
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
 
-    TextView t;
+    TextView name_age, followers, following;
     String TAG ="main";
-
-    RecyclerView saved_recipes, your_recipes;
-    ProfileAdapter savedRecipeAdapter, yourRecipeAdapter;
+    RecyclerView cards;
     Query base;
+    UserCardAdapter userCardAdapter;
+    SharedPreferences sharedPreferences;
+    User[] user;
 
 
     @Override
@@ -52,16 +47,25 @@ public class Profile extends AppCompatActivity {
         RecipeAdapter ad;
 
 
-        t = (TextView) findViewById(R.id.name);
-        Button delete = (Button) findViewById(R.id.btn_delete);
+        name_age = findViewById(R.id.name);
+        followers = findViewById(R.id.followers);
+        following = findViewById(R.id.following);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
-        t.setText(sharedPreferences.getString("user_name",""));
-        ((TextView) findViewById(R.id.age)).setText(String.valueOf(sharedPreferences.getInt("user_age",0)));
+        //get user basic info from sharedpreferences
+        sharedPreferences = getSharedPreferences("user",0);
+        String json = sharedPreferences.getString("user_info", null);
+        Gson gson = new Gson();
+        user = gson.fromJson(json, User[].class);
 
+        followers.setText(user[0].getFollowers_count() + " followers");
+        following.setText(user[0].getFollowing_count() + " following");
+        name_age.setText(user[0].getName() + ", " + user[0].getAge());
+
+        //add a new recipe
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,20 +74,15 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        base = FirebaseFirestore.getInstance().collection("recipes");
+        //display user cards
+        base = FirebaseFirestore.getInstance().collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
 
-        saved_recipes = findViewById(R.id.saved_recipes);
-        saved_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        your_recipes = findViewById(R.id.your_recipes);
-        your_recipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        cards = findViewById(R.id.cards);
+        cards.setLayoutManager(new GridLayoutManager(this, 2));
 
-        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
-
-        savedRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);
-        yourRecipeAdapter = new ProfileAdapter(getApplicationContext(), options);
-
-        saved_recipes.setAdapter(savedRecipeAdapter);
-        your_recipes.setAdapter(yourRecipeAdapter);
+        FirestoreRecyclerOptions<UserCard> options = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base, UserCard.class).build();
+        userCardAdapter = new UserCardAdapter(getApplicationContext(), options);
+        cards.setAdapter(userCardAdapter);
     }
 
     // Function to tell the app to start getting
@@ -91,8 +90,7 @@ public class Profile extends AppCompatActivity {
     @Override protected void onStart()
     {
         super.onStart();
-        savedRecipeAdapter.startListening();
-        yourRecipeAdapter.startListening();
+        userCardAdapter.startListening();
     }
 
     // Function to tell the app to stop getting
@@ -100,9 +98,7 @@ public class Profile extends AppCompatActivity {
     @Override protected void onStop()
     {
         super.onStop();
-        savedRecipeAdapter.stopListening();
-        yourRecipeAdapter.stopListening();
-
+        userCardAdapter.stopListening();
     }
 
             public void showCustomDialog(String path) {
@@ -123,7 +119,9 @@ public class Profile extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_all, menu);
+        menu.findItem(R.id.action_refine).setVisible(false);
+        menu.findItem(R.id.action_profile).setVisible(false);
         return true;
     }
 
@@ -136,7 +134,7 @@ public class Profile extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), SearchResult.class));
             return true;
         }
         if (id == R.id.action_logout) {

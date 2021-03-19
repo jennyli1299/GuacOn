@@ -1,13 +1,19 @@
 package com.example.guacon.Login;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,8 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.guacon.MainActivity;
 import com.example.guacon.R;
+import com.example.guacon.SearchResult;
 import com.example.guacon.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,10 +32,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     Button b1;
@@ -66,12 +71,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             e1.setError("required");
             return;
         }
-
         if(TextUtils.isEmpty(password)){
             e2.setError("required");
             return;
         }
-
         if(!r.isChecked()){
             Toast.makeText(this,"Please agree to Privacy Policy.",Toast.LENGTH_LONG).show();
             return;
@@ -79,16 +82,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         //if the email and password are not empty
         //displaying a progress dialog
-
         progressDialog.setMessage("Registering" + "\n" + "Please Wait...");
         progressDialog.show();
-
-        final Map<String, Object> newUser = new HashMap<>();
-        newUser.put("First_Name", "");
-        newUser.put("Last_Name", "");
-        newUser.put("Age", 18);
-        newUser.put("saved_recipes", new ArrayList<String>());
-        newUser.put("your_recipes", new ArrayList<String>());
 
         //creating a new user
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -97,11 +92,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 //checking if success
                 if(task.isSuccessful()){
                     //enter in Starting Gradle Daemon...database
-                    guacon.collection("Users").document(email).set(newUser);
+                    FirebaseFirestore.getInstance().document("Users/" + email).set(user);
 
-                    saveData(email);
-
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    //get basic info for user for creating document in collection 'User'
+                    getDataFromUser();
                 }
                 else{
                     //display some message here
@@ -112,28 +106,81 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    public void saveData(String email) {
-        final SharedPreferences sharedPreferences = getSharedPreferences("user", 0);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("user_email", email);
-        FirebaseFirestore.getInstance().collection("Users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    user.setName(documentSnapshot.getString("First_Name"), documentSnapshot.getString("Last_Name"));
-                    user.setAge(Integer.parseInt(String.valueOf(documentSnapshot.getLong("Age"))));
-                    user.setSaved_recipes((ArrayList<String>)documentSnapshot.get("saved_recipes"));
-                    user.setYour_recipes((ArrayList<String>)documentSnapshot.get("your_recipes"));
+    private int mYear, mMonth, mDay;
 
-                    editor.putString("user_name", user.getName());
-                    editor.putInt("user_age", user.getAge());
-                    editor.putStringSet("user_saved_recipes", new HashSet<String>(user.getSaved_recipes()));
-                    editor.putStringSet("user_recipes", new HashSet<String>(user.getYour_recipes()));
-                    editor.apply();
+    public void getDataFromUser() {
+        final Map<String, Object> newUser = new HashMap<>();
+        final Dialog dialog = new Dialog(this);
+
+        //form in a dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_profile);
+
+        final Calendar cal = Calendar.getInstance();
+        //get DOB for age
+        ((ImageButton) dialog.findViewById(R.id.date_icon)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = cal.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(SignupActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String mm = String.format("%02d", monthOfYear+1);
+                        String dd = String.format("%02d", dayOfMonth);
+                        ((TextView) dialog.findViewById(R.id.age)).setText(year + "-" + mm + "-" + dd);
+                        mYear = year;
+                        mMonth = Integer.parseInt(mm) - 1;
+                        mDay = Integer.parseInt(dd);
+                    }
+                }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+        //save data in db
+        ((Button) dialog.findViewById(R.id.buttonOk)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cal.set(mYear, mMonth, mDay);
+
+                //check for empty fields
+                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.first_name)).getText().toString())){
+                    ((EditText)dialog.findViewById(R.id.first_name)).setError("Required");
+                }
+                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.last_name)).getText().toString())){
+                    ((EditText)dialog.findViewById(R.id.last_name)).setError("Required");
+                }
+                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.age)).getText().toString())){
+                    ((EditText)dialog.findViewById(R.id.age)).setError("Required");
+                }
+                else {
+                    newUser.put("First_Name", ((EditText) dialog.findViewById(R.id.first_name)).getText().toString());
+                    newUser.put("Last_Name", ((EditText) dialog.findViewById(R.id.last_name)).getText().toString());
+                    newUser.put("Age", cal.getTimeInMillis());
+                    newUser.put("Followers", new ArrayList<String>());
+                    newUser.put("Following", new ArrayList<String>());
+                    newUser.put("Followers_count", 0);
+                    newUser.put("Following_count", 0);
+
+                    //add data to collection 'Users'
+                    guacon.collection("Users").document(email).set(newUser);
+                    dialog.cancel();
+
+                    //save data for local usage
+                    new LoginActivity().saveData(email);
                 }
             }
         });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
     }
 
     public void onClick(View view) {
@@ -141,7 +188,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             //calling register method on click
             registerUser();
         else{
-            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
     }

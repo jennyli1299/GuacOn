@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -183,21 +184,6 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                     tags.add("Naturally Sweetened");
                 newRecipe.setTags(tags);
                 simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("What time does your recipe tastes best?");
-                break;
-
-            case R.id.buttonNext8:
-                ArrayList<String> meal_time = new ArrayList<>();
-                if(((CheckBox) findViewById(R.id.breakfast)).isChecked())
-                    meal_time.add("Breakfast");
-                if(((CheckBox) findViewById(R.id.dinner)).isChecked())
-                    meal_time.add("Dinner");
-                if(((CheckBox) findViewById(R.id.lunch)).isChecked())
-                    meal_time.add("Lunch");
-                if(((CheckBox) findViewById(R.id.snack)).isChecked())
-                    meal_time.add("Snack");
-                newRecipe.setMeal_time(meal_time);
-                simpleViewFlipper.showNext();
                 ((TextView)findViewById(R.id.ques)).setText("Show us how your creation looks?");
                 break;
 
@@ -285,4 +271,8 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
             findViewById(v.getId()).setBackgroundResource(R.color.white);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
