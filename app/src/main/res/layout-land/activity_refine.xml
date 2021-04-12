@@ -1,164 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout2"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="20dp"
+    android:background="#fff">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/appbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/head"
+        android:text="Filter By"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            app:title="Preferences"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimaryDark"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0"/>
 
     <Button
         android:id="@+id/btn_ok"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        style="@style/TextAppearance.MaterialComponents.Button"
+        android:onClick="okay"
+        android:text="Close"
+        android:textColor="#004D40"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"/>
+
+    <CheckBox
+        android:id="@+id/vegetarian"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:onClick="okay"
-        android:text="Okay"
+        android:text=""
+        android:textSize="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"/>
+
+    <CheckBox
+        android:id="@+id/gluten_free"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <CheckBox
+        android:id="@+id/vegan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <CheckBox
+        android:id="@+id/dairy_free"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <CheckBox
+        android:id="@+id/naturally_sweetened"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_vegetarian"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/gluten_free"
+        app:layout_constraintStart_toEndOf="@+id/vegetarian"
+        app:layout_constraintTop_toBottomOf="@+id/head"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_gluten_free"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vegan"
+        app:layout_constraintStart_toEndOf="@+id/gluten_free"
+        app:layout_constraintTop_toBottomOf="@+id/head"/>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_vegan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dairy_free"
+        app:layout_constraintStart_toEndOf="@+id/vegan"
+        app:layout_constraintTop_toBottomOf="@+id/head" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_dairy_free"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/naturally_sweetened"
+        app:layout_constraintStart_toEndOf="@+id/dairy_free"
+        app:layout_constraintTop_toBottomOf="@+id/head" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_naturally_sweetened"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.545" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="576dp"
-        android:layout_height="357dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar">
-
-        <CheckBox
-            android:id="@+id/vegetarian"
-            android:layout_width="220dp"
-            android:layout_height="70dp"
-            android:text="Vegetarian"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/gluten_free"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <CheckBox
-            android:id="@+id/gluten_free"
-            android:layout_width="220dp"
-            android:layout_height="70dp"
-            android:text="Gluten Free"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/vegan"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vegetarian" />
-
-        <CheckBox
-            android:id="@+id/vegan"
-            android:layout_width="220dp"
-            android:layout_height="70dp"
-            android:text="Vegan"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/dairy_free"
-            app:layout_constraintEnd_toStartOf="@+id/imageView3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gluten_free" />
-
-        <CheckBox
-            android:id="@+id/dairy_free"
-            android:layout_width="220dp"
-            android:layout_height="70dp"
-            android:text="Dairy Free"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/naturally_sweetened"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vegan" />
-
-        <CheckBox
-            android:id="@+id/naturally_sweetened"
-            android:layout_width="220dp"
-            android:layout_height="70dp"
-            android:text="Naturally Sweetened"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dairy_free" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:src="@drawable/ic_vegetarian"
-            app:layout_constraintBottom_toBottomOf="@+id/vegetarian"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toTopOf="@+id/vegetarian"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="58dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_gluten_free"
-            app:layout_constraintBottom_toBottomOf="@+id/gluten_free"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toTopOf="@+id/gluten_free" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="58dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_vegan"
-            app:layout_constraintBottom_toBottomOf="@+id/vegan"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toTopOf="@+id/vegan" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="58dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_dairy_free"
-            app:layout_constraintBottom_toBottomOf="@+id/dairy_free"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toTopOf="@+id/dairy_free" />
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="58dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_naturally_sweetened"
-            app:layout_constraintBottom_toBottomOf="@+id/naturally_sweetened"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toTopOf="@+id/naturally_sweetened" />
+        app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
+        app:layout_constraintTop_toBottomOf="@+id/head" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
