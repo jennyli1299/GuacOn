@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ public class Recipe_Detail extends AppCompatActivity {
     TextView Instructions, Recipe, prep_time, cook_time, Ingredients, owner;
     ImageView imageView, v, veg, gf, df, ns;
     Recipe recipe;
+    Button startcooking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class Recipe_Detail extends AppCompatActivity {
         gf = findViewById(R.id.gluten_free);
         df = findViewById(R.id.dairy_free);
         ns = findViewById(R.id.naturally_sweetened);
+        startcooking = findViewById(R.id.imageButton2);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Recipe");
@@ -96,6 +100,13 @@ public class Recipe_Detail extends AppCompatActivity {
             ns.setVisibility(View.VISIBLE);
 
         Glide.with(getApplicationContext()).load(recipe.getFinal_photo()).into(imageView);
+
+        startcooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), StartCooking.class));
+            }
+        });
     }
 
     @Override
