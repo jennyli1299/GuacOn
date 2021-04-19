@@ -34,6 +34,7 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
         holder.name.setText(model.getName());
         //Loading image from Glide library.
         Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

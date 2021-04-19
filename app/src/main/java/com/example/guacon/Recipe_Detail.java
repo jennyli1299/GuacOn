@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
+import com.example.guacon.Profile.PublicProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,8 +69,22 @@ public class Recipe_Detail extends AppCompatActivity {
 
         FirebaseFirestore.getInstance().document("Users/" + recipe.getOwner()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
                 owner.setText("Recipe by " + task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name"));
+                owner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(recipe.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                            startActivity(new Intent(getApplicationContext(), Profile.class));
+                        }
+                        else {
+                            Intent intent = new Intent(getApplicationContext(), PublicProfile.class);
+                            intent.putExtra("owner_email", recipe.getOwner());
+                            intent.putExtra("owner", task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name").charAt(0));
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
         });
 
@@ -104,7 +119,7 @@ public class Recipe_Detail extends AppCompatActivity {
         startcooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), StartCooking.class));
+                //startActivity(new Intent(getApplicationContext(), StartCooking.class));
             }
         });
     }
