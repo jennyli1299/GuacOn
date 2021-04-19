@@ -1,5 +1,6 @@
 package com.example.guacon.Profile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -15,13 +16,19 @@ import android.widget.TextView;
 
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.R;
+import com.example.guacon.Recipe;
+import com.example.guacon.RecipeAdapter;
+import com.example.guacon.Recipe_Detail;
 import com.example.guacon.SearchResult;
 import com.example.guacon.User;
 import com.example.guacon.UserCard;
 import com.example.guacon.UserCardAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
@@ -61,8 +68,8 @@ public class Profile extends AppCompatActivity {
         Gson gson = new Gson();
         user = gson.fromJson(json, User[].class);
 
-        followers.setText(user[0].getFollowers_count() + " followers");
-        following.setText(user[0].getFollowing_count() + " following");
+        followers.setText(user[0].getFollowers_count() + "");
+        following.setText(user[0].getFollowing_count() + "");
         name_age.setText(user[0].getName() + ", " + user[0].getAge());
 
         //add a new recipe

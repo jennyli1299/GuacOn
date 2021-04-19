@@ -21,94 +21,132 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:id="@+id/dp"
-                app:cardCornerRadius="50dp"
+            <Button
+                android:id="@+id/follow"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="Follow"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/cards"
+                app:layout_constraintEnd_toEndOf="@+id/following_head"
+                app:layout_constraintStart_toStartOf="@+id/followers_head"
+                app:layout_constraintTop_toBottomOf="@+id/following_head" />
+
+            <TextView
+                android:id="@+id/followers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/followers_head"
+                app:layout_constraintEnd_toStartOf="@+id/following"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <TextView
+                android:id="@+id/followers_head"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="followers"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/follow"
+                app:layout_constraintEnd_toEndOf="@+id/followers"
+                app:layout_constraintStart_toStartOf="@+id/followers"
+                app:layout_constraintTop_toBottomOf="@+id/followers" />
+
+            <TextView
+                android:id="@+id/following"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/following_head"
+                app:layout_constraintEnd_toEndOf="@+id/name"
+                app:layout_constraintStart_toEndOf="@+id/followers"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <TextView
+                android:id="@+id/following_head"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="following"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/follow"
+                app:layout_constraintEnd_toEndOf="@+id/following"
+                app:layout_constraintStart_toStartOf="@+id/following"
+                app:layout_constraintTop_toBottomOf="@+id/following" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:hint="Your Name"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toTopOf="@+id/followers"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/name">
+                app:layout_constraintStart_toEndOf="@+id/dp"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/dp1"
-                android:src="@drawable/guacon"
-                android:scaleType="centerCrop" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintBottom_toBottomOf="@+id/follow"
+                app:layout_constraintEnd_toStartOf="@+id/name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/name">
 
-        </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/dp1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/guacon" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Your Name, Your Age"
-            android:textColor="#000"
-            android:textAlignment="center"
-            android:textSize="25sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/dp"
-            app:layout_constraintBottom_toTopOf="@+id/followers"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="0 followers"
-            android:textColor="#000"
-            android:textAlignment="viewEnd"
-            android:id="@+id/followers"
-            app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintBottom_toTopOf="@+id/cards"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/seperator"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" - "
-            android:id="@+id/seperator"
-            app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintBottom_toTopOf="@+id/cards"
-            app:layout_constraintEnd_toStartOf="@+id/following"
-            app:layout_constraintStart_toEndOf="@+id/followers"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="0 following"
-            android:textColor="#000"
-            android:id="@+id/following"
-            app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintBottom_toTopOf="@+id/cards"
-            app:layout_constraintStart_toEndOf="@+id/seperator"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id = "@+id/cards"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="20dp"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/seperator"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/follow" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

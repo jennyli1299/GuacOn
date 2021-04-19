@@ -5,6 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:backgroundTint="@android:color/transparent"
     tools:context=".Recipe_Detail">
 
@@ -48,7 +49,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/cook_time"
@@ -104,6 +105,7 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textStyle="bold"
+                android:layout_marginTop="5dp"
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +117,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/owner_name"
                 android:text="Recipe by Madison Brading"
-                android:textSize="12dp"
+                android:clickable="true"
+                android:textSize="15dp"
                 android:textColor="#000"
                 app:layout_constraintTop_toBottomOf="@+id/imageView7"
                 app:layout_constraintBottom_toTopOf="@+id/recipe_text"
@@ -124,7 +127,7 @@
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintVertical_bias="0"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="40dp"/>
+                android:layout_marginBottom="30dp"/>
 
             <TextView
                 android:id="@+id/recipe_text"
@@ -133,6 +136,7 @@
                 android:text="Recipe Name"
                 android:layout_marginLeft="20dp"
                 android:textSize="28dp"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/ingredients_head"
                 app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:paddingLeft="20dp"
-                android:text="Ingredients"
+                android:text="INGREDIENTS"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 app:layout_constraintBottom_toTopOf="@+id/ingredients_txt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -185,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cook_time"
-                app:layout_constraintVertical_bias="0.2"
+
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 android:text="Cook Time: 20 min"
                 android:layout_marginLeft="10dp"
@@ -210,8 +214,8 @@
             <ImageButton
                 android:id="@+id/favorite_button4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/transparent"
+                android:layout_height="35dp"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                 app:layout_constraintEnd_toEndOf="@+id/imageView7"
                 app:layout_constraintStart_toStartOf="@+id/imageView7"
@@ -228,6 +232,7 @@
                 android:background="#DD5F3F"
                 android:text="Start Cooking"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toTopOf="@+id/instructions_txt"
                 app:layout_constraintEnd_toEndOf="parent"
