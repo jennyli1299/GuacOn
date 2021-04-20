@@ -38,64 +38,39 @@
                 android:layout_height="30dp"
                 android:background="@color/colorPrimaryDark"
                 android:text="Follow"
-                android:visibility="gone"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/cards"
-                app:layout_constraintEnd_toEndOf="@+id/following_head"
-                app:layout_constraintStart_toStartOf="@+id/followers_head"
-                app:layout_constraintTop_toBottomOf="@+id/following_head" />
+                app:layout_constraintEnd_toEndOf="@+id/following"
+                app:layout_constraintStart_toStartOf="@+id/followers"
+                app:layout_constraintTop_toBottomOf="@+id/following" />
 
             <TextView
                 android:id="@+id/followers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:layout_marginBottom="20dp"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/followers_head"
+                app:layout_constraintBottom_toTopOf="@+id/follow"
                 app:layout_constraintEnd_toStartOf="@+id/following"
                 app:layout_constraintStart_toStartOf="@+id/name"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
-
-            <TextView
-                android:id="@+id/followers_head"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="followers"
-                android:textAlignment="center"
-                android:textColor="#000"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/follow"
-                app:layout_constraintEnd_toEndOf="@+id/followers"
-                app:layout_constraintStart_toStartOf="@+id/followers"
-                app:layout_constraintTop_toBottomOf="@+id/followers" />
 
             <TextView
                 android:id="@+id/following"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:layout_marginBottom="20dp"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/following_head"
+                app:layout_constraintBottom_toTopOf="@+id/follow"
                 app:layout_constraintEnd_toEndOf="@+id/name"
                 app:layout_constraintStart_toEndOf="@+id/followers"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
-
-            <TextView
-                android:id="@+id/following_head"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="following"
-                android:textAlignment="center"
-                android:textColor="#000"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/follow"
-                app:layout_constraintEnd_toEndOf="@+id/following"
-                app:layout_constraintStart_toStartOf="@+id/following"
-                app:layout_constraintTop_toBottomOf="@+id/following" />
 
             <TextView
                 android:id="@+id/name"

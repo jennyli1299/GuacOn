@@ -41,6 +41,12 @@ public class UserCardAdapter extends FirestoreRecyclerAdapter<UserCard, UserCard
         final float scale = context.getResources().getDisplayMetrics().density;
         int height = (int) (100 * scale + 0.5f);
         holder.name.setText(model.getName());
+        if(model.getName().equals("Your Recipes")){
+            holder.media_image.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height));
+            holder.media_image2.setVisibility(View.GONE);
+            holder.media_image3.setVisibility(View.GONE);
+            holder.media_image.setImageResource(R.drawable.guacon);
+        }
         if (model.getCount() == 1) {
             holder.media_image.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height));
             holder.media_image2.setVisibility(View.GONE);

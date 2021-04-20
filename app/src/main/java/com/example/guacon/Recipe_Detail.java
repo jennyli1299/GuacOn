@@ -3,6 +3,9 @@ package com.example.guacon;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -23,16 +26,18 @@ import com.bumptech.glide.Glide;
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
 import com.example.guacon.Profile.PublicProfile;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
 
 //displays data of a particular recipe
-//TODO: recieve recipe selected from SearchResult.class
 //display link for checking the author of the recipe
 public class Recipe_Detail extends AppCompatActivity {
 
@@ -40,7 +45,12 @@ public class Recipe_Detail extends AppCompatActivity {
     TextView Instructions, Recipe, prep_time, cook_time, Ingredients, owner;
     ImageView imageView, v, veg, gf, df, ns;
     Recipe recipe;
-    Button startcooking;
+    Button more;
+    Query base;
+    private RecyclerView recyclerView;
+    RecipeAdapter adapter;
+    Intent intent;
+    FirestoreRecyclerOptions<Recipe> options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +69,7 @@ public class Recipe_Detail extends AppCompatActivity {
         gf = findViewById(R.id.gluten_free);
         df = findViewById(R.id.dairy_free);
         ns = findViewById(R.id.naturally_sweetened);
-        startcooking = findViewById(R.id.imageButton2);
+        more = findViewById(R.id.imageButton2);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Recipe");
@@ -67,10 +77,15 @@ public class Recipe_Detail extends AppCompatActivity {
 
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
 
+        intent = new Intent(getApplicationContext(), PublicProfile.class);
+
         FirebaseFirestore.getInstance().document("Users/" + recipe.getOwner()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
-                owner.setText("Recipe by " + task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name"));
+                owner.setText(Html.fromHtml("Recipe by <font><b>" + task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name") + "</b></font>"));
+                intent.putExtra("owner", task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name").charAt(0));
+                intent.putExtra("owner_email", recipe.getOwner());
+
                 owner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -78,9 +93,6 @@ public class Recipe_Detail extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), Profile.class));
                         }
                         else {
-                            Intent intent = new Intent(getApplicationContext(), PublicProfile.class);
-                            intent.putExtra("owner_email", recipe.getOwner());
-                            intent.putExtra("owner", task.getResult().getString("First_Name") + " " + task.getResult().getString("Last_Name").charAt(0));
                             startActivity(intent);
                         }
                     }
@@ -116,12 +128,41 @@ public class Recipe_Detail extends AppCompatActivity {
 
         Glide.with(getApplicationContext()).load(recipe.getFinal_photo()).into(imageView);
 
-        startcooking.setOnClickListener(new View.OnClickListener() {
+        more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(getApplicationContext(), StartCooking.class));
+                if(recipe.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                    startActivity(new Intent(getApplicationContext(), Profile.class));
+                }
+                else {
+                    startActivity(intent);
+                }
             }
         });
+
+        recyclerView = findViewById(R.id.more_recipes);
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        base = FirebaseFirestore.getInstance().collection("recipes").whereEqualTo("owner", recipe.getOwner()).limit(5);
+        options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
+        adapter = new RecipeAdapter(getApplicationContext(), options);
+        recyclerView.setAdapter(adapter);
+    }
+
+    // Function to tell the app to start getting
+    // data from database on starting of the activity
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    // Function to tell the app to stop getting
+    // data from database on stoping of the activity
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     @Override

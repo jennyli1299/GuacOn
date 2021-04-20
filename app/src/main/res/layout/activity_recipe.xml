@@ -40,11 +40,33 @@
                 android:layout_marginTop="20dp"
                 android:text="PREPARATION"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
-                app:layout_constraintBottom_toTopOf="@id/imageButton2"
+                app:layout_constraintBottom_toTopOf="@id/instructions_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ingredients_txt" />
+
+            <TextView
+                android:id="@+id/more_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="10dp"
+                android:text="Recently Added by Owner"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                app:layout_constraintBottom_toTopOf="@id/more_recipes"
+                app:layout_constraintTop_toBottomOf="@+id/instructions_txt" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/more_recipes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+                app:layout_constraintTop_toBottomOf="@+id/more_head" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -107,10 +129,10 @@
                 android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 style="@style/TextAppearance.MaterialComponents.Body1"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/more_head"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageButton2" />
+                app:layout_constraintTop_toBottomOf="@id/instructions_head" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -136,7 +158,7 @@
                 android:text="Recipe Name"
                 android:layout_marginLeft="20dp"
                 android:textSize="28dp"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/ingredients_head"
                 app:layout_constraintStart_toStartOf="parent"
@@ -189,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cook_time"
-
+                app:layout_constraintVertical_bias="0.1"
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 android:text="Cook Time: 20 min"
                 android:layout_marginLeft="10dp"
@@ -203,7 +225,7 @@
             <ImageView
                 android:id="@+id/imageView7"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="200dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -226,18 +248,17 @@
 
             <Button
                 android:id="@+id/imageButton2"
-                android:layout_width="250dp"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:background="#DD5F3F"
-                android:text="Start Cooking"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/instructions_txt"
+                android:text="More from Owner"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/instructions_head" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

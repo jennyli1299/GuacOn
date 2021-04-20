@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.guacon.Login.Launcher;
@@ -45,7 +47,7 @@ public class Profile extends AppCompatActivity {
     UserCardAdapter userCardAdapter;
     SharedPreferences sharedPreferences;
     User[] user;
-
+    Button follow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,16 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         RecipeAdapter ad;
 
+        follow = findViewById(R.id.follow);
+        follow.setText("Edit Profile");
+        follow.setBackgroundResource(R.color.white);
+        follow.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         name_age = findViewById(R.id.name);
         followers = findViewById(R.id.followers);
@@ -68,8 +80,8 @@ public class Profile extends AppCompatActivity {
         Gson gson = new Gson();
         user = gson.fromJson(json, User[].class);
 
-        followers.setText(user[0].getFollowers_count() + "");
-        following.setText(user[0].getFollowing_count() + "");
+        followers.setText(Html.fromHtml("<font><b>" + user[0].getFollowers_count() + "</b></font>") + "\nfollowers");
+        following.setText(Html.fromHtml("<font><b>" + user[0].getFollowing_count() + "</b></font>") + "\nfollowing");
         name_age.setText(user[0].getName() + ", " + user[0].getAge());
 
         //add a new recipe
@@ -90,6 +102,25 @@ public class Profile extends AppCompatActivity {
         FirestoreRecyclerOptions<UserCard> options = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base, UserCard.class).build();
         userCardAdapter = new UserCardAdapter(getApplicationContext(), options);
         cards.setAdapter(userCardAdapter);
+
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), FollowersFollowing.class);
+                intent.putExtra("type", "Followers");
+                startActivity(intent);
+            }
+        });
+
+
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), FollowersFollowing.class);
+                intent.putExtra("type", "Following");
+                startActivity(intent);
+            }
+        });
     }
 
     // Function to tell the app to start getting
@@ -107,21 +138,6 @@ public class Profile extends AppCompatActivity {
         super.onStop();
         userCardAdapter.stopListening();
     }
-
-            public void showCustomDialog(String path) {
-                FirebaseFirestore.getInstance().document(path).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            @NonNull Recipe model = new Recipe();
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            //TODO: send recipe name along with Intent
-                            Intent intent = new Intent(getApplicationContext(), Recipe_Detail.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-            }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
