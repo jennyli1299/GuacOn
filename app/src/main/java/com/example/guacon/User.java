@@ -8,16 +8,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class User implements Serializable {
-    public String First_Name, Last_Name;
-    public long Age, Followers_count, Following_count;
-    public ArrayList<String> Followers, Following;
+    private String First_Name, Last_Name;
+    private long Age, Followers_count, Following_count;
+    private ArrayList<String> Followers = new ArrayList<>(), Following = new ArrayList<>();
 
     public User(){}
 
     public User(User user) {
         First_Name = user.First_Name;
         Last_Name = user.Last_Name;
-        Age = user.Age;
         Followers.addAll(user.Followers);
         Following.addAll(user.Following);
         Followers_count = user.Followers_count;
@@ -62,8 +61,16 @@ public class User implements Serializable {
         return (Calendar.getInstance().get(Calendar.YEAR)-c.get(Calendar.YEAR));
     }
 
+    public String getFirst_Name() {
+        return First_Name;
+    }
+
+    public String getLast_Name() {
+        return Last_Name;
+    }
+
     public String getName() {
-        return First_Name + " " + Last_Name.charAt(0);
+        return getFirst_Name() + " " + getLast_Name().charAt(0);
     }
 
     public void setAge(long age) {

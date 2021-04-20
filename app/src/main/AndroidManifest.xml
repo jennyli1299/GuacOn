@@ -13,6 +13,7 @@
         <activity android:name=".Profile.RecipeForm" />
         <activity android:name=".SearchResult" />
         <activity android:name=".Profile.CardResult" />
+        <activity android:name=".Profile.FollowersFollowing" />
         <activity android:name=".Profile.Profile" />
         <activity android:name=".Recipe_Detail" />
         <activity android:name=".Login.LoginActivity" />

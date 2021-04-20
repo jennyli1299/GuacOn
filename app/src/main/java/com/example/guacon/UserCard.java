@@ -14,9 +14,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class UserCard {
-    int Count;
-    ArrayList<String> Recipe;
-    String Name;
+    private int Count;
+    private ArrayList<String> Recipe;
+    private String Name;
 
     public String getName() {
         return Name;
