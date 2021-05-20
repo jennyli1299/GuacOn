@@ -38,7 +38,7 @@
                 android:textSize="20dp"
                 android:id="@+id/default_text"
                 android:layout_marginTop="20dp"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:text="No results for your preferences"
                 app:layout_constraintTop_toBottomOf="@id/appbar"/>
 
@@ -46,7 +46,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/rv"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/appbar"/>
+
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                app:layout_constraintTop_toBottomOf="@+id/appbar"
+                android:id="@+id/shimmer_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:shimmer_demo_child_count="10"
+                app:shimmer_demo_grid_child_count="2"
+                app:shimmer_demo_layout="@layout/recipe_card_shimmer"
+                app:shimmer_demo_layout_manager_type="grid"
+                app:shimmer_demo_angle="20" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

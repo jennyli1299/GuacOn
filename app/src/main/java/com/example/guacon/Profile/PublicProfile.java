@@ -40,21 +40,23 @@ import java.util.Map;
 
 public class PublicProfile extends AppCompatActivity {
 
+    private static SharedPreferences sharedPreferences;
+    private static User[] user;
     private RecyclerView recyclerView;
     RecipeAdapter adapter;
     Query base;
-    SharedPreferences sharedPreferences;
     ArrayList<String> pref;
     SharedPreferences.Editor editor;
     FirestoreRecyclerOptions<Recipe> options;
     Button follow;
-    User[] user;
     String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        //set follow button actions
         follow=findViewById(R.id.follow);
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,25 +65,22 @@ public class PublicProfile extends AppCompatActivity {
             }
         });
 
+        //set Toolbar title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        sharedPreferences = getSharedPreferences("user",0);
-        String json = sharedPreferences.getString("user_info", null);
-        Gson gson = new Gson();
-        user = gson.fromJson(json, User[].class);
-
-        recyclerView = findViewById(R.id.cards);
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //get user information from SharedPreferences
+        getUserData();
 
         email = getIntent().getStringExtra("owner_email");
-        base = FirebaseFirestore.getInstance().collection("recipes").whereEqualTo("owner", email);
-        options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
-        adapter = new RecipeAdapter(getApplicationContext(), options);
-        recyclerView.setAdapter(adapter);
+        //set Profile name
+        ((TextView) findViewById(R.id.name)).setText(getIntent().getStringExtra("owner"));
 
+        //set Recyclerview Layout
+        setRecyclerView();
+
+        //set Follow/Following State of button
         if(user[0].getFollowing().contains(email)) {
             ((Button) findViewById(R.id.follow)).setText("Following");
             findViewById(R.id.follow).setBackgroundResource(R.color.colorPrimary);
@@ -93,72 +92,115 @@ public class PublicProfile extends AppCompatActivity {
             ((Button) findViewById(R.id.follow)).setTextColor(getResources().getColor(R.color.white));
         }
 
-        ((TextView) findViewById(R.id.name)).setText(getIntent().getStringExtra("owner"));
+        //update Followers/Following
         updateActivity();
     }
 
-    // Function to tell the app to start getting
-    // data from database on starting of the activity
+    // Function to tell the app to start getting data from database on starting of the activity
     @Override
     protected void onStart() {
         super.onStart();
         adapter.startListening();
     }
 
-    // Function to tell the app to stop getting
-    // data from database on stoping of the activity
+    // Function to tell the app to stop getting data from database on stoping of the activity
     @Override
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
     }
 
-    void follow(){
+    public void getUserData(){
+        sharedPreferences = getSharedPreferences("user",0);
+        String json = sharedPreferences.getString("user_info", null);
+        Gson gson = new Gson();
+        user = gson.fromJson(json, User[].class);
+    }
+
+    public void setRecyclerView(){
+        recyclerView = findViewById(R.id.cards);
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //set Adapter variables
+        base = FirebaseFirestore.getInstance().collection("recipes").whereEqualTo("owner", email);
+        options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
+        adapter = new RecipeAdapter(getApplicationContext(), options);
+        recyclerView.setAdapter(adapter);
+    }
+
+    //update follow/unfollow actions in DB and sharedPreferences
+    public void follow(){
+        //edit SharedPreferences
         editor=sharedPreferences.edit();
         if(follow.getText().equals("Follow")) {
+            //update Button appearance
             ((Button) findViewById(R.id.follow)).setText("Following");
             findViewById(R.id.follow).setBackgroundResource(R.color.colorPrimary);
             ((Button) findViewById(R.id.follow)).setTextColor(getResources().getColor(R.color.black));
 
+            //uodate following/follower arraylists
             user[0].getFollowing().add(email);
             user[0].setFollowing_count(user[0].getFollowing_count()+1);
-            FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("Following", FieldValue.arrayUnion(email), "Following_count", FieldValue.increment(1));
+            //update user's document
+            FirebaseFirestore.getInstance()
+                    .document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                    .update("Following", FieldValue.arrayUnion(email),
+                            "Following_count", FieldValue.increment(1));
 
-            FirebaseFirestore.getInstance().document("Users/" + email).update("Followers_count", FieldValue.increment(1), "Followers", FieldValue.arrayUnion(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
-
-            updateActivity();
+            //update profile person's document
+            FirebaseFirestore.getInstance()
+                    .document("Users/" + email)
+                    .update("Followers_count", FieldValue.increment(1),
+                            "Followers", FieldValue.arrayUnion(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
         }
 
         else {
+            //update button apprearance
             ((Button) findViewById(R.id.follow)).setText("Follow");
             findViewById(R.id.follow).setBackgroundResource(R.color.colorPrimaryDark);
             ((Button) findViewById(R.id.follow)).setTextColor(getResources().getColor(R.color.white));
 
+            //update following/followers arraylists
             user[0].getFollowing().remove(email);
             user[0].setFollowing_count(user[0].getFollowing_count()-1);
-            FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("Following", FieldValue.arrayRemove(email), "Following_count", FieldValue.increment(-1));
+            //update user's document
+            FirebaseFirestore.getInstance()
+                    .document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                    .update("Following", FieldValue.arrayRemove(email),
+                            "Following_count", FieldValue.increment(-1));
 
-            //add current user to owner's followers
-            FirebaseFirestore.getInstance().document("Users/" + email).update("Followers_count", FieldValue.increment(-1), "Followers", FieldValue.arrayRemove(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
-
-            updateActivity();
+            //update profile person's document
+            FirebaseFirestore.getInstance()
+                    .document("Users/" + email)
+                    .update("Followers_count", FieldValue.increment(-1),
+                            "Followers", FieldValue.arrayRemove(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
         }
+        //commit changes to SharedPreferences
         List<User> temp = new ArrayList<>();
         temp.add(user[0]);
         Gson gson = new Gson();
         String json = gson.toJson(temp);
         editor.putString("user_info", json);
         editor.commit();
+        updateActivity();
     }
 
-    void updateActivity(){
-        FirebaseFirestore.getInstance().collection("Users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    //update followers/following in layout
+    public void updateActivity(){
+        FirebaseFirestore.getInstance()
+                .collection("Users")
+                .document(email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                ((TextView) findViewById(R.id.followers)).setText(Html.fromHtml("<font><b>" + documentSnapshot.getLong("Followers_count") + "</b></font>") + "\nfollowers");
-                ((TextView) findViewById(R.id.following)).setText(Html.fromHtml("<font><b>" + documentSnapshot.getLong("Following_count") + "</b></font>") + "\nfollowing");
 
+                DocumentSnapshot documentSnapshot = task.getResult();
+                ((TextView) findViewById(R.id.followers)).setText(Html.fromHtml("<font><b>" + documentSnapshot.getLong("Followers_count") + "</b></font>"));
+                ((TextView) findViewById(R.id.followers)).append("\nfollowers");
+                ((TextView) findViewById(R.id.following)).setText(Html.fromHtml("<font><b>" + documentSnapshot.getLong("Following_count") + "</b></font>"));
+                ((TextView) findViewById(R.id.following)).append("\nfollowing");
             }
         });
     }
@@ -167,13 +209,14 @@ public class PublicProfile extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_all, menu);
+        //hide refine option
         menu.findItem(R.id.action_refine).setVisible(false);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        //set option actions
         int id = item.getItemId();
 
         if (id == R.id.action_profile) {

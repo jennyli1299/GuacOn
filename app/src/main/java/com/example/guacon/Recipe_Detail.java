@@ -45,6 +45,7 @@ public class Recipe_Detail extends AppCompatActivity {
     TextView Instructions, Recipe, prep_time, cook_time, Ingredients, owner;
     ImageView imageView, v, veg, gf, df, ns;
     Recipe recipe;
+    ImageButton saveRecipe;
     Button more;
     Query base;
     private RecyclerView recyclerView;
@@ -147,6 +148,15 @@ public class Recipe_Detail extends AppCompatActivity {
         options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
+
+        saveRecipe=findViewById(R.id.favorite_button4);
+        saveRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                saveRecipe.setImageResource(R.drawable.ic_saved);
+            }
+        });
     }
 
     // Function to tell the app to start getting

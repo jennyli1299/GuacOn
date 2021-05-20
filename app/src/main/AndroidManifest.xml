@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Profile.PublicProfile"></activity>
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Profile.PublicProfile" />
         <activity android:name=".Profile.RecipeForm" />
         <activity android:name=".SearchResult" />
         <activity android:name=".Profile.CardResult" />
@@ -19,11 +26,7 @@
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.SignupActivity" />
         <activity android:name=".Login.Launcher">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

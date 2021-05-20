@@ -35,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 //user profile displaying user data along with saved recipes and recipes added by user
@@ -48,12 +50,12 @@ public class Profile extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     User[] user;
     Button follow;
+    FirestoreRecyclerOptions<UserCard> options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        RecipeAdapter ad;
 
         follow = findViewById(R.id.follow);
         follow.setText("Edit Profile");
@@ -75,13 +77,10 @@ public class Profile extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //get user basic info from sharedpreferences
-        sharedPreferences = getSharedPreferences("user",0);
-        String json = sharedPreferences.getString("user_info", null);
-        Gson gson = new Gson();
-        user = gson.fromJson(json, User[].class);
+        getUserData();
 
-        followers.setText(Html.fromHtml("<font><b>" + user[0].getFollowers_count() + "</b></font>") + "\nfollowers");
-        following.setText(Html.fromHtml("<font><b>" + user[0].getFollowing_count() + "</b></font>") + "\nfollowing");
+        updateActivity();
+
         name_age.setText(user[0].getName() + ", " + user[0].getAge());
 
         //add a new recipe
@@ -93,15 +92,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        //display user cards
-        base = FirebaseFirestore.getInstance().collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
-
-        cards = findViewById(R.id.cards);
-        cards.setLayoutManager(new GridLayoutManager(this, 2));
-
-        FirestoreRecyclerOptions<UserCard> options = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base, UserCard.class).build();
-        userCardAdapter = new UserCardAdapter(getApplicationContext(), options);
-        cards.setAdapter(userCardAdapter);
+        setRecyclerView();
 
         followers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +128,34 @@ public class Profile extends AppCompatActivity {
     {
         super.onStop();
         userCardAdapter.stopListening();
+    }
+
+    public void getUserData(){
+        sharedPreferences = getSharedPreferences("user",0);
+        String json = sharedPreferences.getString("user_info", null);
+        Gson gson = new Gson();
+        user = gson.fromJson(json, User[].class);
+    }
+
+    //update followers/following in layout
+    public void updateActivity(){
+        followers.setText(Html.fromHtml("<font><b>" + user[0].getFollowers_count() + "</b></font>"));
+        followers.append("\nfollowers");
+        following.setText(Html.fromHtml("<font><b>" + user[0].getFollowing_count() + "</b></font>"));
+        following.append("\nfollowing");
+    }
+
+    public void setRecyclerView(){
+        //display user cards
+        base = FirebaseFirestore.getInstance()
+                .collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
+
+        cards = findViewById(R.id.cards);
+        cards.setLayoutManager(new GridLayoutManager(this, 2));
+
+        options = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base, UserCard.class).build();
+        userCardAdapter = new UserCardAdapter(getApplicationContext(), options);
+        cards.setAdapter(userCardAdapter);
     }
 
     @Override

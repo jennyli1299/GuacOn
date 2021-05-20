@@ -8,11 +8,12 @@
     android:layout_marginRight="4dp"
     android:layout_marginLeft="4dp"
     android:layout_marginBottom="8dp"
-    android:background="@color/gray"
+    app:cardBackgroundColor="@color/gray"
     android:layout_marginTop="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
