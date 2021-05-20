@@ -8,26 +8,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.guacon.Profile.CardResult;
 import com.example.guacon.Profile.PublicProfile;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.UserViewHolder> {
 
@@ -42,16 +31,18 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
     @Override
     protected void onBindViewHolder(@NonNull final UserAdapter.UserViewHolder holder, final int position, @NonNull final User model){
         holder.name.setText(model.getName());
+        //set Follow button state
         if(model.getFollowers().contains(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
             holder.follow.setText("Following");
             holder.follow.setBackgroundResource(R.color.colorPrimary);
-            holder.follow.setTextColor(context.getResources().getColor(R.color.black));
+            holder.follow.setTextColor(context.getResources().getColor(android.R.color.black));
         }
         else {
             holder.follow.setText("Follow");
             holder.follow.setBackgroundResource(R.color.colorPrimaryDark);
             holder.follow.setTextColor(context.getResources().getColor(R.color.white));
         }
+        holder.follow.setClickable(false);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,9 +55,7 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
         });
     }
 
-    // Function to tell the class about the Card view (here
-    // "profile_card.xml")in
-    // which the data will be shown
+    // Function to tell the class about the Card view (here "profile_card.xml")in which the data will be shown
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -74,8 +63,7 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
         return new UserAdapter.UserViewHolder(view);
     }
 
-    // Sub Class to create references of the views in Card
-    // view (here "profile_card.xml")
+    // Sub Class to create references of the views in Cardview (here "profile_card.xml")
     class UserViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView dp;
@@ -97,9 +85,11 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
             });
         }
     }
+
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }

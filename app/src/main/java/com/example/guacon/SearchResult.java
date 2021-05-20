@@ -3,17 +3,15 @@ package com.example.guacon;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,23 +19,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.GridLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.Profile.Profile;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,6 +46,7 @@ public class SearchResult extends AppCompatActivity {
     ArrayList<String> pref;
     SharedPreferences.Editor editor;
     FirestoreRecyclerOptions<Recipe> options;
+    ShimmerRecyclerView shimmerRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +56,9 @@ public class SearchResult extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("For You");
         setSupportActionBar(toolbar);
+
+        shimmerRecycler = findViewById(R.id.shimmer_recycler_view);
+        shimmerRecycler.showShimmerAdapter();
 
         sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
         recyclerView = findViewById(R.id.rv);
@@ -132,6 +131,19 @@ public class SearchResult extends AppCompatActivity {
         options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
+
+        base.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    shimmerRecycler.hideShimmerAdapter();
+                    (findViewById(R.id.default_text)).setVisibility(View.VISIBLE);
+                }
+                else
+                    shimmerRecycler.hideShimmerAdapter();
+                    recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     public void openRefine() {

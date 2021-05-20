@@ -1,6 +1,5 @@
 package com.example.guacon.Profile;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -11,6 +10,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +20,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.bumptech.glide.Glide;
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.R;
 import com.example.guacon.Recipe;
 import com.example.guacon.RecipeAdapter;
+import com.example.guacon.SplashScreen;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +48,7 @@ public class CardResult extends AppCompatActivity {
     ArrayList<String> pref;
     SharedPreferences.Editor editor;
     FirestoreRecyclerOptions<Recipe> options;
+    ShimmerRecyclerView shimmerRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,17 @@ public class CardResult extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(getIntent().getStringExtra("Card"));
         setSupportActionBar(toolbar);
+
+        shimmerRecyclerView = findViewById(R.id.shimmer_recycler_view);
+        shimmerRecyclerView.showShimmerAdapter();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shimmerRecyclerView.hideShimmerAdapter();
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }, 1000);
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
@@ -70,7 +84,6 @@ public class CardResult extends AppCompatActivity {
         options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
-
     }
 
     // Function to tell the app to start getting
