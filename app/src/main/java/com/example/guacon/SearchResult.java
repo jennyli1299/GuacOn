@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -110,6 +111,10 @@ public class SearchResult extends AppCompatActivity {
 
         if (id == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
+            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
             startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }
@@ -182,6 +187,7 @@ public class SearchResult extends AppCompatActivity {
                 editor.commit();
 
                 adapter.stopListening();
+                (findViewById(R.id.default_text)).setVisibility(View.INVISIBLE);
                 inflateView(new ArrayList<>(preferences));
                 adapter.startListening();
                 dialog.cancel();
@@ -196,5 +202,6 @@ public class SearchResult extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
     }
 }

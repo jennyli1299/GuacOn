@@ -1,51 +1,30 @@
 package com.example.guacon.Profile;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.guacon.Login.Launcher;
 import com.example.guacon.R;
-import com.example.guacon.Recipe;
-import com.example.guacon.RecipeAdapter;
 import com.example.guacon.User;
 import com.example.guacon.UserAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldPath;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 public class FollowersFollowing extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
     UserAdapter adapter;
     Query base;
     User[] user;
     SharedPreferences sharedPreferences;
-    ArrayList<String> pref;
-    SharedPreferences.Editor editor;
     FirestoreRecyclerOptions<User> options;
 
     @Override
@@ -63,7 +42,7 @@ public class FollowersFollowing extends AppCompatActivity {
         Gson gson = new Gson();
         user = gson.fromJson(json, User[].class);
 
-        recyclerView = findViewById(R.id.cards);
+        RecyclerView recyclerView = findViewById(R.id.cards);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         if(getIntent().getStringExtra("type").equals("Followers"))

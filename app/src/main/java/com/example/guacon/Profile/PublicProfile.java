@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -231,6 +232,10 @@ public class PublicProfile extends AppCompatActivity {
 
         if (id == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
+            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
             startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }

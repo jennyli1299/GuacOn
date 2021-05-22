@@ -1,11 +1,6 @@
 package com.example.guacon.Profile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,34 +11,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.guacon.Login.Launcher;
 import com.example.guacon.R;
-import com.example.guacon.Recipe;
-import com.example.guacon.RecipeAdapter;
-import com.example.guacon.Recipe_Detail;
 import com.example.guacon.SearchResult;
 import com.example.guacon.User;
 import com.example.guacon.UserCard;
 import com.example.guacon.UserCardAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 //user profile displaying user data along with saved recipes and recipes added by user
 public class Profile extends AppCompatActivity {
 
     TextView name_age, followers, following;
-    String TAG ="main";
     RecyclerView cards;
     Query base;
     UserCardAdapter userCardAdapter;
@@ -181,6 +171,10 @@ public class Profile extends AppCompatActivity {
         }
         if (id == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
+            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
             startActivity(new Intent(getApplicationContext(), Launcher.class));
             return true;
         }

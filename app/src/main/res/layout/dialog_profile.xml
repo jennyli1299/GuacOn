@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Personal Information"
+        android:text="@string/personal_information"
         android:id="@+id/heading"
         android:textColor="#000"
         android:textAlignment="center"
@@ -29,7 +29,9 @@
         app:layout_constraintTop_toBottomOf="@+id/heading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/last_name"
-        android:hint="First name"/>
+        android:hint="@string/first_name"
+        android:autofillHints=""
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/last_name"
@@ -42,7 +44,9 @@
         app:layout_constraintTop_toBottomOf="@+id/heading"
         app:layout_constraintStart_toEndOf="@+id/first_name"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="Last name"/>
+        android:hint="@string/last_name"
+        android:autofillHints=""
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/age"
@@ -53,7 +57,9 @@
         app:layout_constraintTop_toBottomOf="@+id/first_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/date_icon"
-        android:hint="Enter your birth date"/>
+        android:hint="@string/enter_your_birth_date"
+        android:autofillHints=""
+        android:inputType="text" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -64,7 +70,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/age"
         app:layout_constraintTop_toTopOf="@+id/age"
         app:layout_constraintStart_toEndOf="@+id/age"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@null" />
 
     <Button
         android:id="@+id/buttonOk"
@@ -79,7 +86,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/colorPrimaryDark"
-        android:text="Next"
+        android:text="@string/next"
         android:textColor="#FFF"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

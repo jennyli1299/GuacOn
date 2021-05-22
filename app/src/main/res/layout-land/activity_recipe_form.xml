@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
-        android:text="What should we call your recipe?"
+        android:text="@string/ques1"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/black"
@@ -28,7 +28,7 @@
         <ViewFlipper
             android:id="@+id/simpleViewFlipper"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="fill_parent"
@@ -41,7 +41,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/buttonNext1"/>
+                    app:layout_constraintBottom_toTopOf="@+id/buttonNext1"
+                    android:autofillHints="" />
 
                 <Button
                     android:id="@+id/buttonNext1"
@@ -50,7 +51,7 @@
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
                     android:onClick="onClick"
-                    android:text="NEXT"
+                    android:text="@string/next"
                     android:textColor="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/ans1"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -71,7 +72,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/spinner"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/buttonNext2"/>
+                    app:layout_constraintBottom_toTopOf="@+id/buttonNext2"
+                    android:autofillHints="" />
 
                 <Button
                     android:id="@+id/buttonNext2"
@@ -80,7 +82,7 @@
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
                     android:onClick="onClick"
-                    android:text="NEXT"
+                    android:text="@string/next"
                     android:textColor="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/ans2"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -110,7 +112,7 @@
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
                     android:onClick="onClick"
-                    android:text="NEXT"
+                    android:text="@string/next"
                     android:textColor="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/ans3"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -135,16 +137,18 @@
                         android:id="@+id/add2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:onClick="onClick"
-                        android:text="Add" />
+                        android:text="@string/add" />
 
                     <EditText
                         android:id="@+id/ing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@id/add2" />
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/add2"
+                        android:autofillHints=""
+                        android:inputType="text" />
 
                 </RelativeLayout>
 
@@ -152,7 +156,7 @@
                     android:id="@+id/container2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical"/>
 
                 <Button
                     android:id="@+id/buttonNext4"
@@ -162,7 +166,7 @@
                     android:padding="15dp"
                     android:layout_margin="50dp"
                     android:onClick="onClick"
-                    android:text="NEXT"
+                    android:text="@string/next"
                     android:textColor="@color/white" />
 
             </LinearLayout>
@@ -185,16 +189,18 @@
                         android:id="@+id/add"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:onClick="onClick"
-                        android:text="Add" />
+                        android:text="@string/add" />
 
                     <EditText
                         android:id="@+id/inst"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@id/add" />
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/add"
+                        android:autofillHints=""
+                        android:inputType="text" />
 
                 </RelativeLayout>
 
@@ -202,7 +208,7 @@
                     android:id="@+id/container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical"/>
 
                 <Button
                     android:id="@+id/buttonNext5"
@@ -212,7 +218,7 @@
                     android:padding="15dp"
                     android:layout_margin="50dp"
                     android:onClick="onClick"
-                    android:text="NEXT"
+                    android:text="@string/next"
                     android:textColor="@color/white" />
 
             </LinearLayout>
@@ -229,7 +235,7 @@
                     android:background="@color/colorPrimaryDark"
                     android:onClick="onClick"
                     android:padding="15dp"
-                    android:text="NEXT"
+                    android:text="@string/next"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -322,7 +328,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/select"
-                    android:text="Select Image"
+                    android:text="@string/select_image"
                     android:onClick="onClick"
                     app:layout_constraintTop_toBottomOf="@+id/image_name"
                     app:layout_constraintBottom_toTopOf="@+id/buttonNext7"
@@ -338,7 +344,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/image_name"/>
+                    app:layout_constraintBottom_toTopOf="@+id/image_name"
+                    android:contentDescription="@null" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -357,7 +364,7 @@
                     android:background="@color/colorPrimaryDark"
                     android:padding="15dp"
                     android:onClick="onClick"
-                    android:text="SAVE RECIPE"
+                    android:text="@string/save_recipe"
                     android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

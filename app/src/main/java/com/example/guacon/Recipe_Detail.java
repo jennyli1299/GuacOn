@@ -71,15 +71,49 @@ public class Recipe_Detail extends AppCompatActivity {
         df = findViewById(R.id.dairy_free);
         ns = findViewById(R.id.naturally_sweetened);
         more = findViewById(R.id.imageButton2);
+        saveRecipe=findViewById(R.id.favorite_button4);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Recipe");
         setSupportActionBar(toolbar);
 
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
-
         intent = new Intent(getApplicationContext(), PublicProfile.class);
+        putOwner();
+        fillDetails();
+        displayMore();
+        saveRecipe();
 
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(recipe.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                    startActivity(new Intent(getApplicationContext(), Profile.class));
+                }
+                else {
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    // Function to tell the app to start getting
+    // data from database on starting of the activity
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    // Function to tell the app to stop getting
+    // data from database on stoping of the activity
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    public void putOwner(){
         FirebaseFirestore.getInstance().document("Users/" + recipe.getOwner()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
@@ -100,7 +134,9 @@ public class Recipe_Detail extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    public void fillDetails(){
         Recipe.setText(recipe.getName());
         prep_time.setText("Prep Time: " + recipe.getPrep_time() + " min");
         cook_time.setText("Cook Time: " + recipe.getCook_time() + " min");
@@ -128,19 +164,9 @@ public class Recipe_Detail extends AppCompatActivity {
             ns.setVisibility(View.VISIBLE);
 
         Glide.with(getApplicationContext()).load(recipe.getFinal_photo()).into(imageView);
+    }
 
-        more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(recipe.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
-                    startActivity(new Intent(getApplicationContext(), Profile.class));
-                }
-                else {
-                    startActivity(intent);
-                }
-            }
-        });
-
+    public void displayMore(){
         recyclerView = findViewById(R.id.more_recipes);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -148,31 +174,25 @@ public class Recipe_Detail extends AppCompatActivity {
         options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
+    }
 
-        saveRecipe=findViewById(R.id.favorite_button4);
+    public void saveRecipe(){
         saveRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                saveRecipe.setImageResource(R.drawable.ic_saved);
+                if(true) {
+                    //TODO: display dialog with list of collections
+                    //TODO: If 'create new collection selected' then change layout of dialog and take name of new collection
+                    //TODO: else add recipe to selected collection
+                    saveRecipe.setImageResource(R.drawable.ic_saved);
+                }
+                else{
+                    //TODO: Remove recipe from collection
+                    //TODO: if collection gets enpty, delete it
+                    saveRecipe.setImageResource(R.drawable.ic_save);
+                }
             }
         });
-    }
-
-    // Function to tell the app to start getting
-    // data from database on starting of the activity
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    // Function to tell the app to stop getting
-    // data from database on stoping of the activity
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
     }
 
     @Override
