@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,12 +18,16 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.guacon.Login.Launcher;
@@ -36,6 +43,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 //displays data of a particular recipe
 //display link for checking the author of the recipe
@@ -47,11 +55,13 @@ public class Recipe_Detail extends AppCompatActivity {
     Recipe recipe;
     ImageButton saveRecipe;
     Button more;
-    Query base;
-    private RecyclerView recyclerView;
+    Query base, base2;
+    private RecyclerView recyclerView, collectionList;
     RecipeAdapter adapter;
+    CollectionListAdapter collectionAdapter;
     Intent intent;
     FirestoreRecyclerOptions<Recipe> options;
+    FirestoreRecyclerOptions<UserCard> options2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +92,14 @@ public class Recipe_Detail extends AppCompatActivity {
         putOwner();
         fillDetails();
         displayMore();
-        saveRecipe();
+        saveRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveRecipe();
+            }
+        });
 
+        //more from owner, navigate to owner's public profile
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +127,7 @@ public class Recipe_Detail extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+        collectionAdapter.stopListening();
     }
 
     public void putOwner(){
@@ -177,22 +194,45 @@ public class Recipe_Detail extends AppCompatActivity {
     }
 
     public void saveRecipe(){
-        saveRecipe.setOnClickListener(new View.OnClickListener() {
+        final Dialog dialog = new Dialog(this);
+        //form in a dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_collections);
+
+        dialog.findViewById(R.id.addNew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(true) {
-                    //TODO: display dialog with list of collections
-                    //TODO: If 'create new collection selected' then change layout of dialog and take name of new collection
-                    //TODO: else add recipe to selected collection
-                    saveRecipe.setImageResource(R.drawable.ic_saved);
-                }
-                else{
-                    //TODO: Remove recipe from collection
-                    //TODO: if collection gets enpty, delete it
-                    saveRecipe.setImageResource(R.drawable.ic_save);
-                }
+                addToNewCollection();
             }
         });
+        dialog.findViewById(R.id.item1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToNewCollection();
+            }
+        });
+
+        base2 = FirebaseFirestore.getInstance()
+                .collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
+
+        collectionList = dialog.findViewById(R.id.collectionList);
+        collectionList.setLayoutManager(new LinearLayoutManager(this));
+
+        options2 = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base2, UserCard.class).build();
+        collectionAdapter = new CollectionListAdapter(getApplicationContext(), options2);
+        collectionList.setAdapter(collectionAdapter);
+
+        collectionAdapter.startListening();
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+    }
+
+    public void addToNewCollection(){
+        Toast.makeText(this, "new collected", Toast.LENGTH_SHORT).show();
     }
 
     @Override

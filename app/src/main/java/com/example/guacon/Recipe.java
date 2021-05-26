@@ -15,10 +15,18 @@ import java.util.List;
 //inflate data received from firestore in an object of type 'Recipe'
 public class Recipe implements Serializable {
     //variable name must match the firestore key names
-    private String name, prep_time, cook_time, final_photo, owner;
+    private String name, prep_time, cook_time, final_photo, owner, doc_id;
     private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), tags = new ArrayList<>();
 
     public Recipe() {}
+
+    public String getDoc_id() {
+        return doc_id;
+    }
+
+    public void setDoc_id(String doc_id) {
+        this.doc_id = doc_id;
+    }
 
     public String getName(){ return name; }
     public void setName(String name){
