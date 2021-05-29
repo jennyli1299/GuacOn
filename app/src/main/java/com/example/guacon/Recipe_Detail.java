@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -39,11 +41,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 //displays data of a particular recipe
 //display link for checking the author of the recipe
@@ -127,7 +134,8 @@ public class Recipe_Detail extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
-        collectionAdapter.stopListening();
+        if(base2!=null)
+            collectionAdapter.stopListening();
     }
 
     public void putOwner(){
@@ -219,7 +227,7 @@ public class Recipe_Detail extends AppCompatActivity {
         collectionList.setLayoutManager(new LinearLayoutManager(this));
 
         options2 = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base2, UserCard.class).build();
-        collectionAdapter = new CollectionListAdapter(getApplicationContext(), options2);
+        collectionAdapter = new CollectionListAdapter(Recipe_Detail.this, options2, recipe.getDoc_id());
         collectionList.setAdapter(collectionAdapter);
 
         collectionAdapter.startListening();
@@ -227,11 +235,38 @@ public class Recipe_Detail extends AppCompatActivity {
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
 
     public void addToNewCollection(){
+        final Dialog dialog = new Dialog(this);
+        //form in a dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_new_collection);
+        dialog.findViewById(R.id.buttonOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.name)).getText().toString())){
+                    ((EditText)dialog.findViewById(R.id.name)).setError("Required");
+                }
+                else {
+                    String new_collection_name = ((TextView) dialog.findViewById(R.id.name)).getText().toString();
+                    Map<String, Object> new_collection = new HashMap<String, Object>();
+                    new_collection.put("Count", 1);
+                    new_collection.put("Name", new_collection_name);
+                    new_collection.put("Recipe", FieldValue.arrayUnion(recipe.getDoc_id()));
+                    FirebaseFirestore.getInstance().collection("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/cards").document(new_collection_name).set(new_collection);
+                    dialog.dismiss();
+                }
+            }
+        });
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
         Toast.makeText(this, "new collected", Toast.LENGTH_SHORT).show();
     }
 

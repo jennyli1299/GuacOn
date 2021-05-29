@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -24,6 +26,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -33,23 +36,53 @@ public class CollectionListAdapter extends FirestoreRecyclerAdapter<UserCard, Co
 
     private CollectionListAdapter.OnItemClickListener listener;
     Context context;
+    String recipe_doc_id;
 
-    public CollectionListAdapter(Context context, @NonNull FirestoreRecyclerOptions<UserCard> options){
+    public CollectionListAdapter(Context context, @NonNull FirestoreRecyclerOptions<UserCard> options, String recipe_doc_id){
         super(options);
         this.context = context;
+        this.recipe_doc_id = recipe_doc_id;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull final CollectionListAdapter.RecipesViewHolder holder, int position, @NonNull final UserCard model){
         final ArrayList<String> recipeArrayList = model.getRecipe();
-        holder.collection_name.setText(model.getName());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: onClick doesn't work
-                Toast.makeText(context, "button clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(model.getName().equals("Your Recipes")){
+            holder.collection_name.setTextSize(0);
+            holder.collection_name.setVisibility(View.GONE);
+        }
+        else {
+            holder.collection_name.setText(model.getName());
+            holder.collection_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recipeArrayList.contains(recipe_doc_id)) {
+                        showAlertDialog("This recipe already exists in " + model.getName() + " collection. Kindly select a different collection or create a new one.");
+                    } else{
+                        model.getRecipe().add(recipe_doc_id);
+                        model.setCount(model.getCount() + 1);
+                        //TODO: add progressbar
+                        FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/cards/" + model.getName()).update("Recipe", model.getRecipe(), "Count", model.getCount());
+                        showAlertDialog("Added successfully to " + model.getName() + "!");
+                    }
+                }
+            });
+        }
+    }
+
+    void showAlertDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        //Setting message manually and performing action on button click
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     // Function to tell the class about the Card view (here
@@ -65,7 +98,7 @@ public class CollectionListAdapter extends FirestoreRecyclerAdapter<UserCard, Co
     // Sub Class to create references of the views in Card
     // view (here "collection_option.xml")
     class RecipesViewHolder extends RecyclerView.ViewHolder {
-        Button collection_name;
+        TextView collection_name;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
             collection_name = itemView.findViewById(R.id.option);
@@ -76,7 +109,6 @@ public class CollectionListAdapter extends FirestoreRecyclerAdapter<UserCard, Co
                     if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
-
                 }
             });
         }
