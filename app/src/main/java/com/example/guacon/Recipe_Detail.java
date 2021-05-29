@@ -242,7 +242,6 @@ public class Recipe_Detail extends AppCompatActivity {
 
     public void addToNewCollection(){
         final Dialog dialog = new Dialog(this);
-        //form in a dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_new_collection);
         dialog.findViewById(R.id.buttonOk).setOnClickListener(new View.OnClickListener() {
