@@ -16,7 +16,7 @@
             android:clickable="true"
             android:onClick="onClick"
             android:shadowColor="@color/colorPrimaryDark"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/head_3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:padding="15dp"
             android:textColor="@android:color/darker_gray"
@@ -38,14 +38,15 @@
             app:layout_constraintBottom_toTopOf="@+id/password_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/head_2" />
+            app:layout_constraintTop_toBottomOf="@+id/head_2"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/password_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="15dp"
             android:textColor="@android:color/darker_gray"
@@ -54,7 +55,8 @@
             app:layout_constraintBottom_toTopOf="@+id/login_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_text" />
+            app:layout_constraintTop_toBottomOf="@+id/email_text"
+            android:autofillHints="" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -70,7 +72,7 @@
             android:id="@+id/head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/login"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@android:color/black"
             android:textColorHint="@android:color/black"
@@ -84,7 +86,7 @@
             android:id="@+id/head_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please login to continue using GuacOn"
+            android:text="@string/please_login_to_continue_using_guacon"
             app:layout_constraintBottom_toTopOf="@+id/head_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +96,7 @@
             android:id="@+id/head_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter your credentials"
+            android:text="@string/enter_your_credentials"
             android:textColor="#000"
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/email_text"
@@ -106,7 +108,7 @@
         android:id="@+id/head_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't have an account?"
+        android:text="@string/don_t_have_an_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.350"
@@ -120,12 +122,13 @@
             android:clickable="true"
             android:linksClickable="true"
             android:onClick="onClick"
-            android:text="Sign Up"
+            android:text="@string/sign_up"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.750"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_button" />
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
+            android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

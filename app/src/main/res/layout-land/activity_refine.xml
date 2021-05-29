@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -18,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/head"
-        android:text="Filter By"
+        android:text="@string/filter_by"
         style="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
@@ -31,8 +30,7 @@
         android:layout_width="60dp"
         android:layout_height="20dp"
         style="@style/TextAppearance.MaterialComponents.Button"
-        android:onClick="okay"
-        android:text="Close"
+        android:text="@string/close"
         android:textColor="#004D40"
         android:layout_marginTop="20dp"
         android:background="@android:color/transparent"
@@ -101,60 +99,65 @@
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_vegetarian"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/gluten_free"
         app:layout_constraintStart_toEndOf="@+id/vegetarian"
-        app:layout_constraintTop_toBottomOf="@+id/head"/>
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        android:contentDescription="@null" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_gluten_free"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vegan"
         app:layout_constraintStart_toEndOf="@+id/gluten_free"
-        app:layout_constraintTop_toBottomOf="@+id/head"/>
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        android:contentDescription="@null" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_vegan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dairy_free"
         app:layout_constraintStart_toEndOf="@+id/vegan"
-        app:layout_constraintTop_toBottomOf="@+id/head" />
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        android:contentDescription="@null" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_dairy_free"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/naturally_sweetened"
         app:layout_constraintStart_toEndOf="@+id/dairy_free"
-        app:layout_constraintTop_toBottomOf="@+id/head" />
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        android:contentDescription="@null" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:src="@drawable/ic_naturally_sweetened"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-        app:layout_constraintTop_toBottomOf="@+id/head" />
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        android:contentDescription="@null" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

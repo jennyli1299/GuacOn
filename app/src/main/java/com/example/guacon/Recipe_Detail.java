@@ -5,22 +5,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.guacon.Login.Launcher;
@@ -32,10 +41,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 //displays data of a particular recipe
 //display link for checking the author of the recipe
@@ -47,11 +62,13 @@ public class Recipe_Detail extends AppCompatActivity {
     Recipe recipe;
     ImageButton saveRecipe;
     Button more;
-    Query base;
-    private RecyclerView recyclerView;
+    Query base, base2;
+    private RecyclerView recyclerView, collectionList;
     RecipeAdapter adapter;
+    CollectionListAdapter collectionAdapter;
     Intent intent;
     FirestoreRecyclerOptions<Recipe> options;
+    FirestoreRecyclerOptions<UserCard> options2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +88,57 @@ public class Recipe_Detail extends AppCompatActivity {
         df = findViewById(R.id.dairy_free);
         ns = findViewById(R.id.naturally_sweetened);
         more = findViewById(R.id.imageButton2);
+        saveRecipe=findViewById(R.id.favorite_button4);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Recipe");
         setSupportActionBar(toolbar);
 
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
-
         intent = new Intent(getApplicationContext(), PublicProfile.class);
+        putOwner();
+        fillDetails();
+        displayMore();
+        saveRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveRecipe();
+            }
+        });
 
+        //more from owner, navigate to owner's public profile
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(recipe.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                    startActivity(new Intent(getApplicationContext(), Profile.class));
+                }
+                else {
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    // Function to tell the app to start getting
+    // data from database on starting of the activity
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    // Function to tell the app to stop getting
+    // data from database on stoping of the activity
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+        if(base2!=null)
+            collectionAdapter.stopListening();
+    }
+
+    public void putOwner(){
         FirebaseFirestore.getInstance().document("Users/" + recipe.getOwner()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
@@ -100,7 +159,9 @@ public class Recipe_Detail extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    public void fillDetails(){
         Recipe.setText(recipe.getName());
         prep_time.setText("Prep Time: " + recipe.getPrep_time() + " min");
         cook_time.setText("Cook Time: " + recipe.getCook_time() + " min");
@@ -128,19 +189,9 @@ public class Recipe_Detail extends AppCompatActivity {
             ns.setVisibility(View.VISIBLE);
 
         Glide.with(getApplicationContext()).load(recipe.getFinal_photo()).into(imageView);
+    }
 
-        more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(recipe.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
-                    startActivity(new Intent(getApplicationContext(), Profile.class));
-                }
-                else {
-                    startActivity(intent);
-                }
-            }
-        });
-
+    public void displayMore(){
         recyclerView = findViewById(R.id.more_recipes);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -148,31 +199,74 @@ public class Recipe_Detail extends AppCompatActivity {
         options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
+    }
 
-        saveRecipe=findViewById(R.id.favorite_button4);
-        saveRecipe.setOnClickListener(new View.OnClickListener() {
+    public void saveRecipe(){
+        final Dialog dialog = new Dialog(this);
+        //form in a dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_collections);
+
+        dialog.findViewById(R.id.addNew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                saveRecipe.setImageResource(R.drawable.ic_saved);
+                addToNewCollection();
             }
         });
+        dialog.findViewById(R.id.item1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToNewCollection();
+            }
+        });
+
+        base2 = FirebaseFirestore.getInstance()
+                .collection("Users/" + getSharedPreferences("user",0).getString("user_email","") + "/cards");
+
+        collectionList = dialog.findViewById(R.id.collectionList);
+        collectionList.setLayoutManager(new LinearLayoutManager(this));
+
+        options2 = new FirestoreRecyclerOptions.Builder<UserCard>().setQuery(base2, UserCard.class).build();
+        collectionAdapter = new CollectionListAdapter(Recipe_Detail.this, options2, recipe.getDoc_id());
+        collectionList.setAdapter(collectionAdapter);
+
+        collectionAdapter.startListening();
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
     }
 
-    // Function to tell the app to start getting
-    // data from database on starting of the activity
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    // Function to tell the app to stop getting
-    // data from database on stoping of the activity
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+    public void addToNewCollection(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_new_collection);
+        dialog.findViewById(R.id.buttonOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.name)).getText().toString())){
+                    ((EditText)dialog.findViewById(R.id.name)).setError("Required");
+                }
+                else {
+                    String new_collection_name = ((TextView) dialog.findViewById(R.id.name)).getText().toString();
+                    Map<String, Object> new_collection = new HashMap<String, Object>();
+                    new_collection.put("Count", 1);
+                    new_collection.put("Name", new_collection_name);
+                    new_collection.put("Recipe", FieldValue.arrayUnion(recipe.getDoc_id()));
+                    FirebaseFirestore.getInstance().collection("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/cards").document(new_collection_name).set(new_collection);
+                    dialog.dismiss();
+                }
+            }
+        });
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+        Toast.makeText(this, "new collected", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -18,7 +18,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <include
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:id="@+id/default_text"
                 android:layout_marginTop="20dp"
                 android:visibility="visible"
-                android:text="No results for your preferences"
+                android:text="@string/no_results_for_your_preferences"
                 app:layout_constraintTop_toBottomOf="@id/appbar"/>
 
             <androidx.recyclerview.widget.RecyclerView

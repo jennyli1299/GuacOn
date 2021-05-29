@@ -1,52 +1,36 @@
-package com.example.guacon.Profile;
+  package com.example.guacon.Profile;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+  import android.content.Intent;
+  import android.os.Bundle;
+  import android.os.Handler;
+  import android.view.Menu;
+  import android.view.MenuItem;
+  import android.view.View;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
+  import androidx.appcompat.app.AppCompatActivity;
+  import androidx.appcompat.widget.Toolbar;
+  import androidx.recyclerview.widget.DefaultItemAnimator;
+  import androidx.recyclerview.widget.GridLayoutManager;
+  import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
-import com.example.guacon.Login.Launcher;
-import com.example.guacon.R;
-import com.example.guacon.Recipe;
-import com.example.guacon.RecipeAdapter;
-import com.example.guacon.SplashScreen;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+  import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+  import com.example.guacon.Login.Launcher;
+  import com.example.guacon.R;
+  import com.example.guacon.Recipe;
+  import com.example.guacon.RecipeAdapter;
+  import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+  import com.google.firebase.auth.FirebaseAuth;
+  import com.google.firebase.firestore.FieldPath;
+  import com.google.firebase.firestore.FirebaseFirestore;
+  import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+  import java.util.ArrayList;
 
 public class CardResult extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     RecipeAdapter adapter;
     Query base;
-    SharedPreferences sharedPreferences;
-    ArrayList<String> pref;
-    SharedPreferences.Editor editor;
     FirestoreRecyclerOptions<Recipe> options;
     ShimmerRecyclerView shimmerRecyclerView;
 

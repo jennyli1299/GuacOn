@@ -12,7 +12,6 @@
     android:layout_marginTop="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,7 +24,9 @@
             android:layout_marginRight="3dp"
             android:layout_marginLeft="3dp"
             android:textSize="15dp"
-            android:text="recipe name here"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text=""
             android:textColor="#DE000000"
             app:layout_constraintTop_toBottomOf="@+id/media_image"
             app:layout_constraintBottom_toTopOf="@+id/seerecipe"
@@ -40,14 +41,15 @@
             android:layout_marginRight="3dp"
             android:layout_marginBottom="5dp"
             android:textSize="10dp"
-            android:text="See the recipe"
+            android:text="@string/see_recipe"
             android:textColor="#BF360C"
             android:clickable="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true" />
 
         <ImageView
             android:id="@+id/media_image"
@@ -58,7 +60,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/name"/>
+            app:layout_constraintBottom_toTopOf="@+id/name"
+            android:contentDescription="@null" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

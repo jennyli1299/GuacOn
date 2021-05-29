@@ -30,7 +30,7 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull RecipesViewHolder holder, int position, @NonNull final Recipe model){
+    protected void onBindViewHolder(@NonNull RecipesViewHolder holder, final int position, @NonNull final Recipe model){
         holder.name.setText(model.getName());
         //Loading image from Glide library.
         Glide.with(context).load(model.getFinal_photo()).into(holder.media_image);
@@ -53,6 +53,7 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<Recipe, RecipeAdapte
                 recipe.setInstructions(model.getInstructions());
                 recipe.setIngredients(model.getIngredients());
                 recipe.setOwner(model.getOwner());
+                recipe.setDoc_id(getSnapshots().getSnapshot(position).getId());
                 Intent intent = new Intent(context, Recipe_Detail.class);
                 intent.putExtra("Recipe", recipe);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -1,19 +1,12 @@
 package com.example.guacon.Login;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,30 +15,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.guacon.R;
-import com.example.guacon.SearchResult;
-import com.example.guacon.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     Button b1;
     RadioButton r;
     EditText e1,e2;
-    TextView t1,t2;
+    TextView t1;
     private FirebaseAuth auth;
-    private FirebaseFirestore guacon;
     String email, password;
     private ProgressDialog progressDialog;
-    User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +40,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         r = (RadioButton) findViewById(R.id.privacy_policy);
         progressDialog = new ProgressDialog(this);
         auth = FirebaseAuth.getInstance();
-        guacon = FirebaseFirestore.getInstance();
     }
 
     private void registerUser(){
@@ -91,96 +72,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(@NonNull Task<AuthResult> task) {
                 //checking if success
                 if(task.isSuccessful()){
-                    //enter in Starting Gradle Daemon...database
-                    FirebaseFirestore.getInstance().document("Users/" + email).set(user);
-
                     //get basic info for user for creating document in collection 'User'
-                    getDataFromUser();
+                    progressDialog.dismiss();
+                    new LoginFunctions().getDataFromUser(email, SignupActivity.this);
                 }
                 else{
                     //display some message here
+                    progressDialog.dismiss();
                     Toast.makeText(SignupActivity.this,"Registration Error"+task.getException(),Toast.LENGTH_LONG).show();
                 }
-                progressDialog.dismiss();
             }
         });
-    }
-
-    private int mYear, mMonth, mDay;
-
-    public void getDataFromUser() {
-        final Map<String, Object> newUser = new HashMap<>();
-        final Dialog dialog = new Dialog(this);
-
-        //form in a dialog
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_profile);
-
-        final Calendar cal = Calendar.getInstance();
-        //get DOB for age
-        ((ImageButton) dialog.findViewById(R.id.date_icon)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = cal.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(SignupActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String mm = String.format("%02d", monthOfYear+1);
-                        String dd = String.format("%02d", dayOfMonth);
-                        ((TextView) dialog.findViewById(R.id.age)).setText(year + "-" + mm + "-" + dd);
-                        mYear = year;
-                        mMonth = Integer.parseInt(mm) - 1;
-                        mDay = Integer.parseInt(dd);
-                    }
-                }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
-        });
-
-        //save data in db
-        ((Button) dialog.findViewById(R.id.buttonOk)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cal.set(mYear, mMonth, mDay);
-
-                //check for empty fields
-                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.first_name)).getText().toString())){
-                    ((EditText)dialog.findViewById(R.id.first_name)).setError("Required");
-                }
-                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.last_name)).getText().toString())){
-                    ((EditText)dialog.findViewById(R.id.last_name)).setError("Required");
-                }
-                if(TextUtils.isEmpty(((EditText)dialog.findViewById(R.id.age)).getText().toString())){
-                    ((EditText)dialog.findViewById(R.id.age)).setError("Required");
-                }
-                else {
-                    newUser.put("First_Name", ((EditText) dialog.findViewById(R.id.first_name)).getText().toString());
-                    newUser.put("Last_Name", ((EditText) dialog.findViewById(R.id.last_name)).getText().toString());
-                    newUser.put("Age", cal.getTimeInMillis());
-                    newUser.put("Followers", new ArrayList<String>());
-                    newUser.put("Following", new ArrayList<String>());
-                    newUser.put("Followers_count", 0);
-                    newUser.put("Following_count", 0);
-
-                    //add data to collection 'Users'
-                    guacon.collection("Users").document(email).set(newUser);
-                    dialog.cancel();
-
-                    //save data for local usage
-                    new LoginActivity().saveData(email);
-                }
-            }
-        });
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        dialog.show();
-        dialog.getWindow().setAttributes(lp);
     }
 
     public void onClick(View view) {

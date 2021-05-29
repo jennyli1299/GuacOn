@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -15,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/head"
-        android:text="Filter By"
+        android:text="@string/filter_by"
         android:layout_marginBottom="20dp"
         style="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +29,7 @@
         android:layout_width="60dp"
         android:layout_height="20dp"
         style="@style/TextAppearance.MaterialComponents.Button"
-        android:onClick="okay"
-        android:text="Close"
+        android:text="@string/close"
         android:textColor="#004D40"
         android:layout_marginTop="20dp"
         android:background="@android:color/transparent"
@@ -57,8 +55,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/item1"
-            android:text="Vegetarian"
-            android:layout_marginLeft="5dp"
+            android:text="@string/vegetarian"
+            android:layout_marginStart="5dp"
             style="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toBottomOf="@+id/vegetarian"
@@ -82,8 +80,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/item3"
-        android:text="Gluten Free"
-        android:layout_marginLeft="5dp"
+        android:text="@string/glutenfree"
+        android:layout_marginStart="5dp"
         style="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintBottom_toBottomOf="@+id/gluten_free"
@@ -107,8 +105,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/item2"
-            android:text="Vegan"
-            android:layout_marginLeft="5dp"
+            android:text="@string/vegan"
+            android:layout_marginStart="5dp"
             style="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toBottomOf="@+id/vegan"
@@ -132,8 +130,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/item4"
-        android:text="Dairy Free"
-        android:layout_marginLeft="5dp"
+        android:text="@string/dairyfree"
+        android:layout_marginStart="5dp"
         style="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintBottom_toBottomOf="@+id/dairy_free"
@@ -157,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/item5"
-        android:text="Naturally Sweetened"
+        android:text="@string/naturalsweet"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         style="@style/TextAppearance.MaterialComponents.Body1"
@@ -176,7 +174,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toBottomOf="@+id/head"/>
+            app:layout_constraintTop_toBottomOf="@+id/head"
+            android:contentDescription="@null" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -187,7 +186,8 @@
             app:layout_constraintBottom_toTopOf="@+id/imageView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gluten_free"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            android:contentDescription="@null" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -198,7 +198,8 @@
             app:layout_constraintBottom_toTopOf="@+id/imageView4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/vegan"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            android:contentDescription="@null" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -209,7 +210,8 @@
             app:layout_constraintBottom_toTopOf="@+id/imageView5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            android:contentDescription="@null" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -220,6 +222,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_ok"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/naturally_sweetened"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView4"
+            android:contentDescription="@null" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

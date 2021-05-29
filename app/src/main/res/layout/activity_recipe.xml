@@ -19,7 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <include
                 android:layout_width="match_parent"
@@ -36,9 +36,9 @@
                 android:id="@+id/instructions_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
+                android:paddingStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="PREPARATION"
+                android:text="@string/preparation"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 app:layout_constraintBottom_toTopOf="@id/instructions_txt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:layout_marginTop="10dp"
-                android:text="Recently Added by Owner"
+                android:text="@string/recently_added_by_owner"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 app:layout_constraintBottom_toTopOf="@id/more_recipes"
                 app:layout_constraintTop_toBottomOf="@+id/instructions_txt" />
@@ -71,7 +71,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/cook_time"
@@ -84,39 +84,44 @@
                     android:layout_height="30dp"
                     android:visibility="gone"
                     android:id="@+id/vegan"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_vegan"/>
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_vegan"
+                    android:contentDescription="@null" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:visibility="gone"
                     android:id="@+id/vegetarian"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_vegetarian"/>
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_vegetarian"
+                    android:contentDescription="@null" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:visibility="gone"
                     android:id="@+id/gluten_free"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_gluten_free"/>
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_gluten_free"
+                    android:contentDescription="@null" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:visibility="gone"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:id="@+id/dairy_free"
-                    android:src="@drawable/ic_dairy_free"/>
+                    android:src="@drawable/ic_dairy_free"
+                    android:contentDescription="@null" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:visibility="gone"
                     android:id="@+id/naturally_sweetened"
-                    android:src="@drawable/ic_naturally_sweetened"/>
+                    android:src="@drawable/ic_naturally_sweetened"
+                    android:contentDescription="@null" />
 
             </LinearLayout>
 
@@ -138,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/owner_name"
-                android:text="Recipe by Madison Brading"
+                android:text=""
                 android:clickable="true"
                 android:textSize="15dp"
                 android:textColor="#000"
@@ -148,15 +153,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintVertical_bias="0"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="30dp"/>
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/recipe_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recipe Name"
-                android:layout_marginLeft="20dp"
+                android:text=""
+                android:layout_marginStart="20dp"
                 android:textSize="28dp"
                 android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -169,8 +175,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:paddingLeft="20dp"
-                android:text="INGREDIENTS"
+                android:paddingStart="20dp"
+                android:text="@string/ingredients"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 app:layout_constraintBottom_toTopOf="@+id/ingredients_txt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -183,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:textStyle="bold"
                 style="@style/TextAppearance.MaterialComponents.Body2"
                 app:layout_constraintBottom_toTopOf="@id/instructions_head"
@@ -196,12 +202,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/prep_time"
-                android:text="Prep Time: 20 min"
+                android:text=""
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintStart_toEndOf="@+id/ingredients_txt"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintVertical_bias="0.1"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintTop_toTopOf="@+id/ingredients_head"
@@ -213,10 +219,10 @@
                 android:id="@+id/cook_time"
                 app:layout_constraintVertical_bias="0.1"
                 style="@style/TextAppearance.MaterialComponents.Body1"
-                android:text="Cook Time: 20 min"
-                android:layout_marginLeft="10dp"
+                android:text=""
+                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/ingredients_txt"
-                android:layout_marginRight="30dp"
+                android:layout_marginEnd="30dp"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/prep_time"
@@ -231,7 +237,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appbar"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:contentDescription="@null" />
 
             <ImageButton
                 android:id="@+id/favorite_button4"
@@ -244,7 +251,8 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView7"
                 app:layout_constraintVertical_bias="0.9"
                 app:layout_constraintHorizontal_bias="0.95"
-                app:srcCompat="@drawable/ic_save" />
+                app:srcCompat="@drawable/ic_save"
+                android:contentDescription="@null" />
 
             <Button
                 android:id="@+id/imageButton2"
@@ -252,7 +260,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:background="#DD5F3F"
-                android:text="More from Owner"
+                android:text="@string/more_from_owner"
                 android:layout_marginTop="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

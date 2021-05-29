@@ -12,7 +12,6 @@
     android:layout_marginTop="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -45,7 +44,8 @@
             app:layout_constraintVertical_bias="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true" />
 
         <ImageView
             android:id="@+id/media_image"
@@ -58,7 +58,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/name"/>
+            app:layout_constraintBottom_toTopOf="@+id/name"
+            android:contentDescription="@null" />
 
         <View
             android:layout_width="match_parent"
