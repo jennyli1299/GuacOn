@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,8 +31,11 @@ import android.widget.ViewFlipper;
 import com.example.guacon.Profile.Profile;
 import com.example.guacon.R;
 import com.example.guacon.Recipe;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -42,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -83,7 +89,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 final View addView = layoutInflater.inflate(R.layout.activity_listview2, (LinearLayout) findViewById(R.id.container), false);
 
                 final TextView text = (TextView) addView.findViewById(R.id.inst1);
-                text.setText(((EditText) findViewById(R.id.inst)).getText().toString());
+                text.setText(((EditText) findViewById(R.id.inst)).getText().toString().trim());
 
                 Button delete_inst = (Button) addView.findViewById(R.id.delete_inst);
                 final View.OnClickListener thisListener = new View.OnClickListener(){
@@ -101,6 +107,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 else {
                     inst.add(text.getText().toString());
                     ((LinearLayout) findViewById(R.id.container)).addView(addView);
+                    ((EditText) findViewById(R.id.inst)).setText("");
                 }
             }
         });
@@ -112,7 +119,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 final View addView = layoutInflater.inflate(R.layout.activity_listview2, (LinearLayout) findViewById(R.id.container2), false);
 
                 final TextView text = (TextView) addView.findViewById(R.id.inst1);
-                text.setText(((EditText) findViewById(R.id.ing)).getText().toString());
+                text.setText(((EditText) findViewById(R.id.ing)).getText().toString().trim());
 
                 Button delete_inst = (Button) addView.findViewById(R.id.delete_inst);
                 final View.OnClickListener thisListener = new View.OnClickListener(){
@@ -130,6 +137,7 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 else {
                     ing.add(text.getText().toString());
                     ((LinearLayout) findViewById(R.id.container2)).addView(addView);
+                    ((EditText) findViewById(R.id.ing)).setText("");
                 }
             }
         });
@@ -140,35 +148,60 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
 
             //add recipe name to Hashmap
             case R.id.buttonNext1:
-                newRecipe.setName(((EditText)findViewById(R.id.ans1)).getText().toString());
-                simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("How much time is required for preparation?");
+                if(TextUtils.isEmpty(((EditText)findViewById(R.id.ans1)).getText()))
+                    ((EditText)findViewById(R.id.ans1)).setError("Required");
+                else {
+                    String[] name = ((EditText) findViewById(R.id.ans1)).getText().toString().trim().split(" ");
+                    newRecipe.setName(Arrays.asList(name));
+                    simpleViewFlipper.showNext();
+                    ((TextView) findViewById(R.id.ques)).setText("How much time is required for preparation?");
+                }
                 break;
 
             //add recipe preparation time to Hashmap
             case R.id.buttonNext2:
-                newRecipe.setPrep_time(((EditText)findViewById(R.id.ans2)).getText().toString());
-                simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("How much time is required for cooking it?");
+                if(TextUtils.isEmpty(((EditText)findViewById(R.id.ans2)).getText()))
+                    ((EditText)findViewById(R.id.ans1)).setError("Required");
+                else {
+                    newRecipe.setPrep_time(((EditText) findViewById(R.id.ans2)).getText().toString());
+                    simpleViewFlipper.showNext();
+                    ((TextView) findViewById(R.id.ques)).setText("How much time is required for cooking it?");
+                }
                 break;
 
             //add recipe cooking time to Hashmap
             case R.id.buttonNext3:
-                newRecipe.setCook_time(((EditText)findViewById(R.id.ans3)).getText().toString());
-                simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("List all the ingredients for your recipe?");
+                if(TextUtils.isEmpty(((EditText)findViewById(R.id.ans3)).getText()))
+                    ((EditText)findViewById(R.id.ans1)).setError("Required");
+                else {
+                    newRecipe.setCook_time(((EditText) findViewById(R.id.ans3)).getText().toString());
+                    simpleViewFlipper.showNext();
+                    ((TextView) findViewById(R.id.ques)).setText("List all the ingredients for your recipe?");
+                }
                 break;
 
             //add recipe ingredients to HashMap
-            case R.id.buttonNext4: newRecipe.setIngredients(ing);
-                simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("Provide the instructions for your recipe?");
+            case R.id.buttonNext4:
+                if(ing.isEmpty()) {
+                    //TODO: Add Alert Dialog
+                }
+                else {
+                    newRecipe.setIngredients(ing);
+                    simpleViewFlipper.showNext();
+                    ((TextView) findViewById(R.id.ques)).setText("Provide the instructions for your recipe?");
+                }
                 break;
 
             //add recipe instructions to Hashmap
-            case R.id.buttonNext5:  newRecipe.setInstructions(inst);
+            case R.id.buttonNext5:
+                if(ing.isEmpty()) {
+                    //TODO: Add Alert Dialog
+                }
+                else{
+                newRecipe.setInstructions(inst);
                 simpleViewFlipper.showNext();
-                ((TextView)findViewById(R.id.ques)).setText("What tag(s) suits your recipe?");
+                ((TextView) findViewById(R.id.ques)).setText("What tag(s) suits your recipe?");
+                }
                 break;
 
             //add recipe tags to HashMap
@@ -195,7 +228,11 @@ public class RecipeForm extends AppCompatActivity implements View.OnClickListene
                 if(((TextView) findViewById(R.id.image_name)).getText().toString().equals(""))
                     Toast.makeText(this, "Please upload an Image", Toast.LENGTH_SHORT).show();
                 else {
+                    //TODO: Add progressbar
                     newRecipe.setFinal_photo("https://firebasestorage.googleapis.com/v0/b/guacon-65c8f.appspot.com/o/images%2F" + ((TextView) findViewById(R.id.image_name)).getText().toString() + "?alt=media");
+                    newRecipe.setOwner(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    newRecipe.setNo_of_stars(0);
+                    newRecipe.setTimestamp(Calendar.getInstance().getTimeInMillis());
                     FirebaseFirestore.getInstance().collection("recipes").document().set(newRecipe);
                     startActivity(new Intent(getApplicationContext(), Profile.class));
                 }

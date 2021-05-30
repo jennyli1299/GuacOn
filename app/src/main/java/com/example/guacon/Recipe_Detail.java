@@ -1,6 +1,7 @@
 package com.example.guacon;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -12,6 +13,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Html;
@@ -57,7 +59,7 @@ import java.util.Map;
 public class Recipe_Detail extends AppCompatActivity {
 
     //fields
-    TextView Instructions, Recipe, prep_time, cook_time, Ingredients, owner;
+    TextView Instructions, Recipe, prep_time, cook_time, Ingredients, owner, no_of_stars;
     ImageView imageView, v, veg, gf, df, ns;
     Recipe recipe;
     ImageButton saveRecipe;
@@ -89,6 +91,7 @@ public class Recipe_Detail extends AppCompatActivity {
         ns = findViewById(R.id.naturally_sweetened);
         more = findViewById(R.id.imageButton2);
         saveRecipe=findViewById(R.id.favorite_button4);
+        no_of_stars=findViewById(R.id.no_of_stars);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Recipe");
@@ -161,10 +164,12 @@ public class Recipe_Detail extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void fillDetails(){
-        Recipe.setText(recipe.getName());
+        Recipe.setText(String.join(" ", recipe.getName()));
         prep_time.setText("Prep Time: " + recipe.getPrep_time() + " min");
         cook_time.setText("Cook Time: " + recipe.getCook_time() + " min");
+        no_of_stars.setText(String.valueOf(recipe.getNo_of_stars()>999? ((double)recipe.getNo_of_stars()/1000) +"K":recipe.getNo_of_stars()));
 
         Ingredients.setText(recipe.getIngredients().get(0) + "\n");
         for(int i=1;i<recipe.getIngredients().size();i++){
@@ -257,6 +262,7 @@ public class Recipe_Detail extends AppCompatActivity {
                     new_collection.put("Name", new_collection_name);
                     new_collection.put("Recipe", FieldValue.arrayUnion(recipe.getDoc_id()));
                     FirebaseFirestore.getInstance().collection("Users/" + FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/cards").document(new_collection_name).set(new_collection);
+                    FirebaseFirestore.getInstance().collection("recipes").document(recipe.getDoc_id()).update("no_of_stars", FieldValue.increment(1));
                     dialog.dismiss();
                 }
             }

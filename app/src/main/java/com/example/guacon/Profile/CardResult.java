@@ -19,10 +19,12 @@
   import com.example.guacon.Recipe;
   import com.example.guacon.RecipeAdapter;
   import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+  import com.google.android.gms.tasks.OnSuccessListener;
   import com.google.firebase.auth.FirebaseAuth;
   import com.google.firebase.firestore.FieldPath;
   import com.google.firebase.firestore.FirebaseFirestore;
   import com.google.firebase.firestore.Query;
+  import com.google.firebase.firestore.QuerySnapshot;
 
   import java.util.ArrayList;
 
@@ -43,16 +45,10 @@ public class CardResult extends AppCompatActivity {
         toolbar.setTitle(getIntent().getStringExtra("Card"));
         setSupportActionBar(toolbar);
 
+        findViewById(R.id.search_bar).setVisibility(View.GONE);
+
         shimmerRecyclerView = findViewById(R.id.shimmer_recycler_view);
         shimmerRecyclerView.showShimmerAdapter();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shimmerRecyclerView.hideShimmerAdapter();
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-        }, 1000);
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
@@ -68,6 +64,18 @@ public class CardResult extends AppCompatActivity {
         options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
+        base.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    shimmerRecyclerView.hideShimmerAdapter();
+                    (findViewById(R.id.default_text)).setVisibility(View.VISIBLE);
+                }
+                else
+                    shimmerRecyclerView.hideShimmerAdapter();
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     // Function to tell the app to start getting
