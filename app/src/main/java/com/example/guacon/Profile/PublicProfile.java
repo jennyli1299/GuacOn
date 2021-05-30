@@ -71,6 +71,9 @@ public class PublicProfile extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
+        ((TextView)findViewById(R.id.your_recipes)).setText("Recipes");
+        ((TextView)findViewById(R.id.your_collection_head)).setVisibility(View.GONE);
+        (findViewById(R.id.your_recipe_card)).setVisibility(View.GONE);
         //get user information from SharedPreferences
         getUserData();
 

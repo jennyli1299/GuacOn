@@ -14,6 +14,7 @@ import com.example.guacon.R;
 import com.example.guacon.User;
 import com.example.guacon.UserAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -45,10 +46,16 @@ public class FollowersFollowing extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.cards);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        if(getIntent().getStringExtra("type").equals("Followers"))
-            base = FirebaseFirestore.getInstance().collection("Users").whereIn(FieldPath.documentId(), user[0].getFollowers());
-        if(getIntent().getStringExtra("type").equals("Following"))
-            base = FirebaseFirestore.getInstance().collection("Users").whereIn(FieldPath.documentId(), user[0].getFollowing());
+        if(getIntent().getStringExtra("type").equals("Followers")) {
+            if (user[0].getFollowing_count() != 0)
+                base = FirebaseFirestore.getInstance().collection("Users").whereIn(FieldPath.documentId(), user[0].getFollowers());
+        }
+        if(getIntent().getStringExtra("type").equals("Following")) {
+            if (user[0].getFollowing_count() == 0)
+                base = FirebaseFirestore.getInstance().collection("Users").whereNotEqualTo(FieldPath.documentId(), FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            else
+                base = FirebaseFirestore.getInstance().collection("Users").whereIn(FieldPath.documentId(), user[0].getFollowing());
+        }
 
         options = new FirestoreRecyclerOptions.Builder<User>().setQuery(base, User.class).build();
         adapter = new UserAdapter(getApplicationContext(), options);

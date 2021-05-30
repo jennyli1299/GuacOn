@@ -20,6 +20,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.example.guacon.Login.Launcher;
@@ -43,6 +45,7 @@ public class SearchResult extends AppCompatActivity {
     private RecyclerView recyclerView;
     RecipeAdapter adapter;
     Query base;
+    SearchView searchView;
     SharedPreferences sharedPreferences;
     ArrayList<String> pref;
     SharedPreferences.Editor editor;
@@ -57,6 +60,34 @@ public class SearchResult extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("For You");
         setSupportActionBar(toolbar);
+
+        searchView = findViewById(R.id.search_bar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                base = FirebaseFirestore.getInstance().collection("recipes").whereArrayContains("name", text);
+                if (!text.trim().isEmpty()){
+                    fillAdapter(base);
+                    adapter.startListening();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.trim().isEmpty()) {
+                    base = FirebaseFirestore.getInstance().collection("recipes").orderBy("timestamp", Query.Direction.DESCENDING);
+                    fillAdapter(base);
+                    adapter.startListening();
+                }
+                else{
+                    base = FirebaseFirestore.getInstance().collection("recipes").whereArrayContains("name", newText).orderBy("timestamp", Query.Direction.DESCENDING);
+                    fillAdapter(base);
+                    adapter.startListening();
+                }
+                return false;
+            }
+        });
 
         shimmerRecycler = findViewById(R.id.shimmer_recycler_view);
         shimmerRecycler.showShimmerAdapter();
@@ -133,7 +164,11 @@ public class SearchResult extends AppCompatActivity {
             base = FirebaseFirestore.getInstance().collection("recipes").whereArrayContainsAny("tags", pref);
         }
 
-        options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(base, Recipe.class).build();
+        fillAdapter(base);
+    }
+
+    public void fillAdapter(Query query){
+        options = new FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe.class).build();
         adapter = new RecipeAdapter(getApplicationContext(), options);
         recyclerView.setAdapter(adapter);
 
@@ -146,7 +181,7 @@ public class SearchResult extends AppCompatActivity {
                 }
                 else
                     shimmerRecycler.hideShimmerAdapter();
-                    recyclerView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
             }
         });
     }

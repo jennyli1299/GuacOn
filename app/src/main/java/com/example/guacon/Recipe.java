@@ -1,22 +1,17 @@
 package com.example.guacon;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 //data class for collection "Recipes"
 //inflate data received from firestore in an object of type 'Recipe'
 public class Recipe implements Serializable {
     //variable name must match the firestore key names
-    private String name, prep_time, cook_time, final_photo, owner, doc_id;
-    private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), tags = new ArrayList<>();
+    private String prep_time, cook_time, final_photo, owner, doc_id;
+    long timestamp, no_of_stars;
+    private List<String> ingredients = new ArrayList<>(), instructions = new ArrayList<>(), tags = new ArrayList<>(), name = new ArrayList<>();
 
     public Recipe() {}
 
@@ -28,9 +23,26 @@ public class Recipe implements Serializable {
         this.doc_id = doc_id;
     }
 
-    public String getName(){ return name; }
-    public void setName(String name){
+    public List<String> getName(){ return name; }
+    public void setName(List<String> name){
         this.name = name;
+    }
+
+    public long getNo_of_stars() {
+        return no_of_stars;
+    }
+
+    public void setNo_of_stars(long no_of_stars) {
+        this.no_of_stars = no_of_stars;
+    }
+
+    public long getTimestamp() {
+        Calendar c = Calendar.getInstance();
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getFinal_photo(){ return final_photo; }
